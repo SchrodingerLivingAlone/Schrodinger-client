@@ -19,13 +19,26 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         // useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +52,7 @@ class MyHomePage extends StatelessWidget {
               IconButton(onPressed: (){}, icon: const Icon(Icons.search))
             ],
             bottom: const TabBar(
-                // unselectedLabelColor: Colors.white,
+              // unselectedLabelColor: Colors.white,
                 indicatorColor: Colors.white,
                 isScrollable: true,
                 tabs: [
@@ -120,48 +133,46 @@ class MyHomePage extends StatelessWidget {
                       onTap: (){},
                     ),
                   ),
-
-
                 ],
               ),
 
-                ListTile(
-                  leading: const Icon(Icons.search),
-                  title: const Text('Search'),
-                  trailing: const Icon(Icons.navigate_next),
-                  onTap: (){},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.refresh),
-                  title: const Text('Refresh'),
-                  trailing: const Icon(Icons.navigate_next),
-                  onTap: (){},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.home),
-                  title: const Text('Home'),
-                  trailing: const Icon(Icons.navigate_next),
-                  onTap: (){},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.search),
-                  title: const Text('Search'),
-                  trailing: const Icon(Icons.navigate_next),
-                  onTap: (){},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.refresh),
-                  title: const Text('Refresh'),
-                  trailing: const Icon(Icons.navigate_next),
-                  onTap: (){},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.refresh),
-                  title: const Text('ㅁㄴㅇㅁㄴㅇㅁㄴ'),
-                  trailing: const Icon(Icons.navigate_next),
-                  onTap: (){},
-                ),
-              ],
+              ListTile(
+                leading: const Icon(Icons.search),
+                title: const Text('Search'),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: (){},
+              ),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Refresh'),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: (){},
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Home'),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: (){},
+              ),
+              ListTile(
+                leading: const Icon(Icons.search),
+                title: const Text('Search'),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: (){},
+              ),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('Refresh'),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: (){},
+              ),
+              ListTile(
+                leading: const Icon(Icons.refresh),
+                title: const Text('ㅁㄴㅇㅁㄴㅇㅁㄴ'),
+                trailing: const Icon(Icons.navigate_next),
+                onTap: (){},
+              ),
+            ],
 
 
           ),
@@ -174,8 +185,13 @@ class MyHomePage extends StatelessWidget {
               BottomNavigationBarItem(icon: Icon(Icons.post_add), label: '동네정보'),
               BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
             ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
           ),
         )
     );
   }
 }
+
+
+
