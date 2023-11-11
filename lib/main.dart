@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/facility_info.dart';
+import 'package:schrodinger_client/food_info.dart';
+import 'package:schrodinger_client/home_info.dart';
 import 'package:schrodinger_client/style.dart';
 
 void main() {
@@ -19,19 +22,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         // useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const MainPage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -68,86 +71,9 @@ class _HomePageState extends State<HomePage> {
           ),
           body: TabBarView(
             children: [
-              ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10, bottom: 10),
-                    child: ListTile(
-                      title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                      subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                      trailing: const Icon(Icons.square, size: 50),
-                      onTap: (){},
-                    ),
-                  ),
-                ],
-              ),
-
-              ListTile(
-                leading: const Icon(Icons.search),
-                title: const Text('Search'),
-                trailing: const Icon(Icons.navigate_next),
-                onTap: (){},
-              ),
-              ListTile(
-                leading: const Icon(Icons.refresh),
-                title: const Text('Refresh'),
-                trailing: const Icon(Icons.navigate_next),
-                onTap: (){},
-              ),
+              const HomeInfoPage(),
+              const FoodInfoPage(),
+              const FacilityInfoPage(),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('Home'),
@@ -173,8 +99,6 @@ class _HomePageState extends State<HomePage> {
                 onTap: (){},
               ),
             ],
-
-
           ),
           drawer: const Drawer(),
           bottomNavigationBar: BottomNavigationBar(
