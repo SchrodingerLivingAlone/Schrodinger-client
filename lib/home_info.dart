@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/style.dart';
 
 class HomeInfoPage extends StatefulWidget {
   const HomeInfoPage({super.key});
@@ -24,10 +25,10 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
                     width: 120, // <-- Your width
-                    height: 45,
+                    height: 50,
                     child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffFFC536),
+                      backgroundColor: AppColor.yellow,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)
                         ),

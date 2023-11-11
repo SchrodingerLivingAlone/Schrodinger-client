@@ -112,6 +112,12 @@ class _MainPageState extends State<MainPage> {
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
           ),
+          floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: AppColor.yellow,
+            onPressed: (){},
+            label: const Text('글쓰기'),
+            icon: const Icon(Icons.post_add)
+          ),
         )
     );
   }
