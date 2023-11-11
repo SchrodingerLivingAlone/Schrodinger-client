@@ -62,7 +62,7 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                         }
                         return null;
                         },
-                      selectedItemBuilder: (BuildContext context) { //<-- SEE HERE
+                      selectedItemBuilder: (BuildContext context) {
                         return sortCategory.map((String value) {
                           return Text(
                             value,
@@ -177,7 +177,7 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
         ),
         ListTile(
           leading: const Icon(Icons.refresh),
-          title: const Text('ㅁㄴㅇㅁㄴㅇㅁㄴ'),
+          title: const Text('공공 정보'),
           trailing: const Icon(Icons.navigate_next),
           onTap: (){},
         ),

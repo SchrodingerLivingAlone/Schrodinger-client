@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/facility_info.dart';
-import 'package:schrodinger_client/food_info.dart';
 import 'package:schrodinger_client/home_info.dart';
 import 'package:schrodinger_client/style.dart';
 
@@ -22,7 +21,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         // useMaterial3: true,
       ),
-      home: const MainPage(),
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => const MainPage(),
+        '/post' : (context) => const PostPage(),
+      },
+      // home: const MainPage(),
     );
   }
 }
@@ -72,29 +76,29 @@ class _MainPageState extends State<MainPage> {
           body: TabBarView(
             children: [
               const HomeInfoPage(),
-              const FoodInfoPage(),
+              const PostPage(),
               const FacilityInfoPage(),
               ListTile(
                 leading: const Icon(Icons.home),
-                title: const Text('Home'),
+                title: const Text('할인'),
                 trailing: const Icon(Icons.navigate_next),
                 onTap: (){},
               ),
               ListTile(
                 leading: const Icon(Icons.search),
-                title: const Text('Search'),
+                title: const Text('같이 해요'),
                 trailing: const Icon(Icons.navigate_next),
                 onTap: (){},
               ),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('Refresh'),
+                title: const Text('질문 요청'),
                 trailing: const Icon(Icons.navigate_next),
                 onTap: (){},
               ),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: const Text('ㅁㄴㅇㅁㄴㅇㅁㄴ'),
+                title: const Text('공공 정보'),
                 trailing: const Icon(Icons.navigate_next),
                 onTap: (){},
               ),
@@ -114,7 +118,9 @@ class _MainPageState extends State<MainPage> {
           ),
           floatingActionButton: FloatingActionButton.extended(
             backgroundColor: AppColor.yellow,
-            onPressed: (){},
+            onPressed: (){
+              Navigator.pushNamed(context, '/post');
+            },
             label: const Text('글쓰기'),
             icon: const Icon(Icons.post_add)
           ),
@@ -123,5 +129,43 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
+class PostPage extends StatefulWidget {
+  const PostPage({super.key});
 
+  @override
+  State<PostPage> createState() => _PostPageState();
+}
 
+class _PostPageState extends State<PostPage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.black
+          ),
+          backgroundColor: Colors.white,
+          title: const Center(
+              child: Text('새 게시물', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shadowColor: Colors.transparent,
+              ),
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: const Text('등록',
+                  style: TextStyle(
+                      color: AppColor.main,
+                      fontWeight: FontWeight.bold
+                  )
+              )
+            ),
+          ],
+        ),
+      );
+    }
+}
