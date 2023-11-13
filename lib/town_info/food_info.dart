@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/town_info/category_dropdown.dart';
 
 class FoodInfoPage extends StatefulWidget {
   const FoodInfoPage({super.key});
@@ -13,6 +14,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   Widget build(BuildContext context) {
     return ListView(
           children: [
+            const CategoryDropdown(),
             Padding(
               padding: const EdgeInsets.only(top:10, bottom: 10),
               child: ListTile(
