@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/facility_info.dart';
-import 'package:schrodinger_client/food_info.dart';
-import 'package:schrodinger_client/home_info.dart';
-import 'package:schrodinger_client/post_page.dart';
+import 'package:schrodinger_client/town_info/facility_info.dart';
+import 'package:schrodinger_client/town_info/food_info.dart';
+import 'package:schrodinger_client/town_info/home_info.dart';
+import 'package:schrodinger_client/town_info/post_page.dart';
 import 'package:schrodinger_client/style.dart';
 
 void main() {
