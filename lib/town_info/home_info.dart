@@ -58,62 +58,81 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top:10, bottom: 10),
-              child: ListTile(
-                title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                trailing: const Icon(Icons.square, size: 50),
-                onTap: (){},
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:10, bottom: 10),
-              child: ListTile(
-                title: const Text('기대치에 못미쳤던.. 백미당 후기'),
-                subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-                trailing: const Icon(Icons.square, size: 50),
-                onTap: (){},
-              ),
-            ),
-          ],
-        ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 10, top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('맛집', style: TextStyle(fontSize: 20)),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)
+                            )
+                          ),
+                          onPressed: (){},
+                          child:const Text('더보기 >', style: TextStyle(fontSize: 15, color: Colors.grey)),
+                      ),
 
-        ListTile(
-          leading: const Icon(Icons.search),
-          title: const Text('Search'),
-          trailing: const Icon(Icons.navigate_next),
-          onTap: (){},
-        ),
-        ListTile(
-          leading: const Icon(Icons.refresh),
-          title: const Text('Refresh'),
-          trailing: const Icon(Icons.navigate_next),
-          onTap: (){},
-        ),
-        ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text('Home'),
-          trailing: const Icon(Icons.navigate_next),
-          onTap: (){},
-        ),
-        ListTile(
-          leading: const Icon(Icons.search),
-          title: const Text('Search'),
-          trailing: const Icon(Icons.navigate_next),
-          onTap: (){},
-        ),
-        ListTile(
-          leading: const Icon(Icons.refresh),
-          title: const Text('Refresh'),
-          trailing: const Icon(Icons.navigate_next),
-          onTap: (){},
-        ),
-        ListTile(
-          leading: const Icon(Icons.refresh),
-          title: const Text('공공 정보'),
-          trailing: const Icon(Icons.navigate_next),
-          onTap: (){},
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10, bottom: 10),
+                  child: ListTile(
+                    title: const Text('기대치에 못미쳤던.. 백미당 후기'),
+                    subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
+                    trailing: const Icon(Icons.square, size: 50),
+                    onTap: (){},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10, bottom: 10),
+                  child: ListTile(
+                    title: const Text('기대치에 못미쳤던.. 백미당 후기'),
+                    subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
+                    trailing: const Icon(Icons.square, size: 50),
+                    onTap: (){},
+                  ),
+                ),
+                Container(
+                    height: 10,
+                    color: AppColor.lightGrey
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top:10, bottom: 10),
+                  child: ListTile(
+                    title: const Text('기대치에 못미쳤던.. 백미당 후기'),
+                    subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
+                    trailing: const Icon(Icons.square, size: 50),
+                    onTap: (){},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10, bottom: 10),
+                  child: ListTile(
+                    title: const Text('기대치에 못미쳤던.. 백미당 후기'),
+                    subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
+                    trailing: const Icon(Icons.square, size: 50),
+                    onTap: (){},
+                  ),
+                ),
+                Container(
+                    height: 10,
+                    color: AppColor.lightGrey
+                ),
+              ],
+            ),
+
+          ],
         ),
       ],
     );
