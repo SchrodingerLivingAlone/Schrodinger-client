@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/facility_info.dart';
+import 'package:schrodinger_client/food_info.dart';
 import 'package:schrodinger_client/home_info.dart';
 import 'package:schrodinger_client/post_page.dart';
 import 'package:schrodinger_client/style.dart';
@@ -77,7 +78,7 @@ class _MainPageState extends State<MainPage> {
           body: TabBarView(
             children: [
               const HomeInfoPage(),
-              const PostPage(),
+              const FoodInfoPage(),
               const FacilityInfoPage(),
               ListTile(
                 leading: const Icon(Icons.home),
