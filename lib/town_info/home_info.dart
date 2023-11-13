@@ -18,13 +18,10 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
 
-    return TabBarView(
-      children: [
+    return
         ListView(
           children: [
             Stack(
-              // height: 100,
-              // color: AppColor.lightGrey,
               alignment: Alignment.center,
               children: [
                 Container(
@@ -43,7 +40,7 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                           spreadRadius: 2.0, // 그림자의 확산 정도
                         ),
                       ],
-                      ),
+                    ),
                   height: deviceHeight * 0.15,
                   width: deviceWidth * 0.85,
                   child: const Center(
@@ -68,7 +65,7 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                       const Text('맛집', style: TextStyle(fontSize: 20)),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            elevation: 0,
+                            // elevation: 0,
                             backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)
@@ -77,7 +74,6 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                           onPressed: (){},
                           child:const Text('더보기 >', style: TextStyle(fontSize: 15, color: Colors.grey)),
                       ),
-
                     ],
                   ),
                 ),
@@ -108,6 +104,26 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
             Column(
               children: [
                 Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 10, top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('시설', style: TextStyle(fontSize: 20)),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          // elevation: 0,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)
+                            )
+                        ),
+                        onPressed: (){},
+                        child:const Text('더보기 >', style: TextStyle(fontSize: 15, color: Colors.grey)),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.only(top:10, bottom: 10),
                   child: ListTile(
                     title: const Text('기대치에 못미쳤던.. 백미당 후기'),
@@ -131,11 +147,8 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                 ),
               ],
             ),
-
           ],
-        ),
-      ],
-    );
+        );
   }
 }
 

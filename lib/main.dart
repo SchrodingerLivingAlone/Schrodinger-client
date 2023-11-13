@@ -42,6 +42,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  late TabController _tabController;
 
   void _onItemTapped(int index) {
     setState(() {
