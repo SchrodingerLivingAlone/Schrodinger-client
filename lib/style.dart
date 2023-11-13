@@ -6,4 +6,5 @@ class AppColor {
 
   static const main = Color(0xff4600A3);
   static const yellow = Color(0xffFFC536);
+  static const lightGrey = Color(0xffEFEFF0);
 }
