@@ -42,11 +42,46 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  late TabController _tabController;
+  bool isCompleted = false;
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      if (index == 2){
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0), // BorderRadius 조절
+            ),
+            // title: const Text('AlertDialog'),
+            elevation: 20,
+            content: const Text(
+              "동네인증을 완료해야 \n 동네정보에 접근할 수 있습니다.\n 동네인증 페이지로 이동할까요?",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15)
+            ),
+            contentPadding: const EdgeInsets.only(top: 30),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('취소', style: TextStyle(fontSize: 20, color: Colors.red)),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    isCompleted == true
+                        ? isCompleted = false
+                        : isCompleted = true;
+                  });
+                  Navigator.of(context).pop(); // TODO: 동네 인증 화면으로 넘어가기
+                },
+                child: const Text('이동', style: TextStyle(fontSize: 20, color: Colors.blue)),
+              ),
+            ],
+          );
+        });
+      } else {
+        _selectedIndex = index;
+      }
     });
   }
 
