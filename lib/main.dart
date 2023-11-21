@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/facility_info.dart';
-import 'package:schrodinger_client/home_info.dart';
-import 'package:schrodinger_client/post_page.dart';
+import 'package:schrodinger_client/town_info/facility_info.dart';
+import 'package:schrodinger_client/town_info/food_info.dart';
+import 'package:schrodinger_client/town_info/home_info.dart';
+import 'package:schrodinger_client/town_info/post_page.dart';
 import 'package:schrodinger_client/style.dart';
 
 void main() {
@@ -41,6 +42,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  late TabController _tabController;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -77,7 +79,7 @@ class _MainPageState extends State<MainPage> {
           body: TabBarView(
             children: [
               const HomeInfoPage(),
-              const PostPage(),
+              const FoodInfoPage(),
               const FacilityInfoPage(),
               ListTile(
                 leading: const Icon(Icons.home),
