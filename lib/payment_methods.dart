@@ -15,6 +15,9 @@ class _PaymentMethodsState extends State<PaymentMethods> {
     final expense = args['expense'];
     final selectedButtonIndex = args['selectedButtonIndex'];
     final memo = args['memo'];
+    final year = args['year'];
+    final month = args['month'];
+    final day = args['day'];
 
     return Scaffold(
       appBar: AppBar(
@@ -58,6 +61,9 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       expense: expense,
                       selectedButtonIndex: selectedButtonIndex,
                       memo: memo,
+                      year: year,
+                      month: month,
+                      day: day,
                     ),
                   ),
                   SizedBox(
@@ -68,6 +74,9 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       expense: expense,
                       selectedButtonIndex: selectedButtonIndex,
                       memo: memo,
+                      year: year,
+                      month: month,
+                      day: day,
                     ),
                   )
                 ],
@@ -84,11 +93,18 @@ class ImageCardButton extends StatelessWidget {
   final int expense;
   final int selectedButtonIndex;
   final String memo;
+  final String year;
+  final String month;
+  final String day;
+
 
   ImageCardButton({
     required this.expense,
     required this.selectedButtonIndex,
-    required this.memo
+    required this.memo,
+    required this.year,
+    required this.month,
+    required this.day
   });
 
   @override
@@ -96,7 +112,7 @@ class ImageCardButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/spendingRecords',
-            arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'type': '카드'}
+            arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'type': '카드', 'year': year, 'month': month, 'day': day}
         );
       },
       child: Container(
@@ -117,11 +133,17 @@ class ImageCashButton extends StatelessWidget {
   final int expense;
   final int selectedButtonIndex;
   final String memo;
+  final String year;
+  final String month;
+  final String day;
 
   ImageCashButton({
     required this.expense,
     required this.selectedButtonIndex,
-    required this.memo
+    required this.memo,
+    required this.year,
+    required this.month,
+    required this.day
   });
 
   @override
@@ -129,7 +151,7 @@ class ImageCashButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/spendingRecords',
-            arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'type': '현금'}
+            arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'type': '현금', 'year': year, 'month': month, 'day': day}
         );
       },
       child: Container(

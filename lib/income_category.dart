@@ -15,6 +15,13 @@ class _IncomeCategoryState extends State<IncomeCategory> {
 
   @override
   Widget build(BuildContext context) {
+
+    final Map<String, dynamic> args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final year = args['year'];
+    final month = args['month'];
+    final day = args['day'];
+    final expense = int.parse(args['amount']);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -75,7 +82,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                           print('텍스트가 비어있습니다.');
                         } else {
                           Navigator.pushNamed(context, '/incomeRecords',
-                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                           );
                         }
                       },
@@ -92,7 +99,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                           print('텍스트가 비어있습니다.');
                         } else {
                           Navigator.pushNamed(context, '/incomeRecords',
-                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                           );
                         }
                       },
@@ -109,7 +116,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                           print('텍스트가 비어있습니다.');
                         } else {
                           Navigator.pushNamed(context, '/incomeRecords',
-                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                           );
                         }
                       },
@@ -126,7 +133,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                           print('텍스트가 비어있습니다.');
                         } else {
                           Navigator.pushNamed(context, '/incomeRecords',
-                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                           );
                         }
                       },
@@ -143,7 +150,7 @@ class _IncomeCategoryState extends State<IncomeCategory> {
                           print('텍스트가 비어있습니다.');
                         } else {
                           Navigator.pushNamed(context, '/incomeRecords',
-                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                              arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                           );
                         }
                       },

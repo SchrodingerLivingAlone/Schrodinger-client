@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "schrodinger_client",
     "short_name": "schrodinger_client",
+=======
+    "name": "capstone",
+    "short_name": "capstone",
+>>>>>>> b3738b6ff3bb9710c534aa8db75351077ef439e2
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

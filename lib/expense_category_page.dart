@@ -8,7 +8,6 @@ class ExpenseCategoryPage extends StatefulWidget {
 }
 
 class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
-  int expense = 4500;
   final TextEditingController _memoController = TextEditingController();
   String memoText = "";
   int selectedButtonIndex = -1;
@@ -16,6 +15,12 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    final Map<String, dynamic> args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final year = args['year'];
+    final month = args['month'];
+    final day = args['day'];
+    final expense = int.parse(args['amount']);
 
     return Scaffold(
         appBar: AppBar(
@@ -77,7 +82,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -94,7 +99,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -111,7 +116,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -128,7 +133,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -145,7 +150,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },

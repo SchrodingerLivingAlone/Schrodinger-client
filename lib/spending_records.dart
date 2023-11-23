@@ -15,6 +15,9 @@ class _SpendingRecordsState extends State<SpendingRecords> {
     final selectedButtonIndex = args['selectedButtonIndex'];
     final memo = args['memo'];
     final type = args['type'];
+    final year = args['year'];
+    final month = args['month'];
+    final day = args['day'];
     String selectedButtonText = '';
     Color color = Colors.purple;
 
@@ -135,7 +138,7 @@ class _SpendingRecordsState extends State<SpendingRecords> {
                           ),
                         ),
                         Text(
-                          '2023.05.22',
+                          '${year}.${month}.${day}',
                         )
                       ],
                     ),
