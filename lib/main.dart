@@ -4,6 +4,7 @@ import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/post_page.dart';
 import 'package:schrodinger_client/style.dart';
+import 'package:schrodinger_client/town_info/town_auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/' : (context) => const MainPage(),
         '/post' : (context) => const PostPage(),
+        '/town/auth' : (context) => const TownAuthPage()
       },
       // home: const MainPage(),
     );
@@ -72,7 +74,8 @@ class _MainPageState extends State<MainPage> {
                         ? isCompleted = false
                         : isCompleted = true;
                   });
-                  Navigator.of(context).pop(); // TODO: 동네 인증 화면으로 넘어가기
+                  Navigator.pushNamed(context, '/town/auth');
+
                 },
                 child: const Text('이동', style: TextStyle(fontSize: 20, color: Colors.blue)),
               ),
