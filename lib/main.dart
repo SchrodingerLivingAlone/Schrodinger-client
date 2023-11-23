@@ -74,7 +74,6 @@ class _MainPageState extends State<MainPage> {
                         ? isCompleted = false
                         : isCompleted = true;
                   });
-                  // Navigator.of(context).pop(); // TODO: 동네 인증 화면으로 넘어가기
                   Navigator.pushNamed(context, '/town/auth');
 
                 },

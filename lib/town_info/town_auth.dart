@@ -19,8 +19,7 @@ class _TownAuthPageState extends State<TownAuthPage> {
         ),
         leading:  IconButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.popUntil(context, (route) => route.isFirst);
             },
             color: Colors.purple,
             icon: const Icon(Icons.arrow_back)),
@@ -39,38 +38,7 @@ class _TownAuthPageState extends State<TownAuthPage> {
       ),
       body: Column(
         children: [
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                Container(
-                  height: 350,
-                  color: AppColor.lightGrey,
-                  child: const GoogleMapSection(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.yellow,
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(5)
-                      ),
-                      onPressed: (){},
-                      child: const SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.place),
-                            Text('현재위치', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                      )
-                  )
-                ),
-              ],
-            ),
+          const GoogleMapSection(),
           Column(
             children: [
               Padding(
