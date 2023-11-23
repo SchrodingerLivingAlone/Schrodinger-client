@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:schrodinger_client/style.dart';
 
 
@@ -32,6 +33,8 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
           ),
         ),
         Padding(
@@ -42,7 +45,9 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(5)
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  _currentLocation();
+                },
                 child: const SizedBox(
                   width: 60,
                   height: 60,
@@ -60,9 +65,17 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     );
   }
 
-  // TODO: 현재 위치로 돌아오는 이벤트
-  // Future<void> _goToTheLake() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
+  void _currentLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    Location location = Location();
+    final currentLocation = await location.getLocation();
+
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng(currentLocation.latitude!, currentLocation.longitude!),
+        zoom: 18.0,
+      ),
+    ));
+  }
 }
