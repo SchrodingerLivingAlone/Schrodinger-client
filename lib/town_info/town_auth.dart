@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/google_map_section.dart';
 import 'package:schrodinger_client/style.dart';
 
 class TownAuthPage extends StatefulWidget {
@@ -43,7 +44,8 @@ class _TownAuthPageState extends State<TownAuthPage> {
               children: [
                 Container(
                   height: 350,
-                  color: AppColor.lightGrey
+                  color: AppColor.lightGrey,
+                  child: const GoogleMapSection(),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
