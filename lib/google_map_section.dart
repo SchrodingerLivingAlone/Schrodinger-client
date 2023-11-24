@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:schrodinger_client/style.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GoogleMapSection extends StatefulWidget {
   const GoogleMapSection({super.key});
@@ -17,6 +19,7 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
   final Completer<GoogleMapController> _controller = Completer();
 
   List<double> currentCoord = [];
+  String currentAddress = '';
 
   @override
   void initState(){
@@ -36,7 +39,6 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
                 target: currentCoord.isNotEmpty ? LatLng(currentCoord[0], currentCoord[1]) : const LatLng(37.50508097213444, 126.95493073306663),
-
                 zoom: 18
             ), // 초기 카메라 위치
             onMapCreated: (GoogleMapController controller) {
@@ -92,6 +94,8 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     setState(() {
       currentCoord = [latitude, longitude];
     });
+
+    _getCurrentAddress();
   }
 
   void _moveCurrentLocation() async {
@@ -102,5 +106,17 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
         zoom: 18.0,
       ),
     ));
+  }
+
+  Future<void> _getCurrentAddress() async {
+    String gpsUrl =
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentCoord[0]},${currentCoord[1]}&language=ko&key=${dotenv.env['GOOGLE_MAP_KEY']}';
+
+    final responseGps = await http.get(Uri.parse(gpsUrl));
+    final responseJson = jsonDecode(responseGps.body);
+
+    // TODO: response에서 '동' 가져옴. 전역변수에 대입.
+    print(responseJson['results'][0]['address_components'][1]['short_name']);
+
   }
 }
