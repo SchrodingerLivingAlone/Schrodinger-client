@@ -3,6 +3,7 @@ import 'package:schrodinger_client/town_info/facility_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/post_page.dart';
+import 'package:schrodinger_client/town_info/post_info.dart';
 import 'package:schrodinger_client/style.dart';
 
 void main() {

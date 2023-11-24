@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/style.dart';
 
-//1.등록하면 글 객체 생성
+//1.등록하면 글 객체 생성 -> api완성 후 합칠때
 //2.이미지 GridView 갯수만큼만 띄우기
-//3.장소
+//3.장소 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소로
 
 enum Issue {Restaurant, Facility, Discount, Etc, Together, Ask, PublicInfo}
 
@@ -41,7 +41,6 @@ class _PostPageState extends State<PostPage> {
         leading:  IconButton(
           onPressed: () {
             showExitConfirmationDialog(context);
-
           },
           color: Colors.purple,
           icon: Icon(Icons.arrow_back)),
@@ -54,12 +53,17 @@ class _PostPageState extends State<PostPage> {
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
             ),
-            onPressed: (){
+            //onPressed: (){
               //
               //글 객체 생성해서 맞는 자료구조(배열)에 추가하기
               //자료구조는 규한이랑 얘기해보기
               //
-              Navigator.pop(context);
+              //Navigator.pop(context);
+            //},
+            onPressed: () {
+              setState(() {
+                Navigator.pushNamed(context, '/post_info');
+              });
             },
             child: const Text('등록',
               style: TextStyle(
@@ -245,7 +249,10 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
           child: Text('계속 작성', style: TextStyle(color: Colors.blue),),
         ),
         TextButton(
-          onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+          onPressed: () {
+              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(true);
+            },
           child: Text('작성 취소', style: TextStyle(color: Colors.red),),
         ),
       ],
