@@ -16,6 +16,16 @@ class GoogleMapSection extends StatefulWidget {
 class _GoogleMapSectionState extends State<GoogleMapSection> {
   final Completer<GoogleMapController> _controller = Completer();
 
+  // late Future<List<double>> currentCoord = _getCurrentLocation();
+  List<double> currentCoord = [];
+
+  @override
+  void initState(){
+    super.initState();
+    // currentCoord = _getCurrentLocation();
+    _getCurrentLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -26,8 +36,9 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
           color: AppColor.lightGrey,
           child: GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: const CameraPosition(
-                target: LatLng(37.50508097213444, 126.95493073306663),
+            initialCameraPosition: CameraPosition(
+                // target: LatLng(37.50508097213444, 126.95493073306663),
+                target: LatLng(currentCoord[0], currentCoord[1]),
                 zoom: 18
             ), // 초기 카메라 위치
             onMapCreated: (GoogleMapController controller) {
@@ -45,8 +56,8 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(5)
                 ),
-                onPressed: (){
-                  _currentLocation();
+                onPressed: () async {
+                  _moveCurrentLocation();
                 },
                 child: const SizedBox(
                   width: 60,
@@ -65,12 +76,18 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     );
   }
 
-  void _currentLocation() async {
+  Future<void> _getCurrentLocation() async {
+    Location location = Location();
+    final currentLocation = await location.getLocation();
+    setState(() {
+      currentCoord = [currentLocation.latitude!, currentLocation.longitude!];
+    });
+  }
+
+  void _moveCurrentLocation() async {
     final GoogleMapController controller = await _controller.future;
     Location location = Location();
     final currentLocation = await location.getLocation();
-
-
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         target: LatLng(currentLocation.latitude!, currentLocation.longitude!),
