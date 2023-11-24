@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:schrodinger_client/style.dart';
-
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class GoogleMapSection extends StatefulWidget {
   const GoogleMapSection({super.key});
@@ -16,13 +16,11 @@ class GoogleMapSection extends StatefulWidget {
 class _GoogleMapSectionState extends State<GoogleMapSection> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  // late Future<List<double>> currentCoord = _getCurrentLocation();
   List<double> currentCoord = [];
 
   @override
   void initState(){
     super.initState();
-    // currentCoord = _getCurrentLocation();
     _getCurrentLocation();
   }
 
@@ -37,8 +35,8 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
           child: GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
-                // target: LatLng(37.50508097213444, 126.95493073306663),
-                target: LatLng(currentCoord[0], currentCoord[1]),
+                target: currentCoord.isNotEmpty ? LatLng(currentCoord[0], currentCoord[1]) : const LatLng(37.50508097213444, 126.95493073306663),
+
                 zoom: 18
             ), // 초기 카메라 위치
             onMapCreated: (GoogleMapController controller) {
@@ -77,20 +75,30 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
   }
 
   Future<void> _getCurrentLocation() async {
-    Location location = Location();
-    final currentLocation = await location.getLocation();
+    final GoogleMapController controller = await _controller.future;
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double latitude = position.latitude;
+    double longitude = position.longitude;
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng(latitude, longitude),
+        zoom: 18.0,
+      ),
+    ));
+
     setState(() {
-      currentCoord = [currentLocation.latitude!, currentLocation.longitude!];
+      currentCoord = [latitude, longitude];
     });
   }
 
   void _moveCurrentLocation() async {
     final GoogleMapController controller = await _controller.future;
-    Location location = Location();
-    final currentLocation = await location.getLocation();
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
-        target: LatLng(currentLocation.latitude!, currentLocation.longitude!),
+        target: LatLng(currentCoord[0], currentCoord[1]),
         zoom: 18.0,
       ),
     ));

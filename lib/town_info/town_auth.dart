@@ -38,7 +38,9 @@ class _TownAuthPageState extends State<TownAuthPage> {
       ),
       body: Column(
         children: [
-          const GoogleMapSection(),
+          const SingleChildScrollView(
+            child: GoogleMapSection(),
+          ),
           Column(
             children: [
               Padding(
