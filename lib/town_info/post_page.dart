@@ -188,8 +188,8 @@ class _PostPageState extends State<PostPage> {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0,0,50.0,0),
-                    child: const Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 10, color: Colors.grey),),
+                    padding: const EdgeInsets.fromLTRB(8.0,0,25.0,0),
+                    child: const Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 15, color: Colors.grey),),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
