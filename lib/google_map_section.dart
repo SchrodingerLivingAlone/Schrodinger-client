@@ -20,6 +20,7 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
 
   List<double> currentCoord = [];
   String currentAddress = '';
+  bool isMapLoaded = false;
 
   @override
   void initState(){
@@ -56,9 +57,9 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
                     shape: const CircleBorder(),
                     padding: const EdgeInsets.all(5)
                 ),
-                onPressed: () async {
+                onPressed: isMapLoaded ? () async {
                   _moveCurrentLocation();
-                },
+                } : null,
                 child: const SizedBox(
                   width: 60,
                   height: 60,
@@ -93,6 +94,7 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
 
     setState(() {
       currentCoord = [latitude, longitude];
+      isMapLoaded = true;
     });
 
     _getCurrentAddress();
