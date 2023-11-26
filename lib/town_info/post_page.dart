@@ -7,6 +7,7 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/ImageUploader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:schrodinger_client/town_info/post_search.dart';
 
 //TODO 1.등록하면 글 객체 생성 -> api완성 후 합칠때
 //TODO 3.위치 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소로
@@ -179,7 +180,7 @@ class _PostPageState extends State<PostPage> {
             const SizedBox(
               height: 20,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
               child: ImageWidget(),
             ),
@@ -197,7 +198,9 @@ class _PostPageState extends State<PostPage> {
                         minimumSize: const Size(20, 20),
                         primary: Colors.deepPurple,
                         elevation: 10),
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const PostSearch()));
+                    },
                       child: Row(
                         children: [
                           Icon(Icons.pin_drop_outlined, color: Colors.white,),
