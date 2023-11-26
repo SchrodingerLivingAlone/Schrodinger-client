@@ -5,8 +5,10 @@ import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/post_page.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/town_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
