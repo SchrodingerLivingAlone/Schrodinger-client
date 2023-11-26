@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/style.dart';
 
-//1.게시글 수정
-//2.게시글 삭제 로직 추가
-//3.댓글 입력창
-//4.댓글 ui -> 삭제, 수정가능하도록 ListTile이 아닌 widget으로 바꿔보기
+//TODO 1.게시글 수정 로직 추가
+//TODO 2.게시글 삭제 로직 추가
+//TODO 3.댓글 입력창
+//TODO 4.댓글 ui -> 삭제, 수정가능하도록 ListTile이 아닌 widget으로 바꿔보기
 
 class PostInfo extends StatefulWidget {
   const PostInfo({super.key});
@@ -29,7 +28,7 @@ class _PostInfoState extends State<PostInfo> {
         leading:  IconButton(
             onPressed: () => Navigator.of(context).pop(false),
             color: Colors.purple,
-            icon: Icon(Icons.arrow_back)),
+            icon: const Icon(Icons.arrow_back)),
         backgroundColor: Colors.white,
         title: const Center(
             child: Text('동네 정보', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
@@ -39,14 +38,14 @@ class _PostInfoState extends State<PostInfo> {
               // showMenu 함수를 사용하여 다이얼로그를 표시합니다.
               showMenu(
                 context: context,
-                position: RelativeRect.fromLTRB(1000, 0, 0, 0),
+                position: const RelativeRect.fromLTRB(1000, 0, 0, 0),
                 items: [
-                  PopupMenuItem(
-                    child: const Text('게시글 수정'),
+                  const PopupMenuItem(
+                    child: Text('게시글 수정'),
                     value: 'edit',
                   ),
-                  PopupMenuItem(
-                    child: const Text('게시글 삭제'),
+                  const PopupMenuItem(
+                    child: Text('게시글 삭제'),
                     value: 'delete',
                   ),
                 ],
@@ -79,30 +78,30 @@ class _PostInfoState extends State<PostInfo> {
                          Padding(
                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
                            child: Container(
-                             child: CircleAvatar(
+                             child: const CircleAvatar(
                                backgroundColor: Colors.grey,
                                //backgroundImage: ,
                              ),
                            ),
                          ),
-                         Column(
+                         const Column(
                            children: [
                              Text('nicknamePosition', style: TextStyle(fontSize: 20),),
                              Text('5분전 | 조회 46 | 전눙동 '),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            width: 80,
                          ),
                          ElevatedButton(
                              onPressed: (){},
                              style: ElevatedButton.styleFrom(
                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                 minimumSize: Size(30, 30),
+                                 minimumSize: const Size(30, 30),
                                  primary: Colors.orange,
                                  elevation: 10
                              ),
-                             child: Text('IssuePos', style: TextStyle(fontSize: 13),)
+                             child: const Text('IssuePos', style: TextStyle(fontSize: 13),)
                          ),
                        ],
                      ),
@@ -110,15 +109,15 @@ class _PostInfoState extends State<PostInfo> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                     child: Container(width: 500,
-                        child: Divider(color: Colors.grey, thickness: 2.0)),
+                        child: const Divider(color: Colors.grey, thickness: 2.0)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                    child: Container(child: Text('TitlePosition', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
+                    child: Container(child: const Text('TitlePosition', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 2.0),
-                    child: Container(child: Text('contentPosition', style: TextStyle(fontSize: 20),)),
+                    child: Container(child: const Text('contentPosition', style: TextStyle(fontSize: 20),)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
@@ -129,11 +128,11 @@ class _PostInfoState extends State<PostInfo> {
                             width: 400.0,
                             height: 200.0,
                             color: Colors.grey,
-                            child: Text('Image Position'),
+                            child: const Text('Image Position'),
                             // Add any child widgets here if needed.
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
+                          const Padding(
+                            padding: EdgeInsets.all(10.0),
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -149,12 +148,6 @@ class _PostInfoState extends State<PostInfo> {
                     padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                     child: Column(
                           children: [
-
-                            // Padding(
-                            //   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                            //   child: Container(width: 180,
-                            //       child: Divider(color: Colors.grey, thickness: 1.0)),
-                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -171,21 +164,8 @@ class _PostInfoState extends State<PostInfo> {
                                         isLiked = !isLiked;
                                       });
                                     },
-                                    child: Text('공감하기', style: TextStyle(fontSize: 15, color:Colors.black),)
+                                    child: const Text('공감하기', style: TextStyle(fontSize: 15, color:Colors.black),)
                                 ),
-                                // ElevatedButton(
-                                //     style: ElevatedButton.styleFrom(
-                                //       shape: RoundedRectangleBorder(
-                                //         borderRadius: BorderRadius.circular(10.0), // 조절하고 싶은 둥근 정도
-                                //       ),
-                                //       backgroundColor: Colors.white,
-                                //       shadowColor: Colors.transparent,
-                                //     ),
-                                //     onPressed: (){
-                                //
-                                //     },
-                                //     child: Text('댓글쓰기', style: TextStyle(fontSize: 15, color:Colors.black),)
-                                // ),
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -199,19 +179,19 @@ class _PostInfoState extends State<PostInfo> {
                                         isScrapped = !isScrapped; // 버튼 클릭 시 상태 변경
                                       });
                                     },
-                                    child: Text('스크랩', style: TextStyle(fontSize: 15, color:Colors.black),)
+                                    child: const Text('스크랩', style: TextStyle(fontSize: 15, color:Colors.black),)
                                 ),
                               ],
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                               child: Container(width: 400,
-                                  child: Divider(color: Colors.grey, thickness: 1.0)),
+                                  child: const Divider(color: Colors.grey, thickness: 1.0)),
                             ),
                             Container(
                               child: ListView(
                                 shrinkWrap : true,
-                                physics : NeverScrollableScrollPhysics(),
+                                physics : const NeverScrollableScrollPhysics(),
                                 children: getContent(),
                               ),
                             )
@@ -223,7 +203,7 @@ class _PostInfoState extends State<PostInfo> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             child:
               TextFormField(
                 decoration: const InputDecoration(

@@ -1,9 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:schrodinger_client/style.dart';
+import 'dart:io';
 
-//1.등록하면 글 객체 생성 -> api완성 후 합칠때
-//2.이미지 GridView 갯수만큼만 띄우기
-//3.장소 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소로
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:schrodinger_client/style.dart';
+import 'package:schrodinger_client/town_info/ImageUploader.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+//TODO 1.등록하면 글 객체 생성 -> api완성 후 합칠때
+//TODO 3.위치 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소로
 
 enum Issue {Restaurant, Facility, Discount, Etc, Together, Ask, PublicInfo}
 
@@ -15,10 +21,8 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-
   Issue _issue = Issue.Restaurant;
   String selectedButton = 'Button 1';
-
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
 
@@ -43,7 +47,7 @@ class _PostPageState extends State<PostPage> {
             showExitConfirmationDialog(context);
           },
           color: Colors.purple,
-          icon: Icon(Icons.arrow_back)),
+          icon: const Icon(Icons.arrow_back)),
         backgroundColor: Colors.white,
         title: const Center(
             child: Text('새 게시물', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
@@ -77,12 +81,11 @@ class _PostPageState extends State<PostPage> {
       body: Container(
         color: Colors.white,
         child: ListView(
-
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 0, 5),
               child: Container(
-                  child: Text('주제', style: TextStyle(fontSize: 15,color: Colors.black, fontWeight: FontWeight.bold)),
+                  child: const Text('주제', style: TextStyle(fontSize: 15,color: Colors.black, fontWeight: FontWeight.bold)),
               ),
             ),
             Row(
@@ -94,11 +97,11 @@ class _PostPageState extends State<PostPage> {
                   },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 1'),
                         elevation: 10
                     ),
-                    child: Text('맛집', style: TextStyle(fontSize: 13),)
+                    child: const Text('맛집', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 2');
@@ -106,10 +109,10 @@ class _PostPageState extends State<PostPage> {
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 2'),
                         elevation: 10),
-                    child: Text('시설', style: TextStyle(fontSize: 13),)
+                    child: const Text('시설', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 3');
@@ -117,10 +120,10 @@ class _PostPageState extends State<PostPage> {
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 3'),
                         elevation: 10),
-                    child: Text('할인', style: TextStyle(fontSize: 13),)
+                    child: const Text('할인', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 4');
@@ -128,10 +131,10 @@ class _PostPageState extends State<PostPage> {
                   },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 4'),
                         elevation: 10),
-                    child: Text('기타', style: TextStyle(fontSize: 13),)
+                    child: const Text('기타', style: TextStyle(fontSize: 13),)
                 ),
               ],
             ),
@@ -144,10 +147,10 @@ class _PostPageState extends State<PostPage> {
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 5'),
                         elevation: 10),
-                    child: Text('같이해요', style: TextStyle(fontSize: 13),)
+                    child: const Text('같이해요', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 6');
@@ -155,10 +158,10 @@ class _PostPageState extends State<PostPage> {
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 6'),
                         elevation: 10),
-                    child: Text('질문/요청', style: TextStyle(fontSize: 13),)
+                    child: const Text('질문/요청', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 7');
@@ -166,56 +169,56 @@ class _PostPageState extends State<PostPage> {
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: Size(30, 30),
+                        minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 7'),
                         elevation: 10),
-                    child: Text('공공정보', style: TextStyle(fontSize: 13),)
+                    child: const Text('공공정보', style: TextStyle(fontSize: 13),)
                 ),
               ],
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+              child: ImageWidget(),
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 10, 10),
-              child: Stack(
+              padding: EdgeInsets.fromLTRB(20.0, 5.0,8.0,0),
+              child: Row(
                 children: [
-                  Container(
-
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0,0,50.0,0),
+                    child: const Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 10, color: Colors.grey),),
                   ),
-                  Column(
-                    children: [
-                      ElevatedButton(onPressed: (){},
-                          style: ElevatedButton.styleFrom(
-                              shape: CircleBorder(),
-                              minimumSize: Size(30, 30),
-                              primary: Colors.grey, elevation: 10,
-                              backgroundColor: Colors.white,
-                          ),
-                          child: Text('+', style: TextStyle(color: Colors.black,fontSize: 20),)
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        minimumSize: const Size(20, 20),
+                        primary: Colors.deepPurple,
+                        elevation: 10),
+                    onPressed: (){},
+                      child: Row(
+                        children: [
+                          Icon(Icons.pin_drop_outlined, color: Colors.white,),
+                          Text('위치', style: TextStyle(color: Colors.white),),
+                        ],
                       ),
-                      Text('0/5', style: TextStyle(fontSize: 15),),
-                    ],
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
-              child: Container(
-                child: TextField(
-                  maxLines: null,
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: TextField(
                   maxLength: 30,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '제목을 입력하세요.'
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    hintText: '제목을 입력하세요.',
+                    border: UnderlineInputBorder(),
                   ),
                   controller: _titleController,
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-              child: Container( height:1.0,
-                width:500.0,
-                color:Colors.black,),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
@@ -223,9 +226,10 @@ class _PostPageState extends State<PostPage> {
                 child: TextField(
                   maxLines: null,
                   maxLength: 200,
-                  decoration: InputDecoration(
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
-                    hintText: '내용을 입력하세요',
+                    hintText: '내용을 입력하세요.',
                   ),
                   controller: _contentController,
                 ),
@@ -242,20 +246,151 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
   return showDialog<bool?>(
     context: context,
     builder: (context) => AlertDialog(
-      content: Text('작성중인 글을 취소하시겠습니까?\n작성 취소 시, 작성된 글은 저장되지 않습니다.', style: TextStyle(fontSize: 15),),
+      content: const Text('작성중인 글을 취소하시겠습니까?\n작성 취소 시, 작성된 글은 저장되지 않습니다.', style: TextStyle(fontSize: 15),),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text('계속 작성', style: TextStyle(color: Colors.blue),),
+          child: const Text('계속 작성', style: TextStyle(color: Colors.blue),),
         ),
         TextButton(
           onPressed: () {
               Navigator.of(context).pop(true);
               Navigator.of(context).pop(true);
             },
-          child: Text('작성 취소', style: TextStyle(color: Colors.red),),
+          child: const Text('작성 취소', style: TextStyle(color: Colors.red),),
         ),
       ],
     ),
   );
 }
+//////////////////////////////////////////////////////
+//Image 업로드 코드
+//////////////////////////////////////////////////////
+final imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {
+  return ImageState();
+});
+
+class ImageState extends StateNotifier<List<XFile>> {
+  ImageState() : super(<XFile>[]);
+  final ImagePickerService picker = ImagePickerService();
+
+  @override
+  set state(List<XFile> value) {
+    super.state = value;
+  }
+
+  delImage(XFile image) {
+    var list = [...super.state];
+    list.remove(image);
+    state = list;
+  }
+
+  void addImage(List<XFile> value) {
+    var list = [...super.state];
+    if (list.isEmpty) {
+      state = value;
+    } else {
+      list.addAll(value);
+      list.toSet().toList();
+      state = list;
+    }
+    if (super.state.length > 5) {
+      state = super.state.sublist(0, 5);
+      Fluttertoast.showToast(msg: '최대 5개의 이미지를 업로드할 수 있습니다.');
+    }
+  }
+
+  Future getImage() async {
+    picker.pickImage().then((value) {
+      addImage(value);
+    }).catchError((onError) {
+      Fluttertoast.showToast(msg: 'failed to get image');
+    });
+  }
+}
+
+class ImageWidget extends ConsumerWidget {
+  const ImageWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    double imgBoxSize = ((MediaQuery.of(context).size.width - 32) / 5) - 4;
+    final images = ref.watch(imagePickerProvider);
+
+    Widget imageBox(XFile img) => GestureDetector(
+        onTap: () => ref.read(imagePickerProvider.notifier).delImage(img),
+        child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            width: imgBoxSize,
+            height: imgBoxSize,
+            child: Stack(children: [
+              Center(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: Image.file(File(img.path)).image),
+                          borderRadius: BorderRadius.circular(10)),
+                      width: imgBoxSize,
+                      height: imgBoxSize)),
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Icon(Icons.close,
+                          size: 15, color: Colors.grey[400])))
+            ])));
+
+
+    return Row(children: [
+      if (images.length == 5) ...[
+        ...images.map((e) => imageBox(e)).toList(),
+      ] else ...[
+        ...images.map((e) => imageBox(e)).toList(),
+        InkWell(
+            onTap: () => ref.read(imagePickerProvider.notifier).getImage(),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              width: MediaQuery.of(context).size.width * 0.17,
+              height: MediaQuery.of(context).size.width * 0.17,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.image, color: Colors.grey[400]!),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'image',
+                    style: TextStyle(
+                        color: Colors.grey[400],
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12.0),
+                  )
+                ],
+              ),
+            ))
+      ]
+    ]);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

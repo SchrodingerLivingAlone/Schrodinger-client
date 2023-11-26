@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schrodinger_client/town_info/facility_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
@@ -7,7 +8,11 @@ import 'package:schrodinger_client/town_info/post_info.dart';
 import 'package:schrodinger_client/style.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ProviderScope(
+          child: MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/' : (context) => const MainPage(),
         '/post' : (context) => const PostPage(),
+        '/post_info' : (context) => const PostInfo(),
       },
       // home: const MainPage(),
     );
