@@ -9,7 +9,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GoogleMapSection extends StatefulWidget {
-  const GoogleMapSection({super.key});
+  final String townName;
+  final Function(String) updateTownName;
+
+  const GoogleMapSection({super.key, required this.townName, required this.updateTownName});
+
 
   @override
   State<GoogleMapSection> createState() => _GoogleMapSectionState();
@@ -21,10 +25,14 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
   List<double> currentCoord = [];
   String currentAddress = '';
   bool isMapLoaded = false;
+  String townName = '';
+  late Function(String) updateTownName;
 
   @override
   void initState(){
     super.initState();
+    townName = widget.townName;
+    updateTownName = widget.updateTownName;
     _getCurrentLocation();
   }
 
@@ -117,8 +125,8 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     final responseGps = await http.get(Uri.parse(gpsUrl));
     final responseJson = jsonDecode(responseGps.body);
 
-    // TODO: response에서 '동' 가져옴. 전역변수에 대입.
-    print(responseJson['results'][0]['address_components'][1]['short_name']);
+    String dong = responseJson['results'][0]['address_components'][1]['short_name'];
+    updateTownName(dong);
 
   }
 }
