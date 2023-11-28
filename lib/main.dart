@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schrodinger_client/town_info/facility_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
-import 'package:schrodinger_client/town_info/post_page.dart';
+import 'package:schrodinger_client/post/post_page.dart';
+import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/town_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+
 Future main() async {
   await dotenv.load(fileName: '.env');
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+        child: const MyApp()
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,6 +37,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/' : (context) => const MainPage(),
         '/post' : (context) => const PostPage(),
+        '/post_info' : (context) => const PostInfo(),
         '/town/auth' : (context) => const TownAuthPage()
       },
       // home: const MainPage(),
