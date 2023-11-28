@@ -1,4 +1,4 @@
-import 'package:capstone/accountbank.dart';
+import 'package:schrodinger_client/accountbank.dart';
 import 'package:flutter/material.dart';
 
 class ManageProfiles extends StatefulWidget {
