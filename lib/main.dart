@@ -8,6 +8,9 @@ import 'package:schrodinger_client/income_category.dart';
 import 'package:schrodinger_client/income_records.dart';
 import 'package:schrodinger_client/expense_category_page.dart';
 import 'package:schrodinger_client/income_page.dart';
+import 'package:schrodinger_client/login/auth_page.dart';
+import 'package:schrodinger_client/login/login_page.dart';
+import 'package:schrodinger_client/login/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,8 +37,11 @@ class MyApp extends StatelessWidget {
         '/spendingRecords' : (context) => const SpendingRecords(),
         '/incomeCategory': (context) => const IncomeCategory(),
         '/incomeRecords' : (context) => const IncomeRecords(),
+        '/authPage' : (context) => const AuthPage(),
+        '/loginPage' : (context) => const LoginPage(),
+        '/splash': (context) => const Splash()
       },
-      home: AccountBank(),
+      home: Splash(),
     );
   }
 }
