@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -25,7 +26,7 @@ class _PostSearchState extends State<PostSearch> {
 
   Future<void> _searchPlaces() async {
     try {
-      final String apiKey = 'asdf';
+      final String? apiKey = dotenv.env['GOOGLE_MAP_KEY'];
       final String query = _locationSearchController.text;
       final List<Map<String, dynamic>> results = await searchPlaces(query, apiKey);
 
@@ -118,6 +119,9 @@ class _PostSearchState extends State<PostSearch> {
                               labelText: '검색어를 입력하세요.',
                             ),
                             controller: _locationSearchController,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|ᆞ|ᆢ]')),
+                          ],
                           ),
                     ),
                   ),
@@ -157,7 +161,7 @@ class _PostSearchState extends State<PostSearch> {
   }
 }
 
-Future<List<Map<String, dynamic>>> searchPlaces(String query, String apiKey) async {
+Future<List<Map<String, dynamic>>> searchPlaces(String query, String? apiKey) async {
   final String apiUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
   final String requestUrl = '$apiUrl?query=$query&key=$apiKey';
 
