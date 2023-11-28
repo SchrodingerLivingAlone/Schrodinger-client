@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/town_info/post_adjust.dart';
 
 //TODO 1.게시글 수정 로직 추가
 //TODO 2.게시글 삭제 로직 추가
@@ -53,10 +54,11 @@ class _PostInfoState extends State<PostInfo> {
               ).then((value) {
                 // 사용자가 선택한 항목에 따라 처리합니다.
                 if (value == 'edit') {
-                  // 게시글 수정 로직을 추가하세요.
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PostAdjustPage()));
                   print('게시글 수정');
                 } else if (value == 'delete') {
-                  // 게시글 삭제 로직을 추가하세요.
+                  // 게시글 삭제 api호출.
+
                   print('게시글 삭제');
                 }
               });
@@ -234,13 +236,37 @@ List<Comment> comments = [
   // 여기에 필요한 만큼 댓글을 추가할 수 있습니다.
 ];
 
+// List<Widget> getContent(){
+//   List<Widget> tiles = [];
+//   comments.forEach((comment) {
+//     tiles.add(ListTile(
+//
+//         title : Text(comment.username),
+//
+//         ));
+//     });
+//   return tiles;
+// }
+
 List<Widget> getContent(){
   List<Widget> tiles = [];
   comments.forEach((comment) {
-    tiles.add(ListTile(
+    tiles.add(Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text('nickname', style: TextStyle(fontSize: 10),),
+            Text('comment', style: TextStyle(fontSize: 15),),
+          ],
+        ),
+      ],
 
-        title : Text(comment.username),
-        ));
-    });
+    ));
+  });
   return tiles;
 }
