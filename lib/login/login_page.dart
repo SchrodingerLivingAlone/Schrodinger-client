@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/accountbank.dart';
+import 'package:schrodinger_client/town_info/town_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -101,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             print('${id}, ${password}');
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AccountBank()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
                           }
                         });
                       },
