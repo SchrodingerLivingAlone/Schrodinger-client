@@ -10,6 +10,8 @@ class TownAuthPage extends StatefulWidget {
 }
 
 class _TownAuthPageState extends State<TownAuthPage> {
+  String townName = '검색중...';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +40,15 @@ class _TownAuthPageState extends State<TownAuthPage> {
       ),
       body: Column(
         children: [
-          const GoogleMapSection(),
+          SingleChildScrollView(
+            child: GoogleMapSection(
+              townName: townName,
+              updateTownName: (String newTown) {
+              setState(() {
+                townName = newTown;
+              });
+            },),
+          ),
           Column(
             children: [
               Padding(
@@ -47,7 +57,7 @@ class _TownAuthPageState extends State<TownAuthPage> {
                   // width: 200,
                   height: 120,
                   // color: Colors.red,
-                  child: const Text("현재 위치는 ‘ **동’ 입니다.\n\n거주하시는 동네가 맞다면 아래 버튼을 눌러\n동네 인증을 완료해주세요."),
+                  child: Text("현재 위치는 '$townName' 입니다.\n\n거주하시는 동네가 맞다면 아래 버튼을 눌러\n동네 인증을 완료해주세요."),
                 ),
               ),
               ElevatedButton(
@@ -61,7 +71,6 @@ class _TownAuthPageState extends State<TownAuthPage> {
               )
             ],
           )
-
         ],
       )
     );

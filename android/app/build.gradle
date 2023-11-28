@@ -72,6 +72,12 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+
 }
 
 flutter {

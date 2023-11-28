@@ -7,13 +7,12 @@ import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/town_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(
-      ProviderScope(
-          child: MyApp(),
-      ),
-  );
+
+Future main() async {
+  await dotenv.load(fileName: '.env');
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
