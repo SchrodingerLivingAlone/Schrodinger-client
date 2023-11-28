@@ -25,7 +25,7 @@ class _PostSearchState extends State<PostSearch> {
 
   Future<void> _searchPlaces() async {
     try {
-      final String apiKey = 'AIzaSyBhR43OMd-Sc81ZH7vaFVKFaerit7x4tl8';
+      final String apiKey = 'asdf';
       final String query = _locationSearchController.text;
       final List<Map<String, dynamic>> results = await searchPlaces(query, apiKey);
 

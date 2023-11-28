@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/town_info/post_adjust.dart';
+import 'package:schrodinger_client/post/post_adjust.dart';
 
 //TODO 1.게시글 수정 로직 추가
 //TODO 2.게시글 삭제 로직 추가

@@ -7,21 +7,22 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/ImageUploader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:schrodinger_client/town_info/post_search.dart';
+import 'package:schrodinger_client/post/post_search.dart';
 
 //TODO 1.등록하면 글 객체 생성 -> api완성 후 합칠때
-//TODO 3.위치 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소로
+//TODO 2.위치 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소 return해서 String으로 띄워주기
+//TODO 3.밑에 한줄 더해서 위치띄우기.
 
 enum Issue {Restaurant, Facility, Discount, Etc, Together, Ask, PublicInfo}
 
-class PostAdjustPage extends StatefulWidget {
-  const PostAdjustPage({super.key});
+class PostPage extends StatefulWidget {
+  const PostPage({super.key});
 
   @override
-  State<PostAdjustPage> createState() => _PostAdjustPageState();
+  State<PostPage> createState() => _PostPageState();
 }
 
-class _PostAdjustPageState extends State<PostAdjustPage> {
+class _PostPageState extends State<PostPage> {
   Issue _issue = Issue.Restaurant;
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
@@ -40,19 +41,18 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
+            iconTheme: const IconThemeData(
             color: Colors.black
         ),
         leading:  IconButton(
-            onPressed: () {
-              showExitConfirmationDialog(context);
-            },
-            color: Colors.purple,
-            icon: const Icon(Icons.arrow_back)),
+          onPressed: () {
+            showExitConfirmationDialog(context);
+          },
+          color: Colors.purple,
+          icon: const Icon(Icons.arrow_back)),
         backgroundColor: Colors.white,
-        title: const Padding(
-            padding: const EdgeInsets.fromLTRB(80, 10, 0, 8),
-            child: Text('게시물 수정', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
+        title: const Center(
+            child: Text('새 게시물', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -60,19 +60,18 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
               shadowColor: Colors.transparent,
             ),
             //onPressed: (){
-            //
-            //글 객체 생성해서 맞는 자료구조(배열)에 추가하기
-            //자료구조는 규한이랑 얘기해보기
-            //
-            //Navigator.pop(context);
+              //
+              //글 객체 생성해서 맞는 자료구조(배열)에 추가하기
+              //자료구조는 규한이랑 얘기해보기
+              //
+              //Navigator.pop(context);
             //},
             onPressed: () {
               setState(() {
-                //수정 api 호출
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/post_info');
               });
             },
-            child: const Text('완료',
+            child: const Text('등록',
               style: TextStyle(
                 color: AppColor.yellow,
                 fontWeight: FontWeight.bold,
@@ -88,16 +87,16 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 0, 5),
               child: Container(
-                child: const Text('주제', style: TextStyle(fontSize: 15,color: Colors.black, fontWeight: FontWeight.bold)),
+                  child: const Text('주제', style: TextStyle(fontSize: 15,color: Colors.black, fontWeight: FontWeight.bold)),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(onPressed: (){
-                  selectButton('Button 1');
-                  _issue = Issue.Restaurant;
-                },
+                    selectButton('Button 1');
+                    _issue = Issue.Restaurant;
+                  },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         minimumSize: const Size(30, 30),
@@ -131,7 +130,7 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
                 ElevatedButton(onPressed: (){
                   selectButton('Button 4');
                   _issue = Issue.Etc;
-                },
+                  },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         minimumSize: const Size(30, 30),
@@ -203,13 +202,13 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const PostSearch()));
                     },
-                    child: Row(
-                      children: [
-                        Icon(Icons.pin_drop_outlined, color: Colors.white,),
-                        Text('위치', style: TextStyle(color: Colors.white),),
-                        //사용자의 원래 위치로 초기화해놓고 -> 갔다오면 해당 식당으로 바뀌기.
-                      ],
-                    ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.pin_drop_outlined, color: Colors.white,),
+                          Text('위치', style: TextStyle(color: Colors.white),),
+                          //사용자의 원래 위치로 초기화해놓고 -> 갔다오면 해당 식당으로 바뀌기.
+                        ],
+                      ),
                   ),
                 ],
               ),
@@ -217,14 +216,14 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: TextField(
-                maxLength: 30,
-                maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                decoration: const InputDecoration(
-                  hintText: '제목을 입력하세요.',
-                  border: UnderlineInputBorder(),
+                  maxLength: 30,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    hintText: '제목을 입력하세요.',
+                    border: UnderlineInputBorder(),
+                  ),
+                  controller: _titleController,
                 ),
-                controller: _titleController,
-              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 5),
@@ -252,18 +251,18 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
   return showDialog<bool?>(
     context: context,
     builder: (context) => AlertDialog(
-      content: const Text('수정중인 글을 취소하시겠습니까?\n', style: TextStyle(fontSize: 15),),
+      content: const Text('작성중인 글을 취소하시겠습니까?\n작성 취소 시, 작성된 글은 저장되지 않습니다.', style: TextStyle(fontSize: 15),),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('계속 수정', style: TextStyle(color: Colors.blue),),
+          child: const Text('계속 작성', style: TextStyle(color: Colors.blue),),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(true);
-            Navigator.of(context).pop(true);
-          },
-          child: const Text('수정 취소', style: TextStyle(color: Colors.red),),
+              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(true);
+            },
+          child: const Text('작성 취소', style: TextStyle(color: Colors.red),),
         ),
       ],
     ),
