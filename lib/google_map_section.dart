@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GoogleMapSection extends StatefulWidget {
   final String townName;
-  final Function(String) updateTownName;
+  final Function(TownAddress)? updateTownName;
 
   const GoogleMapSection({super.key, required this.townName, required this.updateTownName});
 
@@ -26,13 +26,13 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
   String currentAddress = '';
   bool isMapLoaded = false;
   String townName = '';
-  late Function(String) updateTownName;
+  late Function(TownAddress) updateTownName;
 
   @override
   void initState(){
     super.initState();
     townName = widget.townName;
-    updateTownName = widget.updateTownName;
+    updateTownName = widget.updateTownName!;
     _getCurrentLocation();
   }
 
@@ -125,8 +125,20 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     final responseGps = await http.get(Uri.parse(gpsUrl));
     final responseJson = jsonDecode(responseGps.body);
 
-    String dong = responseJson['results'][0]['address_components'][1]['short_name'];
-    updateTownName(dong);
+    final address = responseJson['results'][0]['address_components'];
+    String city = address[3]['short_name'];
+    String gu = address[2]['short_name'];
+    String dong = address[1]['short_name'];
 
+    final townAddress = TownAddress(city: city, gu: gu, dong: dong);
+    updateTownName(townAddress);
   }
+}
+
+class TownAddress {
+  String city;
+  String gu;
+  String dong;
+
+  TownAddress({required this.city, required this.gu, required this.dong});
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:schrodinger_client/google_map_section.dart';
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});
@@ -15,6 +16,15 @@ class _JoinPageState extends State<JoinPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textController = TextEditingController();
+    final townAddress = ModalRoute.of(context)!.settings.arguments as TownAddress?;
+
+    @override
+    void dispose() {
+      textController.dispose();
+      super.dispose();
+    }
+
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -150,11 +160,12 @@ class _JoinPageState extends State<JoinPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
+                        controller: textController,
                         onTap: () {
-
+                          Navigator.pushNamed(context, '/town/auth');
                         },
                         decoration: InputDecoration(
-                          hintText: '우리 동네',
+                          hintText: townAddress == null ? '우리 동네' : '${townAddress.city} ${townAddress.gu} ${townAddress.dong}',
                           suffixIcon: Icon(Icons.place),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
