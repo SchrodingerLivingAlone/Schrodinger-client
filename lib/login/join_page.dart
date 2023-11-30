@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:schrodinger_client/google_map_section.dart';
+import 'package:schrodinger_client/login/google_map_section.dart';
 
 class JoinPage extends StatefulWidget {
   const JoinPage({super.key});

@@ -19,7 +19,7 @@ import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
-import 'package:schrodinger_client/town_info/town_auth.dart';
+import 'package:schrodinger_client/login/town_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
 

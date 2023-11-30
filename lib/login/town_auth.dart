@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/google_map_section.dart';
+import 'package:schrodinger_client/login/google_map_section.dart';
 import 'package:schrodinger_client/style.dart';
 
 class TownAuthPage extends StatefulWidget {
