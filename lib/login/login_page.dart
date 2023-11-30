@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/accountbank.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -102,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             print('${id}, ${password}');
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
+                            login(context, id, password);
                           }
                         });
                       },
@@ -120,6 +123,54 @@ class _LoginPageState extends State<LoginPage> {
             )
         ),
       ),
+    );
+  }
+
+  Future<LoginResponse> login(BuildContext context, String email, String password) async {
+    var url = 'http://13.124.153.160:8081/api/users/login';
+
+    // 요청에 전송할 데이터
+    var body = {
+      'email': email,
+      'password': password,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {'Content-Type': 'application/json'}
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
+        return LoginResponse.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data: $e');
+    }
+  }
+}
+
+class LoginResponse {
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final result
+
+  LoginResponse({
+    required this.isSuccess,
+    required this.code,
+    required this.message
+  });
+
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    return LoginResponse(
+        isSuccess: json["isSuccess"],
+        code: json["code"],
+        message: json["message"]
     );
   }
 }

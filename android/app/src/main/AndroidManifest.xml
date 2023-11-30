@@ -8,7 +8,7 @@
         android:requestLegacyExternalStorage="true">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/GOOGLE_MAP_KEY"/>
+            android:value="AIzaSyACcGjgq-lg0-h9xC9V5PCN8CHVNwPJ5Ks"/>
 
         <activity
             android:name=".MainActivity"
