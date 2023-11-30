@@ -11,6 +11,7 @@ class TownAuthPage extends StatefulWidget {
 
 class _TownAuthPageState extends State<TownAuthPage> {
   String townName = '검색중...';
+  bool isMapLoaded = false;
   late TownAddress address;
 
   @override
@@ -43,11 +44,12 @@ class _TownAuthPageState extends State<TownAuthPage> {
         children: [
           SingleChildScrollView(
             child: GoogleMapSection(
-              townName: townName,
+              isMapLoaded: isMapLoaded,
               updateTownName: (TownAddress townAddress) {
               setState(() {
                 townName = townAddress.dong;
                 address = townAddress;
+                isMapLoaded = true;
               });
             },),
           ),
@@ -68,9 +70,9 @@ class _TownAuthPageState extends State<TownAuthPage> {
                   shape: const StadiumBorder(),
                   padding: const EdgeInsets.only(top: 16, bottom: 16, left: 90, right: 90)
                 ),
-                  onPressed: (){
+                  onPressed: isMapLoaded ? (){
                     Navigator.pushNamed(context, '/join', arguments: address);
-                  },
+                  } : null,
                   child: const Text('동네인증 완료하기', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
               )
             ],

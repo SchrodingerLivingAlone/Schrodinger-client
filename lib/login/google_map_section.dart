@@ -9,10 +9,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GoogleMapSection extends StatefulWidget {
-  final String townName;
   final Function(TownAddress)? updateTownName;
+  final bool isMapLoaded;
 
-  const GoogleMapSection({super.key, required this.townName, required this.updateTownName});
+  const GoogleMapSection({super.key, required this.isMapLoaded, required this.updateTownName});
 
 
   @override
@@ -25,14 +25,13 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
   List<double> currentCoord = [];
   String currentAddress = '';
   bool isMapLoaded = false;
-  String townName = '';
   late Function(TownAddress) updateTownName;
 
   @override
   void initState(){
     super.initState();
-    townName = widget.townName;
     updateTownName = widget.updateTownName!;
+    isMapLoaded = widget.isMapLoaded;
     _getCurrentLocation();
   }
 
@@ -77,16 +76,6 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     });
 
     _getCurrentAddress();
-  }
-
-  void _moveCurrentLocation() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        target: LatLng(currentCoord[0], currentCoord[1]),
-        zoom: 18.0,
-      ),
-    ));
   }
 
   Future<void> _getCurrentAddress() async {
