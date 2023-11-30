@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/accountbank.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -97,14 +100,15 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity, // 화면 전체 너비를 사용하도록 설정
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            print('${id}, ${password}');
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
-                          }
-                        });
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          print('${id}, ${password}');
+                          var loginResponse = await login(context, id, password);
+                          var accessToken = loginResponse.result.tokenInfo.accessToken;
+                          var refreshToken = loginResponse.result.tokenInfo.refreshToken;
+                          print('accessToken: ${accessToken}, refreshToken: ${refreshToken}');
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF0010A3),
@@ -120,6 +124,97 @@ class _LoginPageState extends State<LoginPage> {
             )
         ),
       ),
+    );
+  }
+
+  Future<LoginResponse> login(BuildContext context, String email, String password) async {
+    var url = 'http://13.124.153.160:8081/api/users/login';
+
+    // 요청에 전송할 데이터
+    var body = {
+      'email': email,
+      'password': password,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {'Content-Type': 'application/json'}
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
+        print('Response Body: ${response.body}');
+        return LoginResponse.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data: $e');
+    }
+  }
+}
+
+class LoginResponse {
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final Result result;
+
+  LoginResponse({
+    required this.isSuccess,
+    required this.code,
+    required this.message,
+    required this.result
+  });
+
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    return LoginResponse(
+        isSuccess: json["isSuccess"],
+        code: json["code"],
+        message: json["message"],
+        result: Result.fromJson(json['result'])
+    );
+  }
+}
+
+class Result{
+  final TokenInfo tokenInfo;
+  final String nickName;
+
+  Result({
+    required this.tokenInfo,
+    required this.nickName
+  });
+
+  factory Result.fromJson(Map<String, dynamic> json) {
+    return Result(
+      tokenInfo: TokenInfo.fromJson(json['tokenInfo']),
+      nickName: json['nickName'],
+    );
+  }
+}
+
+class TokenInfo {
+  final String grantType;
+  final String accessToken;
+  final String refreshToken;
+  final dynamic refreshTokenExpirationTime;
+
+  TokenInfo({
+    required this.grantType,
+    required this.accessToken,
+    required this.refreshToken,
+    required this.refreshTokenExpirationTime
+  });
+
+  factory TokenInfo.fromJson(Map<String, dynamic> json) {
+    return TokenInfo(
+      grantType: json['grantType'],
+      accessToken: json['accessToken'],
+      refreshToken: json['refreshToken'],
+      refreshTokenExpirationTime: json['refreshTokenExpirationTime'],
     );
   }
 }
