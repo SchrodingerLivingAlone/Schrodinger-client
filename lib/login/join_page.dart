@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/login/google_map_section.dart';
@@ -28,7 +27,7 @@ class _JoinPageState extends State<JoinPage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text('회원가입',
+          title: const Text('회원가입',
               style: TextStyle(
                   color: Color(0xFF61646B), fontWeight: FontWeight.bold)),
           centerTitle: true,
@@ -43,7 +42,7 @@ class _JoinPageState extends State<JoinPage> {
                     }
                   });
                 },
-                child: Text(
+                child: const Text(
                   '다음',
                   style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0010A3)),
                 ))
@@ -51,19 +50,19 @@ class _JoinPageState extends State<JoinPage> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(left: 16, right: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Center(
+                  const Center(
                     child: ProfileButton(),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Column(
@@ -75,7 +74,7 @@ class _JoinPageState extends State<JoinPage> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return '아이디를 입력해주세요.';
@@ -87,15 +86,15 @@ class _JoinPageState extends State<JoinPage> {
                         },
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 5),
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text('이메일 아이디를 입력해주세요.', style: TextStyle(
+                        margin: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsets.only(left: 5),
+                        child: const Text('이메일 아이디를 입력해주세요.', style: TextStyle(
                           color: Colors.grey
                         ),),
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Column(
@@ -107,7 +106,7 @@ class _JoinPageState extends State<JoinPage> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return '비밀번호를 입력해주세요.';
@@ -116,15 +115,15 @@ class _JoinPageState extends State<JoinPage> {
                         },
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 5),
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text('비밀번호를 입력해주세요.(영문 + 숫자)', style: TextStyle(
+                        margin: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsets.only(left: 5),
+                        child: const Text('비밀번호를 입력해주세요.(영문 + 숫자)', style: TextStyle(
                             color: Colors.grey
                         ),),
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Column(
@@ -136,7 +135,7 @@ class _JoinPageState extends State<JoinPage> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return '닉네임을 입력해주세요.';
@@ -145,15 +144,15 @@ class _JoinPageState extends State<JoinPage> {
                         },
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 5),
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text('닉네임을 입력해주세요.', style: TextStyle(
+                        margin: const EdgeInsets.only(top: 5),
+                        padding: const EdgeInsets.only(left: 5),
+                        child: const Text('닉네임을 입력해주세요.', style: TextStyle(
                             color: Colors.grey
                         ),),
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Column(
@@ -166,11 +165,11 @@ class _JoinPageState extends State<JoinPage> {
                         },
                         decoration: InputDecoration(
                           hintText: townAddress == null ? '우리 동네' : '${townAddress.city} ${townAddress.gu} ${townAddress.dong}',
-                          suffixIcon: Icon(Icons.place),
+                          suffixIcon: const Icon(Icons.place),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0)),
                       )
                     ],
                   )

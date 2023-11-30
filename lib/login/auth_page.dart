@@ -8,13 +8,13 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF94D9FF),
+      backgroundColor: const Color(0xFF94D9FF),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(image: AssetImage('assets/슈뢰딩거의 자취 로고 4.png')),
-            Text(
+            const Image(image: AssetImage('assets/슈뢰딩거의 자취 로고 4.png')),
+            const Text(
               '슈뢰딩거의 자취',
               style: TextStyle(
                 color: Color(0xFF0010A3),
@@ -22,7 +22,7 @@ class AuthPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 70,
             ),
             Column(
@@ -30,36 +30,36 @@ class AuthPage extends StatelessWidget {
               children: [
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.only(left: 10, right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                     },
-                    child: Text('로그인',
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0010A3)
+                    ),
+                    child: const Text('로그인',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15)
                     ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF0010A3)
-                    ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 50,
                 ),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.only(left: 10, right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => JoinPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const JoinPage()));
                     },
-                    child: Text('회원가입',
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0010A3)
+                    ),
+                    child: const Text('회원가입',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15)
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF0010A3)
                     ),
                   ),
                 ),

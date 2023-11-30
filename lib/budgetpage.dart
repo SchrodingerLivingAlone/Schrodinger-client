@@ -9,6 +9,7 @@ class BudgetPage extends StatefulWidget {
 
 class _BudgetPageState extends State<BudgetPage> {
   final _expenditurecontroller = TextEditingController(); //이번달 예산 입력변수
+  @override
   void dispose(){
     _expenditurecontroller.dispose();
     super.dispose();
@@ -20,12 +21,12 @@ class _BudgetPageState extends State<BudgetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('예산 설정')),
+        title: const Center(child: Text('예산 설정')),
         actions: [
           TextButton(onPressed: (){
               Navigator.pushNamed(context,'/AccountBank',arguments: expenditure);
           },
-              child: Text('저장',style: TextStyle(color:Colors.white))),
+              child: const Text('저장',style: TextStyle(color:Colors.white))),
         ],
       ),
       body: Padding(
@@ -33,11 +34,11 @@ class _BudgetPageState extends State<BudgetPage> {
         child: Center(
           child: ListView(
             children: [
-              Text('이번달 예산을 입력해주세요.',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 30)),
+              const Text('이번달 예산을 입력해주세요.',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 30)),
               Container(
                 height: 20,
               ),
-              Center(child: Text('지난달보다 절약해보는건 어떨까요?')),
+              const Center(child: Text('지난달보다 절약해보는건 어떨까요?')),
               Container(
                 height: 20,
               ),
@@ -49,8 +50,8 @@ class _BudgetPageState extends State<BudgetPage> {
                   Expanded(
                     flex:5,
                     child: TextField(
-                      style: TextStyle(fontSize:30),
-                      decoration: InputDecoration(
+                      style: const TextStyle(fontSize:30),
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: '금액을 입력하세요',
 
@@ -65,22 +66,22 @@ class _BudgetPageState extends State<BudgetPage> {
                       },
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                       flex:1,
                       child: Text('원',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 40,color:Colors.deepPurple))),
                 ],
               ),
 
 
-              Center(child: Text('하루에 대략', style: TextStyle(fontSize:15))),
+              const Center(child: Text('하루에 대략', style: TextStyle(fontSize:15))),
               Container(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('$day원',style: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurple,fontSize:15)),
-                  Text('을 사용할 수 있어요!', style: TextStyle(fontSize:15))
+                  Text('$day원',style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurple,fontSize:15)),
+                  const Text('을 사용할 수 있어요!', style: TextStyle(fontSize:15))
                 ],
               ),
             ],

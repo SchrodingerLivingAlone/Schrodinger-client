@@ -1,4 +1,3 @@
-import 'package:schrodinger_client/accountbank.dart';
 import 'package:flutter/material.dart';
 
 class ManageProfiles extends StatefulWidget {
@@ -12,8 +11,8 @@ class _ManageProfilesState extends State<ManageProfiles> {
   final _formKey = GlobalKey<FormState>();
   String newnickname='';
   String newageGender='';
-  TextEditingController _nicknameController = TextEditingController();
-  TextEditingController _ageGenderController = TextEditingController();
+  final TextEditingController _nicknameController = TextEditingController();
+  final TextEditingController _ageGenderController = TextEditingController();
   bool isPublic = false; //공개,비공개변수
   String originalnickname ='';
   bool dialogShown = false; //최초 1회만 다이얼로그를 띄우기 위한 변수
@@ -21,7 +20,7 @@ class _ManageProfilesState extends State<ManageProfiles> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {//미리 dialog보여주기 위해서추가
+    WidgetsBinding.instance.addPostFrameCallback((_) {//미리 dialog보여주기 위해서추가
       _loadFormData();
     });
   }
@@ -138,35 +137,35 @@ class _ManageProfilesState extends State<ManageProfiles> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('프로필 관리')),
-          backgroundColor: Color(0xFF0010A3),
+          title: const Center(child: Text('프로필 관리')),
+          backgroundColor: const Color(0xFF0010A3),
           actions: [
             TextButton(onPressed: (){
               setState(() {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  print('${newnickname},${newageGender},공개여부 : $isPublic');  //제대로 입력받았는지 확인
+                  print('$newnickname,$newageGender,공개여부 : $isPublic');  //제대로 입력받았는지 확인
                   Navigator.pop(context);
 
                 }
               });
             },
                 //완료버튼 누르면 닉네임고쳐진거 디비에 바뀌어서 저장되도록 설정.
-                child: Text('완료',style: TextStyle(color:Colors.yellow))),
+                child: const Text('완료',style: TextStyle(color:Colors.yellow))),
           ],
         ),
 
         body: SingleChildScrollView(
           child: Padding(
-              padding: EdgeInsets.only(left: 16.0, right: 16.0),
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 120,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text('닉네임', style: TextStyle(
@@ -182,7 +181,7 @@ class _ManageProfilesState extends State<ManageProfiles> {
                         _showDialogIfNeeded();
                       },
                       controller: _nicknameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         //hintText: '',
                         border: UnderlineInputBorder(),
                       ),
@@ -199,12 +198,12 @@ class _ManageProfilesState extends State<ManageProfiles> {
                         _modify();
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
 
 
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text('나이대/성별', style: TextStyle(
@@ -221,7 +220,7 @@ class _ManageProfilesState extends State<ManageProfiles> {
                         Expanded(
                           child: TextFormField(
                             controller: _ageGenderController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               //hintText: '',
                               border: UnderlineInputBorder(),
                             ),
@@ -246,12 +245,12 @@ class _ManageProfilesState extends State<ManageProfiles> {
                         ),
                         Text(
                           isPublic ? '공개' : '비공개',
-                          style: TextStyle(fontSize: 15,backgroundColor: Colors.purple,),
+                          style: const TextStyle(fontSize: 15,backgroundColor: Colors.purple,),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
-                    Row(
+                    const SizedBox(height: 10,),
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text('우리 동네', style: TextStyle(
@@ -262,17 +261,17 @@ class _ManageProfilesState extends State<ManageProfiles> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('전농동', style: TextStyle(
+                        const Text('전농동', style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                         ),
                         TextButton(onPressed:(){}, //이거 누르면 동네설정으로 넘어가도록
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Text('동네 설정'),
                                 SizedBox(width:8),

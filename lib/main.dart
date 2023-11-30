@@ -24,8 +24,8 @@ import 'package:schrodinger_client/town_info/town_page.dart';
 Future main() async {
   await dotenv.load(fileName: '.env');
   runApp(
-    ProviderScope(
-        child: const MyApp()
+    const ProviderScope(
+        child: MyApp()
     ),
   );
 }
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         '/town': (context) => const TownPage(),
         '/join': (context) => const JoinPage()
       },
-      home: Splash(),
+      home: const Splash(),
     );
   }
 }
