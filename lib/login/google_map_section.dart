@@ -38,50 +38,21 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Container(
-          height: 350,
-          color: AppColor.lightGrey,
-          child: GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
-                target: currentCoord.isNotEmpty ? LatLng(currentCoord[0], currentCoord[1]) : const LatLng(37.50508097213444, 126.95493073306663),
-                zoom: 18
-            ), // 초기 카메라 위치
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-          ),
-        ),
-        Padding(
-            padding: const EdgeInsets.all(10),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.yellow,
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(5)
-                ),
-                onPressed: isMapLoaded ? () async {
-                  _moveCurrentLocation();
-                } : null,
-                child: const SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.place),
-                      Text('현재위치', style: TextStyle(fontSize: 12)),
-                    ],
-                  ),
-                )
-            )
-        ),
-      ],
+    return Container(
+      height: 350,
+      color: AppColor.lightGrey,
+      child: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: CameraPosition(
+            target: currentCoord.isNotEmpty ? LatLng(currentCoord[0], currentCoord[1]) : const LatLng(37.50508097213444, 126.95493073306663),
+            zoom: 18
+        ), // 초기 카메라 위치
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
+      ),
     );
   }
 

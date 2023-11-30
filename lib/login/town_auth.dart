@@ -22,7 +22,7 @@ class _TownAuthPageState extends State<TownAuthPage> {
         ),
         leading:  IconButton(
             onPressed: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pop(context);
             },
             color: Colors.purple,
             icon: const Icon(Icons.arrow_back)),
