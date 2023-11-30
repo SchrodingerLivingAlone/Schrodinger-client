@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:schrodinger_client/accountbank.dart';
 import 'package:schrodinger_client/budgetpage.dart';
 import 'package:schrodinger_client/expensepage.dart';
@@ -13,9 +14,6 @@ import 'package:schrodinger_client/login/auth_page.dart';
 import 'package:schrodinger_client/login/login_page.dart';
 import 'package:schrodinger_client/login/splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:schrodinger_client/town_info/facility_info.dart';
-import 'package:schrodinger_client/town_info/food_info.dart';
-import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
