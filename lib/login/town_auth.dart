@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/google_map_section.dart';
+import 'package:schrodinger_client/login/google_map_section.dart';
 import 'package:schrodinger_client/style.dart';
 
 class TownAuthPage extends StatefulWidget {
@@ -11,6 +11,8 @@ class TownAuthPage extends StatefulWidget {
 
 class _TownAuthPageState extends State<TownAuthPage> {
   String townName = '검색중...';
+  bool isMapLoaded = false;
+  late TownAddress address;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class _TownAuthPageState extends State<TownAuthPage> {
         ),
         leading:  IconButton(
             onPressed: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pop(context);
             },
             color: Colors.purple,
             icon: const Icon(Icons.arrow_back)),
@@ -42,10 +44,12 @@ class _TownAuthPageState extends State<TownAuthPage> {
         children: [
           SingleChildScrollView(
             child: GoogleMapSection(
-              townName: townName,
-              updateTownName: (String newTown) {
+              isMapLoaded: isMapLoaded,
+              updateTownName: (TownAddress townAddress) {
               setState(() {
-                townName = newTown;
+                townName = townAddress.dong;
+                address = townAddress;
+                isMapLoaded = true;
               });
             },),
           ),
@@ -66,7 +70,9 @@ class _TownAuthPageState extends State<TownAuthPage> {
                   shape: const StadiumBorder(),
                   padding: const EdgeInsets.only(top: 16, bottom: 16, left: 90, right: 90)
                 ),
-                  onPressed: (){},
+                  onPressed: isMapLoaded ? (){
+                    Navigator.pushNamed(context, '/join', arguments: address);
+                  } : null,
                   child: const Text('동네인증 완료하기', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
               )
             ],
@@ -76,4 +82,3 @@ class _TownAuthPageState extends State<TownAuthPage> {
     );
   }
 }
-

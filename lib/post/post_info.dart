@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class PostInfo extends StatefulWidget {
 class _PostInfoState extends State<PostInfo> {
   int current = 0;
   final CarouselController _carouselController = CarouselController();
-  List imageList = [
+  final imageList = [
     "https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805",
     "https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805",
     "https://schrodinger-cau.s3.ap-northeast-2.amazonaws.com/2509b321-65ce-4fa9-9112-06af0e367e5d.png"
@@ -290,6 +292,8 @@ class _PostInfoState extends State<PostInfo> {
     );
   }
 }
+
+
 class Comment {
   final String username;
   final String text;
@@ -305,6 +309,7 @@ List<Comment> comments = [
   Comment(username: 'User5', text: '다섯 번째 댓글입니다.'),
   // 여기에 필요한 만큼 댓글을 추가할 수 있습니다.
 ];
+
 
 List<Widget> getContent(){
   List<Widget> tiles = [];
@@ -341,5 +346,3 @@ List<Widget> getContent(){
   });
   return tiles;
 }
-
-

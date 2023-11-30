@@ -39,7 +39,6 @@ dependencies:
   flutter_riverpod: ^1.0.0
   fluttertoast: ^8.0.7
   carousel_slider:
-
   google_maps_flutter: ^2.5.0
   geolocator: ^10.1.0
   http: ^1.1.0
