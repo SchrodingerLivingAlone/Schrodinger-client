@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -108,6 +110,11 @@ class _LoginPageState extends State<LoginPage> {
                           var accessToken = loginResponse.result.tokenInfo.accessToken;
                           var refreshToken = loginResponse.result.tokenInfo.refreshToken;
                           print('accessToken: ${accessToken}, refreshToken: ${refreshToken}');
+
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                          prefs.setString('accessToken', accessToken);
+
                         }
                       },
                       style: ElevatedButton.styleFrom(
