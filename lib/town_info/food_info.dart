@@ -23,111 +23,67 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
     getFoodPost();
   }
 
+  List<Widget> createFoodListTiles() {
+    List<Widget> foodTiles = [];
+    for (int i = 0; i < foodList.length; i++) {
+      Foods food = foodList[i];
+
+      Widget foodTile = Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        child: ListTile(
+          title: Text(food.title),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 5),
+              Text(food.content, style: TextStyle(fontSize: 12)),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  Text(food.dong),
+                  const SizedBox(width: 10),
+                  Text(food.calculatedTime),
+                  const SizedBox(width: 10),
+                  Text('조회 ${food.view}'),
+                ],
+              ),
+            ],
+          ),
+          trailing: Column(
+            children: [
+              Image.network(
+                food.imageUrl,
+                width: 60,
+                height: 40,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child; // 이미지 로드 완료됨
+                  } else {
+                    return const CircularProgressIndicator(); // 이미지 로드 중
+                  }
+                },
+                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Image.asset('assets/default_profile.png', width: 60, height: 40,); // 오류 발생 시 기본 이미지
+                },
+              ),
+              Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: TextStyle(fontSize: 11)),
+            ],
+          ),
+          onTap: () {},
+        ),
+      );
+      foodTiles.add(foodTile);
+    }
+    return foodTiles;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         const CategoryDropdown(),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: foodList.isNotEmpty ? Text(foodList[1].title) : null,
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 5),
-                Text(foodList[1].content,
-                  style: TextStyle(fontSize: 12),),
-                SizedBox(height: 5),
-                Row(
-                  children: [
-                    Text('전농동'),
-                    SizedBox(width: 10),
-                    Text('4분 전'),
-                    SizedBox(width: 10),
-                    Text('조회 46'),
-                  ],
-                ),
-
-              ],
-            ),
-            trailing: Column(
-              children: [
-                Image.network('https://schrodinger-cau.s3.ap-northeast-2.amazonaws.com/5789760b-6a2e-4731-baea-2d96691a6c7c.png', width: 60, height: 40,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      // 이미지 로드 완료됨
-                      return child;
-                    } else {
-                      // 이미지 로드 중
-                      return const CircularProgressIndicator(); // 로딩 중 표시할 위젯
-                    }
-                  },
-                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                    return Image.asset('assets/card.png'); // 오류 발생 시 기본 이미지
-                  },
-                ),
-                Text('댓글 3 공감 5', style: TextStyle(fontSize: 11))
-              ],
-            ),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: const Text('내가 생각한 맛집 어디???'),
-            subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-            trailing: const Icon(Icons.square, size: 50, color: Colors.red),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: const Text('내가 생각한 맛집 어디???'),
-            subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-            trailing: const Icon(Icons.square, size: 50, color: Colors.red),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: const Text('내가 생각한 맛집 어디???'),
-            subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-            trailing: const Icon(Icons.square, size: 50, color: Colors.red),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: const Text('내가 생각한 맛집 어디???'),
-            subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-            trailing: const Icon(Icons.square, size: 50, color: Colors.red),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: const Text('내가 생각한 맛집 어디???'),
-            subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-            trailing: const Icon(Icons.square, size: 50, color: Colors.red),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: ListTile(
-            title: const Text('내가 생각한 맛집 어디???'),
-            subtitle: const Text('유명한 백미당에 가봤는데 후기에서 봤던거랑 다르게...'),
-            trailing: const Icon(Icons.square, size: 50, color: Colors.red),
-            onTap: () {},
-          ),
-        ),
-      ],
+        ...createFoodListTiles(),
+      ]
     );
   }
 
