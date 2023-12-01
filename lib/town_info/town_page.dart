@@ -28,7 +28,6 @@ class _TownPageState extends State<TownPage> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: AppColor.main,
-
             title: const Text('전농동'),
             leading: const Icon(Icons.place),
             actions: [

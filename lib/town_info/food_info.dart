@@ -15,7 +15,7 @@ class FoodInfoPage extends StatefulWidget {
 
 class _FoodInfoPageState extends State<FoodInfoPage> {
 
-  late List<Foods> foodList = [];
+  late List<TownInfo> foodList = [];
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   List<Widget> createFoodListTiles() {
     List<Widget> foodTiles = [];
     for (int i = 0; i < foodList.length; i++) {
-      Foods food = foodList[i];
+      TownInfo food = foodList[i];
 
       Widget foodTile = Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -102,7 +102,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
 
     final res = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> responseResult = res['result'];
-    List<Foods> foods = responseResult.map((data) => Foods.fromJson(data)).toList();
+    List<TownInfo> foods = responseResult.map((data) => TownInfo.fromJson(data)).toList();
 
     setState(() {
       foodList = foods;
@@ -110,7 +110,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   }
 }
 
-class Foods {
+class TownInfo {
   int id;
   String dong;
   String neighborhoodPostCategory;
@@ -125,7 +125,7 @@ class Foods {
 
 
 
-  Foods({
+  TownInfo({
     required this.id,
     required this.dong,
     required this.neighborhoodPostCategory,
@@ -139,8 +139,8 @@ class Foods {
     required this.commentCount,
   });
 
-  factory Foods.fromJson(Map<String, dynamic> json) {
-    return Foods(
+  factory TownInfo.fromJson(Map<String, dynamic> json) {
+    return TownInfo(
       id: json['id'],
       dong: json['dong'],
       neighborhoodPostCategory: json['neighborhoodPostCategory'],
