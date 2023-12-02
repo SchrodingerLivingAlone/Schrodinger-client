@@ -44,14 +44,14 @@ class _TownPageState extends State<TownPage> {
                   Tab(text: '같이 해요'),
                   Tab(text: '질문 요청'),
                   Tab(text: '공공 정보'),
-                ]
+                ],
             ),
           ),
           body: TabBarView(
             children: [
               const HomeInfoPage(),
-              const FoodInfoPage(),
-              const FacilityInfoPage(),
+              const FoodInfoPage(tabIndex: 0),
+              const FacilityInfoPage(tabIndex: 1),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('할인'),

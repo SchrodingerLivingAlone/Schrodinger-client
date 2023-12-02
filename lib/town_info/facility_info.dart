@@ -9,7 +9,9 @@ import 'package:http/http.dart' as http;
 import 'category_dropdown.dart';
 
 class FacilityInfoPage extends StatefulWidget {
-  const FacilityInfoPage({super.key});
+  final int tabIndex;
+
+  const FacilityInfoPage({super.key, required this.tabIndex});
 
   @override
   State<FacilityInfoPage> createState() => _FacilityInfoPageState();
@@ -91,7 +93,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
   Future<void> getFacilityPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=1';
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
 
     final response = await http.get(
         Uri.parse(url),

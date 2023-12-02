@@ -7,20 +7,22 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodInfoPage extends StatefulWidget {
-  const FoodInfoPage({super.key});
+  final int tabIndex;
+
+  const FoodInfoPage({super.key, required this.tabIndex});
 
   @override
   State<FoodInfoPage> createState() => _FoodInfoPageState();
 }
 
 class _FoodInfoPageState extends State<FoodInfoPage> {
-
   late List<TownInfo> foodList = [];
 
   @override
   void initState() {
     super.initState();
     getFoodPost();
+    print('food : ${widget.tabIndex}');
   }
 
   List<Widget> createFoodListTiles() {
@@ -90,7 +92,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   Future<void> getFoodPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=0';
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
 
     final response = await http.get(
         Uri.parse(url),
