@@ -30,7 +30,7 @@ class _TownPageState extends State<TownPage> {
   Future<void> getTownName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/location';
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/location';
 
     final response = await http.get(
         Uri.parse(url),
@@ -41,13 +41,9 @@ class _TownPageState extends State<TownPage> {
     );
 
     final res = jsonDecode(utf8.decode(response.bodyBytes));
-    print(res);
-    // final List<dynamic> responseResult = res['result'];
-    // print(responseResult);
-
-    // setState(() {
-    //   townName = res['result']['town'];
-    // });
+    setState(() {
+      townName = res['result']['town'];
+    });
   }
 
   void _onItemTapped(int index) {
