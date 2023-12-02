@@ -6,8 +6,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class PostSearch extends StatefulWidget {
-  const PostSearch({super.key});
+  const PostSearch({super.key, required this.onStringReturned});
 
+  final Function(String) onStringReturned;
   @override
   State<PostSearch> createState() => _PostSearchState();
 }
@@ -17,6 +18,7 @@ class _PostSearchState extends State<PostSearch> {
   final Set<Marker> _markers = {};
   final _locationSearchController = TextEditingController();
   List<Map<String, dynamic>> _searchResults = [];
+  String searchedLocation = '찾을 장소를 검색해주세요.';
 
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
@@ -76,6 +78,9 @@ class _PostSearchState extends State<PostSearch> {
               final double lat = location['lat'];
               final double lng = location['lng'];
               mapController.animateCamera(CameraUpdate.newLatLng(LatLng(lat, lng)));
+              setState(() {
+                searchedLocation = result['name'];
+              });
             },
           );
         },
@@ -102,6 +107,25 @@ class _PostSearchState extends State<PostSearch> {
                 padding: EdgeInsets.fromLTRB(95, 0, 0, 0),
                 child: Text('장소 공유', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
               ),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shadowColor: Colors.transparent,
+                ),
+                onPressed: () {
+                  // 두 번째 페이지에서 문자열을 반환하고 이전 페이지로 돌아갑니다.
+                  widget.onStringReturned(searchedLocation);
+                  Navigator.pop(context);
+                },
+                child: const Text('등록',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ]
         ),
         body: Column(
           children: [

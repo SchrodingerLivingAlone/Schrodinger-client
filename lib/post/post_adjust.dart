@@ -26,6 +26,7 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  String currentLocation = '현재위치';
 
   void selectButton(String buttonName) {
     setState(() {
@@ -200,8 +201,18 @@ class _PostAdjustPageState extends State<PostAdjustPage> {
                         minimumSize: const Size(20, 20),
                         primary: Colors.deepPurple,
                         elevation: 10),
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const PostSearch()));
+                    onPressed: () async {
+                      // 두 번째 페이지로 이동하고 반환값을 받습니다.
+                      currentLocation = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostSearch(
+                            onStringReturned: (value) {
+                              currentLocation = value;
+                            },
+                          ),
+                        ),
+                      );
                     },
                     child: Row(
                       children: [

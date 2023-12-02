@@ -27,6 +27,7 @@ class _PostPageState extends State<PostPage> {
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  String currentLocation = '위치';
 
   void selectButton(String buttonName) {
     setState(() {
@@ -193,25 +194,45 @@ class _PostPageState extends State<PostPage> {
                     padding: const EdgeInsets.fromLTRB(10.0,0,10, 0),
                     child: const Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 12, color: Colors.grey),),
                   ),
-                  ElevatedButton(
+
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 8, 8),
+                  child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         minimumSize: const Size(20, 20),
                         primary: Colors.deepPurple,
                         elevation: 10),
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const PostSearch()));
+                    onPressed: () async {
+                      // 두 번째 페이지로 이동하고 반환값을 받습니다.
+                      currentLocation = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostSearch(
+                            onStringReturned: (value) {
+                              setState(() {
+                                currentLocation = value;
+                              });
+                            },
+                          ),
+                        ),
+                      );
                     },
-                      child: Row(
-                        children: [
-                          Icon(Icons.pin_drop_outlined, color: Colors.white,),
-                          Text('위치', style: TextStyle(color: Colors.white),),
-                          //사용자의 원래 위치로 초기화해놓고 -> 갔다오면 해당 식당으로 바뀌기.
-                        ],
-                      ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.pin_drop_outlined, color: Colors.white,),
+                        Text(currentLocation, style: TextStyle(color: Colors.white),),
+                        //사용자의 원래 위치로 초기화해놓고 -> 갔다오면 해당 식당으로 바뀌기.
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
