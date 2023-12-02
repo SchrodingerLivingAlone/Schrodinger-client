@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/facility_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class TownPage extends StatefulWidget {
   const TownPage({super.key});
@@ -14,6 +19,36 @@ class TownPage extends StatefulWidget {
 class _TownPageState extends State<TownPage> {
   int _selectedIndex = 0;
   bool isCompleted = false;
+  String townName = '검색중...';
+
+  @override
+  void initState(){
+    super.initState();
+    getTownName();
+  }
+
+  Future<void> getTownName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/location';
+
+    final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        }
+    );
+
+    final res = jsonDecode(utf8.decode(response.bodyBytes));
+    print(res);
+    // final List<dynamic> responseResult = res['result'];
+    // print(responseResult);
+
+    // setState(() {
+    //   townName = res['result']['town'];
+    // });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,7 +63,7 @@ class _TownPageState extends State<TownPage> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: AppColor.main,
-            title: const Text('전농동'),
+            title: Text(townName),
             leading: const Icon(Icons.place),
             actions: [
               IconButton(onPressed: (){}, icon: const Icon(Icons.search))
@@ -40,16 +75,16 @@ class _TownPageState extends State<TownPage> {
                   Tab(text: '홈'),
                   Tab(text: '맛집'),
                   Tab(text: '시설'),
-                  Tab(text: '할인'),
-                  Tab(text: '같이 해요'),
-                  Tab(text: '질문 요청'),
-                  Tab(text: '공공 정보'),
+                  Tab(text: '정보공유'),
+                  Tab(text: '같이해요'),
+                  Tab(text: '소통해요'),
+                  Tab(text: '기타'),
                 ],
             ),
           ),
           body: TabBarView(
             children: [
-              const HomeInfoPage(),
+              HomeInfoPage(townName: townName),
               const FoodInfoPage(tabIndex: 0),
               const FacilityInfoPage(tabIndex: 1),
               ListTile(
