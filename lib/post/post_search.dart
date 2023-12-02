@@ -6,9 +6,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class PostSearch extends StatefulWidget {
-  const PostSearch({super.key, required this.onStringReturned});
 
+  PostSearch({super.key, required this.curLocation, required this.onStringReturned});
   final Function(String) onStringReturned;
+  String curLocation;
+
   @override
   State<PostSearch> createState() => _PostSearchState();
 }
@@ -20,16 +22,24 @@ class _PostSearchState extends State<PostSearch> {
   List<Map<String, dynamic>> _searchResults = [];
   String searchedLocation = '찾을 장소를 검색해주세요.';
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _searchPlaces(widget.curLocation);
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       mapController = controller;
     });
   }
 
-  Future<void> _searchPlaces() async {
+
+  Future<void> _searchPlaces(String search) async {
     try {
       final String? apiKey = dotenv.env['GOOGLE_MAP_KEY'];
-      final String query = _locationSearchController.text;
+      final String query = search;
       final List<Map<String, dynamic>> results = await searchPlaces(query, apiKey);
 
       setState(() {
@@ -114,8 +124,9 @@ class _PostSearchState extends State<PostSearch> {
                   shadowColor: Colors.transparent,
                 ),
                 onPressed: () {
-                  // 두 번째 페이지에서 문자열을 반환하고 이전 페이지로 돌아갑니다.
-                  widget.onStringReturned(searchedLocation);
+                  if(searchedLocation != '찾을 장소를 검색해주세요.'){
+                    widget.onStringReturned(searchedLocation);
+                  }
                   Navigator.pop(context);
                 },
                 child: const Text('등록',
@@ -129,6 +140,10 @@ class _PostSearchState extends State<PostSearch> {
         ),
         body: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
+              child: HighLightedText(searchedLocation, fontSize: 20, color: Colors.deepPurple),
+            ),
             Center(
               child: Row(
                 children: [
@@ -150,7 +165,7 @@ class _PostSearchState extends State<PostSearch> {
                     ),
                   ),
                   ElevatedButton(onPressed: (){
-                        _searchPlaces();
+                        _searchPlaces(_locationSearchController.text);
                       },
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -197,5 +212,63 @@ Future<List<Map<String, dynamic>>> searchPlaces(String query, String? apiKey) as
     return results.map((result) => result as Map<String, dynamic>).toList();
   } else {
     throw Exception('Failed to load places');
+  }
+}
+
+class HighLightedText extends StatelessWidget {
+  final String data;
+  final Color color;
+  final double fontSize;
+
+  const HighLightedText(
+      this.data, {
+        super.key,
+        required this.color,
+        this.fontSize = 14,
+      });
+
+  Size getTextSize({
+    required String text,
+    required TextStyle style,
+    required BuildContext context,
+  }) {
+    final Size size = (TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+      textDirection: TextDirection.ltr,
+    )..layout())
+        .size;
+    return size;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle textStyle = TextStyle(
+      fontSize: fontSize,
+      color: color,
+      fontWeight: FontWeight.bold,
+    );
+    final Size textSize = getTextSize(
+      text: data,
+      style: textStyle,
+      context: context,
+    );
+    return Stack(
+      children: [
+        Text(data, style: textStyle),
+        Positioned(
+          top: textSize.height / 2,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              color: color.withOpacity(0.2),
+            ),
+            height: textSize.height / 2,
+            width: textSize.width,
+          ),
+        )
+      ],
+    );
   }
 }

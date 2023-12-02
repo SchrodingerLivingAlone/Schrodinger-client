@@ -27,7 +27,7 @@ class _PostPageState extends State<PostPage> {
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-  String currentLocation = '위치';
+  String searchedLocation = '흑석동';//사용자의 현재위치 넣어놓기
 
   void selectButton(String buttonName) {
     setState(() {
@@ -210,13 +210,14 @@ class _PostPageState extends State<PostPage> {
                         elevation: 10),
                     onPressed: () async {
                       // 두 번째 페이지로 이동하고 반환값을 받습니다.
-                      currentLocation = await Navigator.push(
+                      searchedLocation = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => PostSearch(
+                            curLocation: searchedLocation,
                             onStringReturned: (value) {
                               setState(() {
-                                currentLocation = value;
+                                searchedLocation = value;
                               });
                             },
                           ),
@@ -226,7 +227,7 @@ class _PostPageState extends State<PostPage> {
                     child: Row(
                       children: [
                         Icon(Icons.pin_drop_outlined, color: Colors.white,),
-                        Text(currentLocation, style: TextStyle(color: Colors.white),),
+                        Text(searchedLocation, style: TextStyle(color: Colors.white),),
                         //사용자의 원래 위치로 초기화해놓고 -> 갔다오면 해당 식당으로 바뀌기.
                       ],
                     ),
