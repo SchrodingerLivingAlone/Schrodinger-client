@@ -412,7 +412,97 @@ class ImageWidget extends ConsumerWidget {
 }
 
 
-
+// Future<LoginResponse> login(BuildContext context, String email, String password) async {
+//   var url = 'http://13.124.153.160:8081/api/users/login';
+//
+//   // 요청에 전송할 데이터
+//   var body = {
+//     'email': email,
+//     'password': password,
+//   };
+//
+//   try {
+//     final response = await http.post(
+//         Uri.parse(url),
+//         body: json.encode(body),
+//         headers: {'Content-Type': 'application/json'}
+//     );
+//
+//     if (response.statusCode == 200) {
+//       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
+//       print('Response Body: ${response.body}');
+//       return LoginResponse.fromJson(json.decode(response.body));
+//     } else {
+//       throw Exception('Failed to load data: ${response.statusCode}');
+//     }
+//   } catch (e) {
+//     throw Exception('Failed to load data: $e');
+//   }
+// }
+// }
+//
+// class LoginResponse {
+//   final bool isSuccess;
+//   final String code;
+//   final String message;
+//   final Result result;
+//
+//   LoginResponse({
+//     required this.isSuccess,
+//     required this.code,
+//     required this.message,
+//     required this.result
+//   });
+//
+//   factory LoginResponse.fromJson(Map<String, dynamic> json) {
+//     return LoginResponse(
+//         isSuccess: json["isSuccess"],
+//         code: json["code"],
+//         message: json["message"],
+//         result: Result.fromJson(json['result'])
+//     );
+//   }
+// }
+//
+// class Result{
+//   final TokenInfo tokenInfo;
+//   final String nickName;
+//
+//   Result({
+//     required this.tokenInfo,
+//     required this.nickName
+//   });
+//
+//   factory Result.fromJson(Map<String, dynamic> json) {
+//     return Result(
+//       tokenInfo: TokenInfo.fromJson(json['tokenInfo']),
+//       nickName: json['nickName'],
+//     );
+//   }
+// }
+//
+// class TokenInfo {
+//   final String grantType;
+//   final String accessToken;
+//   final String refreshToken;
+//   final dynamic refreshTokenExpirationTime;
+//
+//   TokenInfo({
+//     required this.grantType,
+//     required this.accessToken,
+//     required this.refreshToken,
+//     required this.refreshTokenExpirationTime
+//   });
+//
+//   factory TokenInfo.fromJson(Map<String, dynamic> json) {
+//     return TokenInfo(
+//       grantType: json['grantType'],
+//       accessToken: json['accessToken'],
+//       refreshToken: json['refreshToken'],
+//       refreshTokenExpirationTime: json['refreshTokenExpirationTime'],
+//     );
+//   }
+// }
 
 
 
