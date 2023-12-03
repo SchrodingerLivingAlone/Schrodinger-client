@@ -42,7 +42,9 @@ class _PostPageState extends State<PostPage> {
 
   void initLocation() async {
     var getPositionResponse = await getPosition(context);
-    searchedLocation = getPositionResponse.result.currentLocation;
+    setState(() {
+      searchedLocation = getPositionResponse.result.currentLocation;
+    });
   }
 
   void selectButton(String buttonName) {
@@ -56,13 +58,15 @@ class _PostPageState extends State<PostPage> {
 
   Future<GetPositionResponse> getPosition(BuildContext context) async {
     var url = 'http://13.124.153.160:8081/api/neighborhood/posts/location';
-
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmdoQG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MDE2Nzc0MzJ9.ZSJmf-XgbfkkCoSIWSq2kmzhPYIMA_iauZfQ9lt8AFA'}
+      );
 
       if (response.statusCode == 200) {
         print('Response Body: ${response.body}');
-        return GetPositionResponse.fromJson(json.decode(response.body));
+        return GetPositionResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         print(response.statusCode);
         throw Exception('Failed to load data1: ${response.statusCode}');
@@ -262,7 +266,6 @@ class _PostPageState extends State<PostPage> {
                         primary: Colors.deepPurple,
                         elevation: 10),
                     onPressed: () async {
-                      // 두 번째 페이지로 이동하고 반환값을 받습니다.
                       searchedLocation = await Navigator.push(
                         context,
                         MaterialPageRoute(
