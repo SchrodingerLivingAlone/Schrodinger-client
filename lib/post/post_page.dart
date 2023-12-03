@@ -30,7 +30,7 @@ class _PostPageState extends State<PostPage> {
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-  String searchedLocation = '흑석동';//사용자의 현재위치 넣어놓기
+  String searchedLocation = 'df';//사용자의 현재위치 넣어놓기
   var container = ProviderContainer();
 
   @override
@@ -58,18 +58,17 @@ class _PostPageState extends State<PostPage> {
     var url = 'http://13.124.153.160:8081/api/neighborhood/posts/location';
 
     try {
-      final response = await http.get(
-        Uri.parse(url),
-      );
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         print('Response Body: ${response.body}');
         return GetPositionResponse.fromJson(json.decode(response.body));
       } else {
-        throw Exception('Failed to load data: ${response.statusCode}');
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to load data: $e');
+      throw Exception('Failed to load data2: $e');
     }
   }
 

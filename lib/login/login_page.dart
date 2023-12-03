@@ -100,19 +100,19 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity, // 화면 전체 너비를 사용하도록 설정
                     height: 40,
                     child: ElevatedButton(
-                      // onPressed: () async {
-                      //   if (_formKey.currentState!.validate()) {
-                      //     _formKey.currentState!.save();
-                      //     print('${id}, ${password}');
-                      //     var loginResponse = await login(context, id, password);
-                      //     var accessToken = loginResponse.result.tokenInfo.accessToken;
-                      //     var refreshToken = loginResponse.result.tokenInfo.refreshToken;
-                      //     print('accessToken: ${accessToken}, refreshToken: ${refreshToken}');
-                      //   }
-                      // },
-                      onPressed: (){
-                        Navigator.pushNamed(context, '/town');
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          print('${id}, ${password}');
+                          var loginResponse = await login(context, id, password);
+                          var accessToken = loginResponse.result.tokenInfo.accessToken;
+                          var refreshToken = loginResponse.result.tokenInfo.refreshToken;
+                          print('accessToken: ${accessToken}, refreshToken: ${refreshToken}');
+                        }
                       },
+                      // onPressed: (){
+                      //   Navigator.pushNamed(context, '/town');
+                      // },
                       style: ElevatedButton.styleFrom(
                         primary: Color(0xFF0010A3),
                         shape: RoundedRectangleBorder(
