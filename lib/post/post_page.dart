@@ -2,20 +2,23 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/ImageUploader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:schrodinger_client/post/post_search.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
-//TODO 1.등록하면 글 객체 생성 -> api완성 후 합칠때
-//TODO 2.위치 버튼 누르면 장소 검색 page로 이동 -> 장소 검색해서 해당 장소 return해서 String으로 띄워주기
-//TODO 3.밑에 한줄 더해서 위치띄우기.
 
-enum Issue {Restaurant, Facility, Discount, Etc, Together, Ask, PublicInfo}
+//TODO 1.등록하면 글 객체 생성 -> api
 
-class PostPage extends StatefulWidget {
+enum Issue {RESTAURANT, FACILITY, SHARE_INFORMATION, TOGETHER, COMMUNICATION, ETC}
+
+class PostPage extends StatefulWidget{
   const PostPage({super.key});
 
   @override
@@ -23,11 +26,24 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  Issue _issue = Issue.Restaurant;
+  Issue _issue = Issue.RESTAURANT;
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   String searchedLocation = '흑석동';//사용자의 현재위치 넣어놓기
+  var container = ProviderContainer();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initLocation();
+  }
+
+  void initLocation() async {
+    var getPositionResponse = await getPosition(context);
+    searchedLocation = getPositionResponse.result.currentLocation;
+  }
 
   void selectButton(String buttonName) {
     setState(() {
@@ -36,6 +52,55 @@ class _PostPageState extends State<PostPage> {
   }
   Color getButtonColor(String buttonName) {
     return selectedButton == buttonName ? Colors.orange : Colors.grey;
+  }
+
+  Future<GetPositionResponse> getPosition(BuildContext context) async {
+    var url = 'http://13.124.153.160:8081/api/neighborhood/posts/location';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 200) {
+        print('Response Body: ${response.body}');
+        return GetPositionResponse.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data: $e');
+    }
+  }
+
+  Future<PostPageResponse> PostPost(BuildContext context, Issue issue, String title, String content, String place, List<XFile> files) async {
+    var url = 'http://13.124.153.160:8081/api/neighborhood/posts';
+
+
+    // 요청에 전송할 데이터
+    var body = {
+      "category": issue,
+      "title": title,
+      "content" : content,
+      "place" : place,
+    };
+
+    try {
+      final response = await http.post(
+          Uri.parse(url),
+          body: json.encode(body),
+          headers: {'Content-Type': 'multipart/form-data'}
+      );
+
+      if (response.statusCode == 200) {
+        print('Response Body: ${response.body}');
+        return PostPageResponse.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data: $e');
+    }
   }
 
   @override
@@ -60,18 +125,18 @@ class _PostPageState extends State<PostPage> {
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
             ),
-            //onPressed: (){
-              //
-              //글 객체 생성해서 맞는 자료구조(배열)에 추가하기
-              //자료구조는 규한이랑 얘기해보기
-              //
-              //Navigator.pop(context);
-            //},
-            onPressed: () {
-              setState(() {
-                Navigator.pushNamed(context, '/post_info');
-              });
+            onPressed: () async {
+              var postPostResponse = await PostPost(context, _issue, _titleController.text, _contentController.text,
+                                          searchedLocation, container.read(imagePickerProvider));
+              if(postPostResponse.isSuccess == 200){
+                Navigator.pop(context);
+              }
             },
+            // onPressed: () {
+            //   setState(() {
+            //     Navigator.pushNamed(context, '/post_info');
+            //   });
+            // },
             child: const Text('등록',
               style: TextStyle(
                 color: AppColor.yellow,
@@ -96,7 +161,7 @@ class _PostPageState extends State<PostPage> {
               children: [
                 ElevatedButton(onPressed: (){
                     selectButton('Button 1');
-                    _issue = Issue.Restaurant;
+                    _issue = Issue.RESTAURANT;
                   },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -108,7 +173,7 @@ class _PostPageState extends State<PostPage> {
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 2');
-                  _issue = Issue.Facility;
+                  _issue = Issue.FACILITY;
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -119,25 +184,14 @@ class _PostPageState extends State<PostPage> {
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 3');
-                  _issue = Issue.Discount;
-                },
+                  _issue = Issue.SHARE_INFORMATION;
+                  },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 3'),
                         elevation: 10),
-                    child: const Text('할인', style: TextStyle(fontSize: 13),)
-                ),
-                ElevatedButton(onPressed: (){
-                  selectButton('Button 4');
-                  _issue = Issue.Etc;
-                  },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 4'),
-                        elevation: 10),
-                    child: const Text('기타', style: TextStyle(fontSize: 13),)
+                    child: const Text('정보공유', style: TextStyle(fontSize: 13),)
                 ),
               ],
             ),
@@ -145,54 +199,54 @@ class _PostPageState extends State<PostPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(onPressed: (){
+                  selectButton('Button 4');
+                  _issue = Issue.TOGETHER;
+                },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        minimumSize: const Size(30, 30),
+                        primary: getButtonColor('Button 4'),
+                        elevation: 10),
+                    child: const Text('같이해요', style: TextStyle(fontSize: 13),)
+                ),
+                ElevatedButton(onPressed: (){
                   selectButton('Button 5');
-                  _issue = Issue.Together;
+                  _issue = Issue.COMMUNICATION;
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 5'),
                         elevation: 10),
-                    child: const Text('같이해요', style: TextStyle(fontSize: 13),)
+                    child: const Text('소통해요', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 6');
-                  _issue = Issue.Ask;
+                  _issue = Issue.ETC;
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         minimumSize: const Size(30, 30),
                         primary: getButtonColor('Button 6'),
                         elevation: 10),
-                    child: const Text('질문/요청', style: TextStyle(fontSize: 13),)
-                ),
-                ElevatedButton(onPressed: (){
-                  selectButton('Button 7');
-                  _issue = Issue.PublicInfo;
-                },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 7'),
-                        elevation: 10),
-                    child: const Text('공공정보', style: TextStyle(fontSize: 13),)
+                    child: const Text('기타', style: TextStyle(fontSize: 13),)
                 ),
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
               child: ImageWidget(),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(10.0, 5.0,8.0,0),
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0,0,10, 0),
-                    child: const Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                    padding: EdgeInsets.fromLTRB(10.0,0,10, 0),
+                    child: Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 12, color: Colors.grey),),
                   ),
 
                 ],
@@ -226,8 +280,8 @@ class _PostPageState extends State<PostPage> {
                     },
                     child: Row(
                       children: [
-                        Icon(Icons.pin_drop_outlined, color: Colors.white,),
-                        Text(searchedLocation, style: TextStyle(color: Colors.white),),
+                        const Icon(Icons.pin_drop_outlined, color: Colors.white,),
+                        Text(searchedLocation, style: const TextStyle(color: Colors.white),),
                         //사용자의 원래 위치로 초기화해놓고 -> 갔다오면 해당 식당으로 바뀌기.
                       ],
                     ),
@@ -411,101 +465,104 @@ class ImageWidget extends ConsumerWidget {
   }
 }
 
+class GetPositionResponse {
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final GetLocationResult result;
 
-// Future<LoginResponse> login(BuildContext context, String email, String password) async {
-//   var url = 'http://13.124.153.160:8081/api/users/login';
-//
-//   // 요청에 전송할 데이터
-//   var body = {
-//     'email': email,
-//     'password': password,
-//   };
-//
-//   try {
-//     final response = await http.post(
-//         Uri.parse(url),
-//         body: json.encode(body),
-//         headers: {'Content-Type': 'application/json'}
-//     );
-//
-//     if (response.statusCode == 200) {
-//       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
-//       print('Response Body: ${response.body}');
-//       return LoginResponse.fromJson(json.decode(response.body));
-//     } else {
-//       throw Exception('Failed to load data: ${response.statusCode}');
-//     }
-//   } catch (e) {
-//     throw Exception('Failed to load data: $e');
-//   }
-// }
-// }
-//
-// class LoginResponse {
-//   final bool isSuccess;
-//   final String code;
-//   final String message;
-//   final Result result;
-//
-//   LoginResponse({
-//     required this.isSuccess,
-//     required this.code,
-//     required this.message,
-//     required this.result
-//   });
-//
-//   factory LoginResponse.fromJson(Map<String, dynamic> json) {
-//     return LoginResponse(
-//         isSuccess: json["isSuccess"],
-//         code: json["code"],
-//         message: json["message"],
-//         result: Result.fromJson(json['result'])
-//     );
-//   }
-// }
-//
-// class Result{
-//   final TokenInfo tokenInfo;
-//   final String nickName;
-//
-//   Result({
-//     required this.tokenInfo,
-//     required this.nickName
-//   });
-//
-//   factory Result.fromJson(Map<String, dynamic> json) {
-//     return Result(
-//       tokenInfo: TokenInfo.fromJson(json['tokenInfo']),
-//       nickName: json['nickName'],
-//     );
-//   }
-// }
-//
-// class TokenInfo {
-//   final String grantType;
-//   final String accessToken;
-//   final String refreshToken;
-//   final dynamic refreshTokenExpirationTime;
-//
-//   TokenInfo({
-//     required this.grantType,
-//     required this.accessToken,
-//     required this.refreshToken,
-//     required this.refreshTokenExpirationTime
-//   });
-//
-//   factory TokenInfo.fromJson(Map<String, dynamic> json) {
-//     return TokenInfo(
-//       grantType: json['grantType'],
-//       accessToken: json['accessToken'],
-//       refreshToken: json['refreshToken'],
-//       refreshTokenExpirationTime: json['refreshTokenExpirationTime'],
-//     );
-//   }
-// }
+  GetPositionResponse({
+    required this.isSuccess,
+    required this.code,
+    required this.message,
+    required this.result
+  });
+
+  factory GetPositionResponse.fromJson(Map<String, dynamic> json) {
+    return GetPositionResponse(
+        isSuccess: json["isSuccess"],
+        code: json["code"],
+        message: json["message"],
+        result: GetLocationResult.fromJson(json['result'])
+    );
+  }
+}
+
+class GetLocationResult{
+  final String currentLocation;
+
+  GetLocationResult({
+    required this.currentLocation
+  });
+
+  factory GetLocationResult.fromJson(Map<String, dynamic> json) {
+    return GetLocationResult(
+      currentLocation: json['town'],
+    );
+  }
+}
 
 
+class PostPageResponse {
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final PostPageResult result;
 
+  PostPageResponse({
+    required this.isSuccess,
+    required this.code,
+    required this.message,
+    required this.result
+  });
+
+  factory PostPageResponse.fromJson(Map<String, dynamic> json) {
+    return PostPageResponse(
+        isSuccess: json["isSuccess"],
+        code: json["code"],
+        message: json["message"],
+        result: PostPageResult.fromJson(json['result'])
+    );
+  }
+}
+
+class PostPageResult{
+  final int id;
+  final String dong;
+  final String neighborhoodPostCategory;
+  final String title;
+  final String content;
+  final String place;
+  final List<String> imageUrls;
+  final String createdAt;
+  final int view;
+
+  PostPageResult({
+    required this.id,
+    required this.dong,
+    required this.neighborhoodPostCategory,
+    required this.title,
+    required this.content,
+    required this.place,
+    required this.imageUrls,
+    required this.createdAt,
+    required this.view,
+  });
+
+  factory PostPageResult.fromJson(Map<String, dynamic> json) {
+    return PostPageResult(
+      id : json['id'],
+      dong : json['dong'],
+      neighborhoodPostCategory: json['neighborhoodPostCategory'],
+      title: json['title'],
+      content: json['content'],
+      place: json['place'],
+      imageUrls: json['imageUrls'],
+      createdAt: json['createdAt'],
+      view: json['view'],
+    );
+  }
+}
 
 
 
