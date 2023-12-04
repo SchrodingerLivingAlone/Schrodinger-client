@@ -8,7 +8,7 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  int _selectedIndex=3;
+  final int _selectedIndex=3;
   bool isCompleted = false;
 
 
@@ -20,11 +20,11 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('마이페이지')),
-        backgroundColor: Color(0xFF0010A3),
+        title: const Center(child: Text('마이페이지')),
+        backgroundColor: const Color(0xFF0010A3),
         actions: [
           IconButton(onPressed: (){
-          }, icon:Icon(Icons.settings)),
+          }, icon:const Icon(Icons.settings)),
         ],
       ),
 
@@ -33,7 +33,7 @@ class _MyPageState extends State<MyPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: Container(
-              color: Color(0xFFFFD300), // 노란색 타일
+              color: const Color(0xFFFFD300), // 노란색 타일
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +43,7 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         // child: Image(
                         //   image: AssetImage(
                         //
@@ -54,48 +54,48 @@ class _MyPageState extends State<MyPage> {
                         width: 100,
                         height:100,
 
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.blue, // Add your image or change the color
                         ),
                       ),
-                      SizedBox(width: 30),
+                      const SizedBox(width: 30),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '$nickname',
-                            style: TextStyle(
+                            nickname,
+                            style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text(
-                            '$ageGender',
-                            style: TextStyle(fontSize: 18),
+                            ageGender,
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
                     child: TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context,'/ManageProfiles',
                             arguments: {
-                              'nickname': '$nickname',
-                              'ageGender' : '$ageGender',
+                              'nickname': nickname,
+                              'ageGender' : ageGender,
                             }
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF800080),
+                        backgroundColor: const Color(0xFF800080),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         '프로필 관리',
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
@@ -106,81 +106,64 @@ class _MyPageState extends State<MyPage> {
             ),
           ),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: Text('동네정보',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
 
-          SizedBox(
+          const SizedBox(
             height:10,
           ),
 
           ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Colors.red, // 아이콘 색깔 조절
               child: Icon(Icons.border_color),
             ),
-            title: Text('작성한 글'),
+            title: const Text('작성한 글'),
             onTap: () {
               Navigator.pushNamed(context, '/WrittenPage');
             },
           ),
           ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Colors.yellow, // 아이콘 색깔 조절
               child: Icon(Icons.whatshot),
             ),
-            title: Text('스크랩 글'),
+            title: const Text('스크랩 글'),
             onTap: () {
 
             },
           ),
           ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Colors.green, // 아이콘 색깔 조절
               child: Icon(Icons.thumb_up),
             ),
-            title: Text('공감한 글'),
+            title: const Text('공감한 글'),
             onTap: () {
 
             },
           ),
 
-          SizedBox(
+          const SizedBox(
             height:10,
           ),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: Text('기타',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
 
           ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundColor: Colors.purple, // 아이콘 색깔 조절
               child: Icon(Icons.room),
             ),
-            title: Text('동네 인증'),
-            onTap: () {
-
-            },
+            title: const Text('동네 인증'),
+            onTap: () {},
           ),
-
-
-
         ],
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: '가계부'),
-          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: '동네정보'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-        ],
-        currentIndex: _selectedIndex,
-        //onTap: _onItemTapped,
       ),
     );
   }

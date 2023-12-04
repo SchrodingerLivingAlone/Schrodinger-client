@@ -90,6 +90,10 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     String gu = address[2]['short_name'];
     String dong = address[1]['short_name'];
 
+    final first = dong.substring(0, dong.length-1);
+    final second = dong.substring(dong.length-1) == '동' ? '동': '동';
+    dong = first + second;
+
     final townAddress = TownAddress(city: city, gu: gu, dong: dong);
     updateTownName(townAddress);
   }

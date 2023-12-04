@@ -56,8 +56,8 @@ class _TownAuthPageState extends State<TownAuthPage> {
           Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(20),
-                child: Container(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
                   // width: 200,
                   height: 120,
                   // color: Colors.red,

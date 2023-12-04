@@ -7,12 +7,12 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthPage()));
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthPage()));
     });
     
     return Scaffold(
-      backgroundColor: Color(0xFF94D9FF),
+      backgroundColor: const Color(0xFF94D9FF),
       body: Center(
         child: Image.asset('assets/슈뢰딩거의 자취 로고 4.png'),
       ),

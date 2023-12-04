@@ -38,11 +38,11 @@ class _WrittenPageState extends State<WrittenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('작성한 글')),
-        backgroundColor: Color(0xFF0010A3),
+        title: const Center(child: Text('작성한 글')),
+        backgroundColor: const Color(0xFF0010A3),
         actions: [
           IconButton(onPressed: (){
-          }, icon:Icon(Icons.settings)),
+          }, icon:const Icon(Icons.settings)),
         ],
       ),
 

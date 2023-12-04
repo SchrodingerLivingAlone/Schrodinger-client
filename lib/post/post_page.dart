@@ -98,9 +98,8 @@ class _PostPageState extends State<PostPage> {
                     _issue = Issue.Restaurant;
                   },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 1'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 1'),
                         elevation: 10
                     ),
                     child: const Text('맛집', style: TextStyle(fontSize: 13),)
@@ -110,9 +109,8 @@ class _PostPageState extends State<PostPage> {
                   _issue = Issue.Facility;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 2'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 2'),
                         elevation: 10),
                     child: const Text('시설', style: TextStyle(fontSize: 13),)
                 ),
@@ -121,9 +119,8 @@ class _PostPageState extends State<PostPage> {
                   _issue = Issue.Discount;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 3'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 3'),
                         elevation: 10),
                     child: const Text('할인', style: TextStyle(fontSize: 13),)
                 ),
@@ -132,9 +129,8 @@ class _PostPageState extends State<PostPage> {
                   _issue = Issue.Etc;
                   },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 4'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 4'),
                         elevation: 10),
                     child: const Text('기타', style: TextStyle(fontSize: 13),)
                 ),
@@ -148,9 +144,8 @@ class _PostPageState extends State<PostPage> {
                   _issue = Issue.Together;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 5'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 5'),
                         elevation: 10),
                     child: const Text('같이해요', style: TextStyle(fontSize: 13),)
                 ),
@@ -159,9 +154,8 @@ class _PostPageState extends State<PostPage> {
                   _issue = Issue.Ask;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 6'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 6'),
                         elevation: 10),
                     child: const Text('질문/요청', style: TextStyle(fontSize: 13),)
                 ),
@@ -170,9 +164,8 @@ class _PostPageState extends State<PostPage> {
                   _issue = Issue.PublicInfo;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 7'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 7'),
                         elevation: 10),
                     child: const Text('공공정보', style: TextStyle(fontSize: 13),)
                 ),
@@ -181,28 +174,27 @@ class _PostPageState extends State<PostPage> {
             const SizedBox(
               height: 20,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
               child: ImageWidget(),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 5.0,8.0,0),
+              padding: const EdgeInsets.fromLTRB(10.0, 5.0,8.0,0),
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0,0,10, 0),
-                    child: const Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 12, color: Colors.grey),),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(10.0,0,10, 0),
+                    child: Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 12, color: Colors.grey),),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.deepPurple,
                         minimumSize: const Size(20, 20),
-                        primary: Colors.deepPurple,
                         elevation: 10),
                     onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const PostSearch()));
                     },
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.pin_drop_outlined, color: Colors.white,),
                           Text('위치', style: TextStyle(color: Colors.white),),
