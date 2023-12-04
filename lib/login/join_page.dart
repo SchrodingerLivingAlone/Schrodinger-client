@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/login/google_map_section.dart';
@@ -53,12 +52,12 @@ class _JoinPageState extends State<JoinPage> {
                   setState(() {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      print('${email}');
-                      print('${password}');
-                      print('${nickname}');
-                      print('city: ${city}');
-                      print('gu: ${gu}');
-                      print('dong: ${dong}');
+                      print(email);
+                      print(password);
+                      print(nickname);
+                      print('city: $city');
+                      print('gu: $gu');
+                      print('dong: $dong');
 
                       if (profileImageFile == null) {
                         showDialog(
@@ -79,8 +78,8 @@ class _JoinPageState extends State<JoinPage> {
                           },
                         );
                       } else {
-                        print('${profileImageFile}');
-                        join(context, profileImageFile!!);
+                        print('$profileImageFile');
+                        join(context, profileImageFile!);
                       }
                     }
                   });
@@ -346,7 +345,7 @@ class _ProfileButtonState extends State<ProfileButton> {
   }
 
   File? getStoredImage() {
-    print('여기까지는 오케이${_storedImage}');
+    print('여기까지는 오케이$_storedImage');
 
     return _storedImage;
   }
