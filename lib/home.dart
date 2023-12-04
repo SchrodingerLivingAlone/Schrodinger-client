@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/accountbank.dart';
+import 'package:schrodinger_client/account/accountbank.dart';
 import 'package:schrodinger_client/mypage/my_page.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
