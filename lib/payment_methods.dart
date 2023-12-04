@@ -22,13 +22,13 @@ class _PaymentMethodsState extends State<PaymentMethods> {
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
             },
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
               },
             ),
@@ -37,7 +37,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
             child: Text(
               '$expense원',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.purple,
                 fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 140,
               ),
               Column(
@@ -66,7 +66,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                       day: day,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   Container(
@@ -98,7 +98,7 @@ class ImageCardButton extends StatelessWidget {
   final String day;
 
 
-  ImageCardButton({
+  const ImageCardButton({super.key, 
     required this.expense,
     required this.selectedButtonIndex,
     required this.memo,
@@ -118,7 +118,7 @@ class ImageCardButton extends StatelessWidget {
       child: Container(
         width: 300.0,
         height: 97.0,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/card.png'), // 이미지 파일 경로에 맞게 수정
             fit: BoxFit.cover,
@@ -137,7 +137,7 @@ class ImageCashButton extends StatelessWidget {
   final String month;
   final String day;
 
-  ImageCashButton({
+  const ImageCashButton({super.key, 
     required this.expense,
     required this.selectedButtonIndex,
     required this.memo,
@@ -157,7 +157,7 @@ class ImageCashButton extends StatelessWidget {
       child: Container(
         width: 300.0,
         height: 97.0,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/cash.png'), // 이미지 파일 경로에 맞게 수정
             fit: BoxFit.cover,

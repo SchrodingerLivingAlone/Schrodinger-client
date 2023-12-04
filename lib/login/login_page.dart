@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:schrodinger_client/accountbank.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -24,12 +23,12 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black,),
+          icon: const Icon(Icons.arrow_back, color: Colors.black,),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('로그인',
+        title: const Text('로그인',
         style: TextStyle(
         color: Color(0xFF61646B), fontWeight: FontWeight.bold)),
         centerTitle: true,
@@ -38,27 +37,27 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 150,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('로그인', style: TextStyle(
+                      const Text('로그인', style: TextStyle(
                           fontSize: 25,
                         fontWeight: FontWeight.bold
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: '이메일 아이디',
                             border: UnderlineInputBorder(),
                         ),
@@ -69,19 +68,19 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          id = value!;
+                          id = value!.trim();
                         },
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: '비밀번호',
                             border: UnderlineInputBorder(),
                         ),
@@ -92,38 +91,36 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          password = value!;
+                          password = value!.trim();
                         },
                       )
                     ],
                   ),
-                  SizedBox(height: 10,),
-                  Container(
+                  const SizedBox(height: 10,),
+                  SizedBox(
                     width: double.infinity, // 화면 전체 너비를 사용하도록 설정
                     height: 40,
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          print('${id}, ${password}');
+                          print('$id, $password');
                           var loginResponse = await login(context, id, password);
                           var accessToken = loginResponse.result.tokenInfo.accessToken;
                           var refreshToken = loginResponse.result.tokenInfo.refreshToken;
-                          print('accessToken: ${accessToken}, refreshToken: ${refreshToken}');
-
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                          prefs.setString('accessToken', accessToken);
-
+                          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          sharedPreferences.setString('accessToken', accessToken);
+                          sharedPreferences.setString('refreshToken', refreshToken);
+                          print('accessToken: $accessToken, refreshToken: $refreshToken');
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF0010A3),
+                        backgroundColor: const Color(0xFF0010A3),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
                       ),
-                      child: Text('로그인'),
+                      child: const Text('로그인'),
                     ),
                   )
                 ],
@@ -151,7 +148,11 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TownPage()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const TownPage()),
+              (route) => false, // 이 조건이 false가 될 때까지 스택에서 모든 페이지를 제거합니다.
+        );
         print('Response Body: ${response.body}');
         return LoginResponse.fromJson(json.decode(response.body));
       } else {
