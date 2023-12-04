@@ -110,17 +110,6 @@ class _TownPageState extends State<TownPage> {
               ),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: '가계부'),
-              BottomNavigationBarItem(icon: Icon(Icons.post_add), label: '동네정보'),
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-          ),
           floatingActionButton: FloatingActionButton.extended(
               backgroundColor: AppColor.yellow,
               onPressed: (){

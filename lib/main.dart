@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:schrodinger_client/accountbank.dart';
 import 'package:schrodinger_client/budgetpage.dart';
 import 'package:schrodinger_client/expensepage.dart';
+import 'package:schrodinger_client/home.dart';
 import 'package:schrodinger_client/login/join_page.dart';
 import 'package:schrodinger_client/payment_methods.dart';
 import 'package:schrodinger_client/spending_records.dart';
@@ -59,7 +60,8 @@ class MyApp extends StatelessWidget {
         '/post_info': (context) => const PostInfo(),
         '/town/auth': (context) => const TownAuthPage(),
         '/town': (context) => const TownPage(),
-        '/join': (context) => const JoinPage()
+        '/join': (context) => const JoinPage(),
+        '/home': (context) => const HomePage()
       },
       home: const Splash(),
     );

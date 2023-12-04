@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/home.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -150,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const TownPage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
               (route) => false, // 이 조건이 false가 될 때까지 스택에서 모든 페이지를 제거합니다.
         );
         print('Response Body: ${response.body}');
