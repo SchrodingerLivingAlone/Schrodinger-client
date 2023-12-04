@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          id = value!;
+                          id = value!.trim();
                         },
                       )
                     ],
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          password = value!;
+                          password = value!.trim();
                         },
                       )
                     ],
@@ -143,7 +143,11 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const TownPage()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const TownPage()),
+              (route) => false, // 이 조건이 false가 될 때까지 스택에서 모든 페이지를 제거합니다.
+        );
         print('Response Body: ${response.body}');
         return LoginResponse.fromJson(json.decode(response.body));
       } else {
