@@ -45,7 +45,6 @@ class _DiaryPageState extends State<DiaryPage> {
 
     final res = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> responseResult = res['result'];
-    print('responseResult :${responseResult[2]}');
     List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
     setState(() {
       postList = posts;
@@ -89,7 +88,7 @@ class _DiaryPageState extends State<DiaryPage> {
     );
   }//
 
-  void _showBottomSheet(BuildContext context) {
+  void _showBottomSheet(BuildContext context, Post post) {
     showModalBottomSheet<void>(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
@@ -102,198 +101,37 @@ class _DiaryPageState extends State<DiaryPage> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: AppColor.main,
+
                       borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
                   ),
                   height: 70,
-                  constraints: BoxConstraints(minWidth: 500, minHeight: 70),
+                  constraints: const BoxConstraints(minWidth: 500, minHeight: 70),
                   child: Center(
-                    child: Text('댓글',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(top: 20, bottom: 20),
+                            child: Text('댓글',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black
+                                )
+                            ),
+                        ),
+
+                        Divider(
+                          color: Colors.black,
+                          height: 1,
+                          thickness: 0.5,
                         )
+                      ]
                     ),
                   )
 
                   // color: AppColor.main,
                 ),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                          child: Container(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('nickname',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight:
-                                    FontWeight.bold
-                                )
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              width: 320,
-                              child: Text(
-                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                          child: Container(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('nickname',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight:
-                                    FontWeight.bold
-                                )
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              width: 320,
-                              child: Text(
-                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                          child: Container(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('nickname',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight:
-                                    FontWeight.bold
-                                )
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              width: 320,
-                              child: Text(
-                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                          child: Container(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('nickname',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight:
-                                    FontWeight.bold
-                                )
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              width: 320,
-                              child: Text(
-                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                          child: Container(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('nickname',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight:
-                                    FontWeight.bold
-                                )
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              width: 320,
-                              child: Text(
-                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ),
+                commentWidget(post.comments),
               ],
             ),
           );
@@ -338,11 +176,9 @@ class _DiaryPageState extends State<DiaryPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                      child: Container(
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage(post.profileImage),
-                        ),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(post.profileImage),
                       ),
                     ),
                     Text(post.nickname,
@@ -404,31 +240,79 @@ class _DiaryPageState extends State<DiaryPage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical:0, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                // Expanded(
-                //     child: child
-                // ),
-                Text('좋아요 ${post.likeCount}개', style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 5),
-                Text('nickname ${post.content} ...더보기'),
-                TextButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
-                  ),
-                  onPressed: () {
-                    _showBottomSheet(context);
-                  },
-                  child: Text('댓글 ${post.commentCount}개 모두 보기', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('좋아요 ${post.likeCount}개', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 5),
+                    Container(
+                      width: 350,
+                      child: Text('${post.nickname} ${post.content}'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                      ),
+                      onPressed: post.comments.isNotEmpty ? () {
+                        _showBottomSheet(context, post);
+                      } : null,
+
+                      child: post.comments.isNotEmpty ? Text('댓글 ${post.commentCount}개 모두 보기', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)) : Text(''),
+                    ),
+                    Text(post.calculatedTime, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  ],
                 ),
-                Text(post.calculatedTime, style: const TextStyle(fontSize: 12, color: Colors.grey)),
               ],
-            ),
+            )
+
           ),
         ],
       )).toList()
     );
+  }
+
+  Widget commentWidget(List<Comment> comments) {
+    return Column(
+        children: comments.map((comment) =>
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                child: Container(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    backgroundImage: NetworkImage(comment.profile_image),
+                  ),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(comment.nickname,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                      )
+                  ),
+                  // SizedBox(height: 5),
+                  Container(
+                    width: 320,
+                    child: Text(
+                        comment.comment,
+                        style: TextStyle(
+                            fontSize: 16,
+                        )
+                    ),
+                  )
+                ],
+              )
+          ],
+        )
+    )).toList());
   }
 
   @override
@@ -482,7 +366,7 @@ class Post {
   String calculatedTime;
   int likeCount;
   int commentCount;
-  List<Map<String, String?>> comments;
+  List<Comment> comments;
 
 
   Post({
@@ -499,6 +383,7 @@ class Post {
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
+    print('Post Post ${json['comments']}');
     return Post(
       id: json['id'],
       content: json['content'],
@@ -510,23 +395,25 @@ class Post {
       likeCount: json['likeCount'],
       commentCount: json['commentCount'],
       comments: List<Map<String, dynamic>>.from(json['comments'] ?? []).map((comment) {
-        return {
-          'nickname': comment['nickname'].toString(),
-          'comment': comment['comment'].toString(),
-          'profile_image': comment['profile_image'].toString(),
-        };
+        return Comment(
+          userId: comment['userId'].toString(),
+          commentId: comment['commentId'].toString(),
+          nickname: comment['nickname'].toString(),
+          comment: comment['comment'].toString(),
+          profile_image: comment['profile_image'].toString(),
+        );
       }).toList(),
     );
   }
-
-
-
 }
-//
-// class Comment {
-//   final String nickname;
-//   final String comment;
-//   final String profile_image;
-//
-//   Comment({required this.nickname, required this.comment, required this.profile_image});
-// }
+
+
+class Comment {
+  final String userId;
+  final String commentId;
+  final String nickname;
+  final String comment;
+  final String profile_image;
+
+  Comment({required this.userId, required this.commentId, required this.nickname, required this.comment, required this.profile_image});
+}
