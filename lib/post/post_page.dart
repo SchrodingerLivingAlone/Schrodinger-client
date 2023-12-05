@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
 import 'package:schrodinger_client/style.dart';
@@ -83,46 +84,67 @@ class _PostPageState extends State<PostPage>{
     }
   }
 
-
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // String? accessToken = prefs.getString('accessToken');
-  // String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
-  //
-  // final response = await http.get(
-  // Uri.parse(url),
-  // headers: {
-  // 'Content-Type': 'application/json',
-  // 'Authorization': 'Bearer $accessToken'
-  // }
-  // );
-
-  Future<PostPageResponse> PostPost(BuildContext context, Issue issue, String title, String content, String place) async {
+  Future<PostPageResponse> PostPost(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts';
-    print(postImages?.length);
-    // 요청에 전송할 데이터
-    var body = {
-      "createjson" :{
-        "category": issue.toString().substring(6),
-        "title": _titleController.text,
-        "content": _contentController.text,
-        "place": searchedLocation,
-      },
-    };
-    try {
-      final response = await http.post(
-          Uri.parse(url),
-          body: json.encode(body),
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization' : 'Bearer $accessToken'}
+    var url = Uri.parse('${dotenv.env['BASE_URL']}/api/neighborhood/posts');
 
-      );
+    String category;
+    switch(_issue){
+      case Issue.RESTAURANT:
+        category = '0';
+        break;
+      case Issue.FACILITY:
+        category = '1';
+        break;
+      case Issue.SHARE_INFORMATION:
+        category = '2';
+        break;
+      case Issue.TOGETHER:
+        category = '3';
+        break;
+      case Issue.COMMUNICATION:
+        category = '4';
+        break;
+      case Issue.ETC:
+        category = '5';
+        break;
+    }
+
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Content-Type'] = 'multipart/form-data';
+
+    request.fields['category'] = category.toString();
+    request.fields['title'] = _titleController.text;
+    request.fields['content'] = _contentController.text;
+    request.fields['place'] = searchedLocation;
+
+    postImages?.forEach((element) async {
+      var imageStream = http.ByteStream(Stream.castFrom(element.openRead()));
+      var length = await element.length();
+      var multipartFile = http.MultipartFile('images', imageStream, length, filename: 'images', contentType: MediaType('image', 'jpeg'));
+      request.files.add(multipartFile);
+    });
+
+    try {
+      var response = await request.send();
+      var responseBody = await response.stream.bytesToString();
+
+      print(responseBody);
+      print('2222222');
+      Map<String, dynamic> jsonMap = json.decode(responseBody);
+
+      print("111111");
+      // 맵에서 값 추출
+      var isSuccess = jsonMap["isSuccess"];
+      var code = jsonMap["code"];
+      var message = jsonMap["message"];
+      var result = jsonMap["result"];
 
       if (response.statusCode == 200) {
-        print('Response Body: ${response.body}');
-        return PostPageResponse.fromJson(json.decode(response.body));
+        print('게시글 등록 성공');
+        print('Response Body: ${responseBody}');
+        return PostPageResponse.fromJson(json.decode(await response.stream.bytesToString()));
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
@@ -130,7 +152,6 @@ class _PostPageState extends State<PostPage>{
       throw Exception('Failed to load data: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +178,7 @@ class _PostPageState extends State<PostPage>{
             ),
             onPressed: () async {
 
-              var postPostResponse = await PostPost(context, _issue, _titleController.text, _contentController.text, searchedLocation);
+              var postPostResponse = await PostPost(context);
               if(postPostResponse.isSuccess == true){
                 print(postPostResponse.message);
                 postImages?.clear();
