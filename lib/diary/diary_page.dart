@@ -151,51 +151,37 @@ class _DiaryPageState extends State<DiaryPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                          child: Container(
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        const Column(
+                        Row(
                           children: [
-                            Text('nicknamePosition', style: TextStyle(fontSize: 20),),
-                            Text('5분전 | 조회 46 | 전눙동 '),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                              child: Container(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
+                                ),
+                              ),
+                            ),
+                            const Text('nickname',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                    FontWeight.bold
+                                )
+                            ),
                           ],
                         ),
-                        const SizedBox(
-                          width: 80,
-                        ),
-                        ElevatedButton(
+                        IconButton(
                             onPressed: (){},
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.orange,
-                                minimumSize: const Size(30, 30),
-                                elevation: 10
-                            ),
-                            child: const Text('IssuePos', style: TextStyle(fontSize: 13),)
+                            icon: const Icon(Icons.more_horiz)
                         ),
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                    child: SizedBox(width: 500,
-                        child: Divider(color: Colors.grey, thickness: 2.0)),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                    child: Container(child: const Text('TitlePosition', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 2.0),
-                    child: Container(child: const Text('contentPosition', style: TextStyle(fontSize: 20),)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
@@ -205,60 +191,41 @@ class _DiaryPageState extends State<DiaryPage> {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(left:10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  isLiked = !isLiked;
+                                });
+                              },
+                              icon: isLiked ? const Icon(Icons.favorite, color: Colors.red,) : const Icon(Icons.favorite_border_outlined),
+                            ),
+                            IconButton(
+                              onPressed: (){},
+                              icon: const Icon(Icons.mode_comment_outlined),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            setState(() {
+                              isScrapped = !isScrapped; // 버튼 클릭 시 상태 변경
+                            });
+                          },
+                          icon: isScrapped ? const Icon(Icons.bookmark) : const Icon(Icons.bookmark_outline),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                       child: Column(
                           children: [
-                            Row(
-                              children: [
-                                const Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(Icons.pin_drop_outlined, color: Colors.deepPurple, size: 20,),
-                                        Text('위치', style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // 조절하고 싶은 둥근 정도
-                                          ),
-                                          backgroundColor: isLiked ? Colors.blue : Colors.white,
-                                          shadowColor: Colors.transparent,
-                                        ),
-                                        onPressed: (){
-                                          setState(() {
-                                            isLiked = !isLiked;
-                                          });
-                                        },
-                                        child: const Text('공감하기', style: TextStyle(fontSize: 15, color:Colors.black),)
-                                    ),
-                                    ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10.0), // 조절하고 싶은 둥근 정도
-                                          ),
-                                          backgroundColor: isScrapped ? Colors.orange : Colors.white,
-                                          shadowColor: Colors.transparent,
-                                        ),
-                                        onPressed: (){
-                                          setState(() {
-                                            isScrapped = !isScrapped; // 버튼 클릭 시 상태 변경
-                                          });
-                                        },
-                                        child: const Text('스크랩', style: TextStyle(fontSize: 15, color:Colors.black),)
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
                             const Padding(
                               padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                               child: SizedBox(width: 400,
