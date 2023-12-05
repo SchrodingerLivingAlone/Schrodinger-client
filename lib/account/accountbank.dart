@@ -1,12 +1,45 @@
+import 'dart:convert';
+import 'dart:math';  //이거 랜덤으로 색 생성하려고 추가한 라이브러리임
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:math' as math;
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
-class AccountBank extends StatelessWidget {
+class AccountBank extends StatefulWidget {
   const AccountBank({super.key});
+
+
+  @override
+  State<AccountBank> createState() => _AccountBankState();
+}
+
+class _AccountBankState extends State<AccountBank> {
+
+  late List<AccountBankInfo> GetAllList = []; //맨처음에 get으로 받아온거
+
+  @override
+  void initState() {
+    super.initState();
+    getAll();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final result = ModalRoute.of(context)?.settings.arguments as int? ?? 0;
+    //final result = ModalRoute.of(context)?.settings.arguments as int? ?? 0;
+
+    List<PieModel> model = getExpenseDataForPieChart();//파이차트비용가져오기
+
+    // 소득, 예산 및 총 지출 받는 변수 선언
+    int income = GetAllList.isNotEmpty ? GetAllList[0].result.income : 0;
+    int budget = GetAllList.isNotEmpty ? GetAllList[0].result.budget : 0;
+    int totalExpense = GetAllList.isNotEmpty
+        ? GetAllList[0].result.expense.fold<int>(
+        0, (previousValue, element) => previousValue + element.price) : 0;
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('가계부')),
@@ -24,31 +57,256 @@ class AccountBank extends StatelessWidget {
         ],
       ),
 
-      body: Column(
+      body:ListView(     //column에서 listview로 바꿈 아래에 listtile넣으려고
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Center(
             child: Container(
                 color: Colors.yellow,
-                padding: const EdgeInsets.all(30.0),
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 child:
                   Column(
                     children: [
-                      Text('이번달 남은 예산은 $result원 이에요.'),
-                      const Text('너무 잘하고 있어요!'),
+                      Text('이번달 남은 예산은 $budget원 이에요.'),
+                      Text('너무 잘하고 있어요!'),
+                      Text('수입: $income원'),
+                      Text('지출: $totalExpense원'),
                     ],
                   ),
 
             ),
           ),
+          Container(//piechart넣기
+
+            child: CustomPaint(
+              size: Size(200, 200),
+              painter: _PieChart(model),
+            ),
+          ),
+          _buildExpenseDetailsList(),  //이게 이제 listtile보여주는 부분.
+
         ],
       ),
+    );
+  }
+
+  Future<void> getAll() async { //맨처음에 get으로 받아오는거 1번
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    //String url = '${dotenv.env['BASE_URL']}/api/accountBooks/all';
+
+    MonthYearRequest request = MonthYearRequest(year: 2023, month: 11);
+
+
+    final url = '${dotenv.env['BASE_URL']}/api/accountBooks/all';
+    final queryParameters = request.toJson();
+    final queryParams = queryParameters.entries
+        .map((entry) => '${Uri.encodeComponent(entry.key)}=${Uri.encodeComponent(entry.value.toString())}')
+        .join('&');
+    final fullUrl = '$url?$queryParams';
+
+    print(fullUrl);
+    final response = await http.get(
+      Uri.parse(fullUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken'
+      },
+    );
+
+    final res = jsonDecode(utf8.decode(response.bodyBytes));
+    print(res);
+    if (response.statusCode == 200) {
+      //final dynamic responseResult = res['result'];
+      List<AccountBankInfo> getall = [AccountBankInfo.fromJson(res)];
+      print(response.statusCode);//잘되는지 테스트
+      print(2);
+
+
+      setState(() {
+        GetAllList = getall;
+      });
+    } else {
+      // 실패 시 /api/accountBooks/budget 로 POST 요청을 보냄.
+      await createAccountBook();
+    }
+  }
+
+  Future<void> createAccountBook() async {
+    //맨처음에 가계부가 없어서 get실패시에 post로 가계부생성하는작업 수행하는 상황
+    //budget 0으로 해서 가계부 생성
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String url = '${dotenv.env['BASE_URL']}/api/accountBooks/budget';
+
+    MonthYearRequest request = MonthYearRequest(year: 2023, month: 11);
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: jsonEncode({
+        'budget': 0,
+        'month': request.month,
+        'year': request.year,
+      }),
+    );
+
+    final res = jsonDecode(utf8.decode(response.bodyBytes));
+
+    print(response.statusCode);
+    print(res['isSuccess']);
+    print('post들어왔다가 나갔어용');
+
+    if (response.statusCode == 200 && res['isSuccess']) {
+      // 성공적으로 가계부를 생성한 경우, 새로운 정보를 받아옵니다.
+      await getAll();
+    } else {
+      // 가계부 생성에 실패한 경우, 적절한 오류 처리를 진행합니다.
+      print('Failed to create account book');
+    }
+  }
+
+  //////////파이차트 부분표출하도록 하는 함수
+  List<PieModel> getExpenseDataForPieChart() {
+    // ExpenseItem 목록에서 PieModel 목록으로 변환
+    List<ExpenseItem> expenseItems = GetAllList.isNotEmpty
+        ? GetAllList[0].result.expense
+        : [];
+
+    // 총 지출액 계산
+    int totalExpense = expenseItems.fold<int>(
+        0, (previousValue, element) => previousValue + element.price);
+
+    // 비율 얼마인지 계산
+    List<PieModel> model = [];
+    for (var expense in expenseItems) {
+      double ratio = expense.price / totalExpense;
+      model.add(PieModel(ratio: ratio, color: getExpenseCategoryColor(expense.transactionCategory)));
+    }
+
+    return model;
+  }
+  //////지금부터 추가한 항목들임 listtile로 지출내역 보여주기 위해서
+  Widget _buildExpenseDetailsList() {
+    List<ExpenseItem> expenseItems = GetAllList.isNotEmpty
+        ? GetAllList[0].result.expense
+        : [];
+
+    int totalExpense = expenseItems.fold<int>(
+        0, (previousValue, element) => previousValue + element.price);
+
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: expenseItems.length,
+      itemBuilder: (context, index) {
+        return Container(
+          height: 40,
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: getExpenseCategoryColor(expenseItems[index].transactionCategory),
+              radius: 17.0,
+            ),
+            title: Text(expenseItems[index].transactionCategory),
+            subtitle: Text('${(expenseItems[index].price / totalExpense * 100).toStringAsFixed(2)}%'),
+          ),
+        );
+      },
+    );
+  }
+
+}
+
+
+
+class MonthYearRequest {
+  final int year;
+  final int month;
+
+  MonthYearRequest({
+    required this.year,
+    required this.month,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'year': year,
+      'month': month,
+    };
+  }
+}
+
+class AccountBankInfo {       ////json받아오는 형식
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final ResultInfo result;
+
+  AccountBankInfo({
+    required this.isSuccess,
+    required this.code,
+    required this.message,
+    required this.result,
+  });
+
+  factory AccountBankInfo.fromJson(Map<String, dynamic> json) {
+    return AccountBankInfo(
+      isSuccess: json['isSuccess'] ?? false,
+      code: json['code'] ?? "",
+      message: json['message'] ?? "",
+      result: ResultInfo.fromJson(json['result'] ?? {}),
+    );
+  }
+}
+
+class ResultInfo {
+  final int expenditure;
+  final int income;
+  final int budget;
+  final List<ExpenseItem> expense;
+
+  ResultInfo({
+    required this.expenditure,
+    required this.income,
+    required this.budget,
+    required this.expense,
+  });
+
+  factory ResultInfo.fromJson(Map<String, dynamic> json) {
+    List<dynamic> expenseList = json['expense'] ?? [];
+    List<ExpenseItem> expenseItems = expenseList
+        .map((expense) => ExpenseItem.fromJson(expense))
+        .toList();
+    return ResultInfo(
+      expenditure: json['expenditure'] ?? 0,
+      income: json['income'] ?? 0,
+      budget: json['budget'] ?? 0,
+      expense: expenseItems,
+    );
+  }
+}
+
+class ExpenseItem {
+  final String transactionCategory;
+  final int price;
+
+  ExpenseItem({
+    required this.transactionCategory,
+    required this.price,
+  });
+
+  factory ExpenseItem.fromJson(Map<String, dynamic> json) {
+    return ExpenseItem(
+      transactionCategory: json['transactionCategory'] ?? '',
+      price: json['price'] ?? 0,
     );
   }
 }
 
 
-class Dialog extends StatelessWidget {
+class Dialog extends StatelessWidget {//오른쪽 상단에 + 버튼눌렀을때 나오는거
   const Dialog({super.key});
 
   @override
@@ -77,3 +335,77 @@ class Dialog extends StatelessWidget {
     );
   }
 }
+
+
+class PieModel {
+  final double ratio; // 비율 추가
+  final Color color;
+
+  PieModel({
+    required this.ratio,
+    required this.color,
+  });
+}
+
+class _PieChart extends CustomPainter {
+  final List<PieModel> data;
+
+  _PieChart(this.data);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint circlePaint = Paint()..color = Colors.black;
+
+    Offset offset = Offset(size.width / 2, size.width / 4); //원의 중심좌표
+    double radius = (size.width / 2) * 0.5;
+    canvas.drawCircle(offset, radius, circlePaint);
+
+    double _startPoint = 0.0;
+    for (int i = 0; i < data.length; i++) {
+      double _startAngle = 2 * math.pi * data[i].ratio; // 비율로 계산
+      double _nextAngle = 2 * math.pi * data[i].ratio;
+      circlePaint.color = data[i].color;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset(size.width / 2, size.width / 4), radius: radius),
+        -math.pi / 2 + _startPoint,
+        _nextAngle,
+        true,
+        circlePaint,
+      );
+      _startPoint = _startPoint + _startAngle;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // 데이터가 변경되면 다시 그려야 하도록 수정
+    if (oldDelegate is _PieChart) {
+      return !listEquals(data, oldDelegate.data);
+    }
+    return false;
+  }
+}
+
+
+
+
+Color getExpenseCategoryColor(String category) {  //카테고리 색 정하기
+  switch (category) {
+    case '식비':
+      return Colors.pink;
+    case '카페/간식':
+      return Colors.orange;
+    case '교통':
+      return Colors.blue;
+    case '술/유흥':
+      return Colors.green;
+    case '기타':
+      return Colors.grey;
+    default:
+      return Colors.grey; // 기본값은 회색으로 지정
+  }
+}
+
+
+

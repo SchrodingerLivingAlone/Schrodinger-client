@@ -15,6 +15,8 @@ import 'package:schrodinger_client/login/auth_page.dart';
 import 'package:schrodinger_client/login/login_page.dart';
 import 'package:schrodinger_client/login/splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:schrodinger_client/mypage/manage_profile.dart';
+import 'package:schrodinger_client/mypage/written_page.dart';
 import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
@@ -61,7 +63,10 @@ class MyApp extends StatelessWidget {
         '/town/auth': (context) => const TownAuthPage(),
         '/town': (context) => const TownPage(),
         '/join': (context) => const JoinPage(),
-        '/home': (context) => const HomePage()
+        '/home': (context) => const HomePage(),
+        //MyPage에서 연결되는 부분 루트 새로 추가한 부분.
+        '/ManageProfiles': (context) => const ManageProfiles(),
+        '/WrittenPage': (context) => const WrittenPage(),
       },
       home: const Splash(),
     );
