@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
 import 'package:schrodinger_client/style.dart';
@@ -12,6 +13,8 @@ import 'package:schrodinger_client/post/post_search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 //TODO 1.등록하면 글 객체 생성 -> api
@@ -57,12 +60,15 @@ class _PostPageState extends State<PostPage>{
     return selectedButton == buttonName ? Colors.orange : Colors.grey;
   }
 
+
   Future<GetPositionResponse> getPosition(BuildContext context) async {
-    var url = 'http://13.124.153.160:8081/api/neighborhood/posts/location';
+    var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/location';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmdoQG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MDE4NDE2MTZ9.vDQtFT8doOY7Le4-T9lKIGPQMg7H4Xd_4h0pGs59lfU'}
+        headers: {'Authorization' : 'Bearer $accessToken'}
       );
 
       if (response.statusCode == 200) {
@@ -77,8 +83,23 @@ class _PostPageState extends State<PostPage>{
     }
   }
 
+
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String? accessToken = prefs.getString('accessToken');
+  // String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
+  //
+  // final response = await http.get(
+  // Uri.parse(url),
+  // headers: {
+  // 'Content-Type': 'application/json',
+  // 'Authorization': 'Bearer $accessToken'
+  // }
+  // );
+
   Future<PostPageResponse> PostPost(BuildContext context, Issue issue, String title, String content, String place) async {
-    var url = 'http://13.124.153.160:8081/api/neighborhood/posts';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts';
     print(postImages?.length);
     // 요청에 전송할 데이터
     var body = {
@@ -95,7 +116,7 @@ class _PostPageState extends State<PostPage>{
           body: json.encode(body),
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmdoQG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MDE4NDA3Mjl9.7ExOcA3dzH3p00LaXntROtm8whRStja_3dkbdhFMKc4'}
+            'Authorization' : 'Bearer $accessToken'}
 
       );
 
