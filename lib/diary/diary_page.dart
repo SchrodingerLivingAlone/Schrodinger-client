@@ -46,9 +46,36 @@ class _DiaryPageState extends State<DiaryPage> {
     final res = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> responseResult = res['result'];
     List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
+    print(responseResult);
     setState(() {
       postList = posts;
     });
+  }
+
+  Future<void> writeComment(int diaryId, String comment) async {
+    String url = '${dotenv.env['BASE_URL']}/api/diary/comments/$diaryId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+
+    var body = {
+      'comment': comment
+    };
+
+
+    final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(body),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        }
+    );
+    print('writeComment : ${response.statusCode}');
+
+
+    if (response.statusCode == 200) {
+      await getPost();
+    }
   }
 
   Widget sliderWidget (List<String> imageUrls) {
@@ -86,59 +113,7 @@ class _DiaryPageState extends State<DiaryPage> {
         },
       ),
     );
-  }//
-
-  void _showBottomSheet(BuildContext context, Post post) {
-    showModalBottomSheet<void>(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
-      ),
-      // backgroundColor: AppColor.main,
-      context: context,
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-
-                      borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
-                  ),
-                  height: 70,
-                  constraints: const BoxConstraints(minWidth: 500, minHeight: 70),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(top: 20, bottom: 20),
-                            child: Text('댓글',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black
-                                )
-                            ),
-                        ),
-
-                        Divider(
-                          color: Colors.black,
-                          height: 1,
-                          thickness: 0.5,
-                        )
-                      ]
-                    ),
-                  )
-
-                  // color: AppColor.main,
-                ),
-                commentWidget(post.comments),
-              ],
-            ),
-          );
-      },
-    );
   }
-
 
   Widget sliderIndicator(List<String> imageUrls) {
     return Align(
@@ -160,6 +135,63 @@ class _DiaryPageState extends State<DiaryPage> {
           );// GestureDetector
         }).toList(),
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context, Post post) {
+    showModalBottomSheet<void>(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
+                        ),
+                        height: 70,
+                        constraints: const BoxConstraints(minWidth: 500, minHeight: 70, maxHeight: 100),
+                        child: const Center(
+                          child: Column(
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                                  child: Text('댓글',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black
+                                      )
+                                  ),
+                              ),
+
+                              Divider(
+                                color: Colors.black,
+                                height: 1,
+                                thickness: 0.5,
+                              )
+                            ]
+                          ),
+                        )
+
+                        // color: AppColor.main,
+                      ),
+                      commentWidget(post.comments),
+                    ],
+                  ),
+                ),
+            ),
+
+
+          ],
+        );
+      },
     );
   }
 
@@ -242,27 +274,49 @@ class _DiaryPageState extends State<DiaryPage> {
             padding: const EdgeInsets.symmetric(vertical:0, horizontal: 20),
             child: Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('좋아요 ${post.likeCount}개', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 5),
-                    Container(
-                      width: 350,
-                      child: Text('${post.nickname} ${post.content}'),
-                    ),
-                    TextButton(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('좋아요 ${post.likeCount}개', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 5),
+                      Container(
+                        width: 350,
+                        child: Text('${post.nickname} ${post.content}'),
                       ),
-                      onPressed: post.comments.isNotEmpty ? () {
-                        _showBottomSheet(context, post);
-                      } : null,
-
-                      child: post.comments.isNotEmpty ? Text('댓글 ${post.commentCount}개 모두 보기', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)) : Text(''),
-                    ),
-                    Text(post.calculatedTime, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                  ],
+                      post.comments.isNotEmpty ?
+                      TextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        ),
+                        onPressed: post.comments.isNotEmpty ? () {
+                          _showBottomSheet(context, post);
+                        } : null,
+                        child: post.comments.isNotEmpty ? Text('댓글 ${post.commentCount}개 모두 보기', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)) : Text(''),
+                      ) : const SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: TextField(
+                          controller: _commentController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.only(right: 15.0),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage('https://schrodinger-cau.s3.ap-northeast-2.amazonaws.com/fc4b0530-dec3-435d-abf3-94142685c2fd.jpg'),
+                              ),
+                            ),
+                            suffixIcon: Icon(Icons.star),
+                            labelText: '댓글 달기...',
+                          ),
+                          onSubmitted: (value) async {
+                            await writeComment(post.id, value);
+                            _commentController.clear();
+                          },
+                        ),
+                      ),
+                      Text(post.calculatedTime, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                    ],
+                  ),
                 ),
               ],
             )
@@ -282,18 +336,16 @@ class _DiaryPageState extends State<DiaryPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-                child: Container(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    backgroundImage: NetworkImage(comment.profile_image),
-                  ),
+                child: CircleAvatar(
+                  // backgroundColor: Colors.grey,
+                  backgroundImage: NetworkImage(comment.profile_image),
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(comment.nickname,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold
                       )
@@ -383,7 +435,6 @@ class Post {
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
-    print('Post Post ${json['comments']}');
     return Post(
       id: json['id'],
       content: json['content'],
