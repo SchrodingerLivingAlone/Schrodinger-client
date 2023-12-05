@@ -22,7 +22,6 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   void initState() {
     super.initState();
     getFoodPost();
-    print('food : ${widget.tabIndex}');
   }
 
   List<Widget> createFoodListTiles() {
