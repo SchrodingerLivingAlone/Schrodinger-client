@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:schrodinger_client/post/post_adjust.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/ImageUploader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:schrodinger_client/post/post_search.dart';
+import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -25,13 +26,14 @@ class PostPage extends StatefulWidget{
   State<PostPage> createState() => _PostPageState();
 }
 
-class _PostPageState extends State<PostPage> {
+class _PostPageState extends State<PostPage>{
   Issue _issue = Issue.RESTAURANT;
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   String searchedLocation = 'df';//사용자의 현재위치 넣어놓기
-  var container = ProviderContainer();
+  final imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+
 
   @override
   void initState() {
@@ -76,23 +78,27 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
-  Future<PostPageResponse> PostPost(BuildContext context, Issue issue, String title, String content, String place, List<XFile> files) async {
+  Future<PostPageResponse> PostPost(BuildContext context, Issue issue, String title, String content, String place) async {
     var url = 'http://13.124.153.160:8081/api/neighborhood/posts';
-
-
+    List<XFile> files = context.read();
+    print(files.length);
     // 요청에 전송할 데이터
     var body = {
-      "category": issue,
-      "title": title,
-      "content" : content,
-      "place" : place,
+      "createjson" :{
+        "category": issue.toString().substring(6),
+        "title": _titleController.text,
+        "content": _contentController.text,
+        "place": searchedLocation,
+      },
     };
-
     try {
       final response = await http.post(
           Uri.parse(url),
           body: json.encode(body),
-          headers: {'Content-Type': 'multipart/form-data'}
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmdoQG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MDE4NDA3Mjl9.7ExOcA3dzH3p00LaXntROtm8whRStja_3dkbdhFMKc4'}
+
       );
 
       if (response.statusCode == 200) {
@@ -105,6 +111,7 @@ class _PostPageState extends State<PostPage> {
       throw Exception('Failed to load data: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +136,11 @@ class _PostPageState extends State<PostPage> {
               shadowColor: Colors.transparent,
             ),
             onPressed: () async {
+
               var postPostResponse = await PostPost(context, _issue, _titleController.text, _contentController.text,
-                                          searchedLocation, container.read(imagePickerProvider));
-              if(postPostResponse.isSuccess == 200){
+                                          searchedLocation);
+              if(postPostResponse.isSuccess == true){
+                print(postPostResponse.message);
                 Navigator.pop(context);
               }
             },
@@ -239,9 +248,9 @@ class _PostPageState extends State<PostPage> {
             const SizedBox(
               height: 20,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
-              child: ImageWidget(),
+              child: ImageWidget(imagePickerProvider: imagePickerProvider),
             ),
             const Padding(
               padding: EdgeInsets.fromLTRB(10.0, 5.0,8.0,0),
@@ -349,9 +358,8 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
 //////////////////////////////////////////////////////
 //Image 업로드 코드
 //////////////////////////////////////////////////////
-final imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {
-  return ImageState();
-});
+
+//final imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
 
 class ImageState extends StateNotifier<List<XFile>> {
   ImageState() : super(<XFile>[]);
@@ -393,15 +401,16 @@ class ImageState extends StateNotifier<List<XFile>> {
 }
 
 class ImageWidget extends ConsumerWidget {
-  const ImageWidget({Key? key}) : super(key: key);
+  ImageWidget({Key? key, required this.imagePickerProvider});
+  StateNotifierProvider<ImageState, List<XFile>> imagePickerProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double imgBoxSize = ((MediaQuery.of(context).size.width - 32) / 5) - 4;
-    final images = ref.watch(imagePickerProvider);
+    final images = ref.watch(imagePickerProvider!);
 
     Widget imageBox(XFile img) => GestureDetector(
-        onTap: () => ref.read(imagePickerProvider.notifier).delImage(img),
+        onTap: () => ref.read(imagePickerProvider!.notifier).delImage(img),
         child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 2),
             width: imgBoxSize,
@@ -436,7 +445,7 @@ class ImageWidget extends ConsumerWidget {
       ] else ...[
         ...images.map((e) => imageBox(e)).toList(),
         InkWell(
-            onTap: () => ref.read(imagePickerProvider.notifier).getImage(),
+            onTap: () => ref.read(imagePickerProvider!.notifier).getImage(),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 2),
               width: MediaQuery.of(context).size.width * 0.17,
