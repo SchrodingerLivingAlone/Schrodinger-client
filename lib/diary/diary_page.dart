@@ -28,35 +28,37 @@ class _DiaryPageState extends State<DiaryPage> {
   bool isLiked = false;
   final _commentController = TextEditingController();
   late List<Post> postList = [];
+
   @override
   void initState(){
     super.initState();
 
-    getPost();
+    // getPost();
   }
 
-  Future<void> getPost() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/9';
-
-    final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        }
-    );
-
-    final res = jsonDecode(utf8.decode(response.bodyBytes));
-    print(res);
-    final responseResult = res['result'];
-    List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
-    print(posts);
-    setState(() {
-      postList = posts;
-    });
-  }
+  // Future<void> getPost() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? accessToken = prefs.getString('accessToken');
+  //   String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/10';
+  //
+  //   final response = await http.get(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer $accessToken'
+  //       }
+  //   );
+  //
+  //   final res = jsonDecode(utf8.decode(response.bodyBytes));
+  //
+  //   final responseResult = res['result'];
+  //   print(res);
+  //   List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
+  //   print(posts);
+  //   setState(() {
+  //     postList = posts;
+  //   });
+  // }
   Widget sliderWidget () {
     return CarouselSlider (
       carouselController: _carouselController,
@@ -124,26 +126,19 @@ class _DiaryPageState extends State<DiaryPage> {
           iconTheme: const IconThemeData(
               color: Colors.black
           ),
-          leading:  IconButton(
-              onPressed: () {},
-              color: Colors.purple,
-              icon: const Icon(Icons.arrow_back)),
-          backgroundColor: Colors.white,
+          leading: IconButton(
+              onPressed: (){},
+              color: Colors.white,
+              icon: const Icon(Icons.add_circle_outline)
+          ),
+          backgroundColor: AppColor.main,
           title: const Center(
-              child: Text('새 게시물', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))),
+              child: Text('자취일기', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
           actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shadowColor: Colors.transparent,
-              ),
-              onPressed: () {},
-              child: const Text('등록',
-                style: TextStyle(
-                  color: AppColor.yellow,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            IconButton(
+                onPressed: (){},
+                color: Colors.white,
+                icon: const Icon(Icons.search)
             ),
           ],
         ),
@@ -162,7 +157,6 @@ class _DiaryPageState extends State<DiaryPage> {
                           child: Container(
                             child: const CircleAvatar(
                               backgroundColor: Colors.grey,
-                              //backgroundImage: ,
                             ),
                           ),
                         ),
@@ -341,15 +335,24 @@ class Post {
       neighborhoodPostCategory: json['neighborhoodPostCategory'],
       title: json['title'],
       content: json['content'],
-      imageUrls: json['imageUrls'],
+      imageUrls: List<String>.from(json['imageUrls'] ?? []),
       createdAt: json['createdAt'],
       calculatedTime: json['calculatedTime'],
       view: json['view'],
       likeCount: json['likeCount'],
       commentCount: json['commentCount'],
-      comments: json['comments']
+      comments: List<Map<String, String?>>.from(json['comments'] ?? []).map((comment) {
+        return {
+          'nickname': comment['nickname'],
+          'comment': comment['comment'],
+          'profile_image': comment['profile_image'],
+        };
+      }).toList(),
     );
   }
+
+
+
 }
 
 class Comment {
