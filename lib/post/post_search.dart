@@ -68,11 +68,7 @@ class _PostSearchState extends State<PostSearch> {
   }
 
   Widget _buildSearchResults() {
-    if (_searchResults == null) {
-      return Container();
-    }
-
-    return Container(
+    return SizedBox(
       height: 200,
       child: ListView.builder(
         itemCount: _searchResults.length,
@@ -105,7 +101,7 @@ class _PostSearchState extends State<PostSearch> {
           iconTheme: const IconThemeData(
               color: Colors.black
           ),
-          leading:  IconButton(
+          leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -168,18 +164,17 @@ class _PostSearchState extends State<PostSearch> {
                         _searchPlaces(_locationSearchController.text);
                       },
                       style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.white,
                           minimumSize: const Size(40, 30),
-                          primary: Colors.white,
                           elevation: 10),
-                      child: Icon(Icons.search_rounded, color: Colors.deepPurple,))
+                      child: const Icon(Icons.search_rounded, color: Colors.deepPurple,))
                 ],
               ),
             ),
             Expanded(
               child: GoogleMap(
                 onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
+                initialCameraPosition: const CameraPosition(
                   target: LatLng(37.5078, 126.9613), // 초기 위치
                   zoom: 12.0,
                 ),
@@ -201,7 +196,7 @@ class _PostSearchState extends State<PostSearch> {
 }
 
 Future<List<Map<String, dynamic>>> searchPlaces(String query, String? apiKey) async {
-  final String apiUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
+  const String apiUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
   final String requestUrl = '$apiUrl?query=$query&key=$apiKey';
 
   final response = await http.get(Uri.parse(requestUrl));

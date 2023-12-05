@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/facility_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class TownPage extends StatefulWidget {
   const TownPage({super.key});
@@ -14,46 +19,37 @@ class TownPage extends StatefulWidget {
 class _TownPageState extends State<TownPage> {
   int _selectedIndex = 0;
   bool isCompleted = false;
+  String townName = '검색중...';
+
+  @override
+  void initState(){
+    super.initState();
+    getTownName();
+  }
+
+  Future<void> getTownName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/location';
+
+    final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        }
+    );
+
+    final res = jsonDecode(utf8.decode(response.bodyBytes));
+    setState(() {
+      townName = res['result']['town'];
+    });
+  }
 
   void _onItemTapped(int index) {
+    if(index == 1)
     setState(() {
-      if (index == 2){
-        showDialog(context: context, builder: (context){
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0), // BorderRadius 조절
-            ),
-            // title: const Text('AlertDialog'),
-            elevation: 20,
-            content: const Text(
-                "동네인증을 완료해야 \n 동네정보에 접근할 수 있습니다.\n 동네인증 페이지로 이동할까요?",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15)
-            ),
-            contentPadding: const EdgeInsets.only(top: 30),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('취소', style: TextStyle(fontSize: 20, color: Colors.red)),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    isCompleted == true
-                        ? isCompleted = false
-                        : isCompleted = true;
-                  });
-                  Navigator.pushNamed(context, '/town/auth');
-
-                },
-                child: const Text('이동', style: TextStyle(fontSize: 20, color: Colors.blue)),
-              ),
-            ],
-          );
-        });
-      } else {
-        _selectedIndex = index;
-      }
+      _selectedIndex = index;
     });
   }
 
@@ -64,30 +60,30 @@ class _TownPageState extends State<TownPage> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: AppColor.main,
-            title: const Text('전농동'),
+            title: Text(townName),
+            leading: const Icon(Icons.place),
             actions: [
               IconButton(onPressed: (){}, icon: const Icon(Icons.search))
             ],
             bottom: const TabBar(
-              // unselectedLabelColor: Colors.white,
                 indicatorColor: Colors.white,
                 isScrollable: true,
                 tabs: [
                   Tab(text: '홈'),
                   Tab(text: '맛집'),
                   Tab(text: '시설'),
-                  Tab(text: '할인'),
-                  Tab(text: '같이 해요'),
-                  Tab(text: '질문 요청'),
-                  Tab(text: '공공 정보'),
-                ]
+                  Tab(text: '정보공유'),
+                  Tab(text: '같이해요'),
+                  Tab(text: '소통해요'),
+                  Tab(text: '기타'),
+                ],
             ),
           ),
           body: TabBarView(
             children: [
-              const HomeInfoPage(),
-              const FoodInfoPage(),
-              const FacilityInfoPage(),
+              HomeInfoPage(townName: townName),
+              const FoodInfoPage(tabIndex: 0),
+              const FacilityInfoPage(tabIndex: 1),
               ListTile(
                 leading: const Icon(Icons.home),
                 title: const Text('할인'),
@@ -113,18 +109,6 @@ class _TownPageState extends State<TownPage> {
                 onTap: (){},
               ),
             ],
-          ),
-          drawer: const Drawer(),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: '가계부'),
-              BottomNavigationBarItem(icon: Icon(Icons.post_add), label: '동네정보'),
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
           ),
           floatingActionButton: FloatingActionButton.extended(
               backgroundColor: AppColor.yellow,

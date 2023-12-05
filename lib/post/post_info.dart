@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
@@ -113,12 +112,12 @@ class _PostInfoState extends State<PostInfo> {
                 position: const RelativeRect.fromLTRB(1000, 0, 0, 0),
                 items: [
                   const PopupMenuItem(
-                    child: Text('게시글 수정'),
                     value: 'edit',
+                    child: Text('게시글 수정'),
                   ),
                   const PopupMenuItem(
-                    child: Text('게시글 삭제'),
                     value: 'delete',
+                    child: Text('게시글 삭제'),
                   ),
                 ],
                 elevation: 8.0,
@@ -169,9 +168,8 @@ class _PostInfoState extends State<PostInfo> {
                          ElevatedButton(
                              onPressed: (){},
                              style: ElevatedButton.styleFrom(
-                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.orange,
                                  minimumSize: const Size(30, 30),
-                                 primary: Colors.orange,
                                  elevation: 10
                              ),
                              child: const Text('IssuePos', style: TextStyle(fontSize: 13),)
@@ -179,10 +177,10 @@ class _PostInfoState extends State<PostInfo> {
                        ],
                      ),
                    ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                    child: Container(width: 500,
-                        child: const Divider(color: Colors.grey, thickness: 2.0)),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                    child: SizedBox(width: 500,
+                        child: Divider(color: Colors.grey, thickness: 2.0)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
@@ -208,9 +206,9 @@ class _PostInfoState extends State<PostInfo> {
                           children: [
                             Row(
                               children: [
-                                Expanded(
+                                const Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                                    padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
@@ -257,10 +255,10 @@ class _PostInfoState extends State<PostInfo> {
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                              child: Container(width: 400,
-                                  child: const Divider(color: Colors.grey, thickness: 1.0)),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                              child: SizedBox(width: 400,
+                                  child: Divider(color: Colors.grey, thickness: 1.0)),
                             ),
                             Container(
                               child: ListView(
@@ -313,14 +311,14 @@ List<Comment> comments = [
 
 List<Widget> getContent(){
   List<Widget> tiles = [];
-  comments.forEach((comment) {
+  for (var comment in comments) {
     tiles.add(Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: CircleAvatar(),
         ),
-        Expanded(
+        const Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -339,10 +337,10 @@ List<Widget> getContent(){
             ],
           ),
         ),
-        TextButton(onPressed: (){}, child: Text('삭제')),
+        TextButton(onPressed: (){}, child: const Text('삭제')),
       ],
 
     ));
-  });
+  }
   return tiles;
 }

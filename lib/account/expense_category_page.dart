@@ -25,13 +25,13 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
               },
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                 },
               ),
@@ -68,12 +68,12 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
                         color: Colors.pink,
                         onPressed: () {
@@ -90,7 +90,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
                         color: Colors.orange,
                         onPressed: () {
@@ -107,7 +107,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
                         color: Colors.blue,
                         onPressed: () {
@@ -124,7 +124,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
                         color: Colors.green,
                         onPressed: () {
@@ -141,7 +141,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
                         color: Colors.grey,
                         onPressed: () {
@@ -172,7 +172,7 @@ class CircularButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String name;
 
-  CircularButton({
+  const CircularButton({super.key, 
     required this.color,
     required this.onPressed,
     required this.name
@@ -200,10 +200,10 @@ class _CircularButtonState extends State<CircularButton> {
               color: widget.color,
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
-            '${widget.name}',
-            style: TextStyle(
+            widget.name,
+            style: const TextStyle(
               color: Colors.black, // 텍스트 색상 조절
             ),
           ),

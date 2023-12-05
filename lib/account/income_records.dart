@@ -40,33 +40,33 @@ class _IncomeRecordsState extends State<IncomeRecords> {
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
             },
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
                       content: Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Text('정말로 삭제하시겠습니까?'),
+                        margin: const EdgeInsets.only(top: 20),
+                        child: const Text('정말로 삭제하시겠습니까?'),
                       ),
                       backgroundColor: Colors.orange,
                       actions: [
                         TextButton(
                           onPressed: () {
                           },
-                          child: Text('내역 취소'),
+                          child: const Text('내역 취소'),
                         ),
                         TextButton(
                           onPressed: () {
                           },
-                          child: Text('내역 유지'),
+                          child: const Text('내역 유지'),
                         ),
                       ],
                     );
@@ -75,7 +75,7 @@ class _IncomeRecordsState extends State<IncomeRecords> {
               },
             ),
           ],
-          title: Center(
+          title: const Center(
             child: Text(
               '수입내역',
               textAlign: TextAlign.center,
@@ -102,7 +102,7 @@ class _IncomeRecordsState extends State<IncomeRecords> {
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 20),
+                          margin: const EdgeInsets.only(top: 20),
                           width: 50.0, // 버튼의 지름
                           height: 50.0, // 버튼의 지름
                           decoration: BoxDecoration(
@@ -110,10 +110,10 @@ class _IncomeRecordsState extends State<IncomeRecords> {
                               color: color
                           ),
                         ),
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         Text(
-                          '$selectedButtonText',
-                          style: TextStyle(
+                          selectedButtonText,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.blueGrey, // 텍스트 색상 조절
                           ),
@@ -121,38 +121,38 @@ class _IncomeRecordsState extends State<IncomeRecords> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 50), // 양쪽 끝에 16의 마진을 줌
+                      padding: const EdgeInsets.symmetric(horizontal: 50), // 양쪽 끝에 16의 마진을 줌
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             '날짜',
                             style: TextStyle(
                               color: Colors.black,
                             ),
                           ),
                           Text(
-                            '${year}.${month}.${day}',
+                            '$year.$month.$day',
                           )
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             '금액',
                             style: TextStyle(
                                 color: Colors.black
@@ -165,16 +165,16 @@ class _IncomeRecordsState extends State<IncomeRecords> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             '메모',
                             style: TextStyle(
                                 color: Colors.black
@@ -187,11 +187,11 @@ class _IncomeRecordsState extends State<IncomeRecords> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(right: 40),
+                    padding: const EdgeInsets.only(right: 40),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -199,7 +199,7 @@ class _IncomeRecordsState extends State<IncomeRecords> {
                             onPressed: () {
                               Navigator.pushNamed(context, '/incomeCategory');
                             },
-                            child: Text('수정')
+                            child: const Text('수정')
                         )
                       ],
                     ),

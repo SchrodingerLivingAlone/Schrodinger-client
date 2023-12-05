@@ -3,7 +3,8 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/list_item.dart';
 
 class HomeInfoPage extends StatefulWidget {
-  const HomeInfoPage({super.key});
+  final String townName;
+  const HomeInfoPage({super.key, required this.townName});
 
   @override
   State<HomeInfoPage> createState() => _HomeInfoPageState();
@@ -43,10 +44,10 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                     ),
                   height: deviceHeight * 0.15,
                   width: deviceWidth * 0.85,
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                        '이번주 전농동에서\n 가장 인기있는 글들을 구경해보세요!💫',
-                        style: TextStyle(
+                        '이번주 ${widget.townName}에서\n 가장 인기있는 글들을 구경해보세요!💫',
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold
                         ),
                       textAlign: TextAlign.center,

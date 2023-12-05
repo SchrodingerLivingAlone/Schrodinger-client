@@ -9,13 +9,13 @@ import 'package:schrodinger_client/town_info/ImageUploader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:schrodinger_client/post/post_search.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
 
 //TODO 1.등록하면 글 객체 생성 -> api
+List<XFile> ? postImages = [];
 
 enum Issue {RESTAURANT, FACILITY, SHARE_INFORMATION, TOGETHER, COMMUNICATION, ETC}
 
@@ -31,8 +31,7 @@ class _PostPageState extends State<PostPage>{
   String selectedButton = 'Button 1';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-  String searchedLocation = 'df';//사용자의 현재위치 넣어놓기
-  final imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+  String searchedLocation = '위치';//사용자의 현재위치 넣어놓기
 
 
   @override
@@ -63,7 +62,7 @@ class _PostPageState extends State<PostPage>{
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmdoQG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MDE2Nzc0MzJ9.ZSJmf-XgbfkkCoSIWSq2kmzhPYIMA_iauZfQ9lt8AFA'}
+        headers: {'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbmdoQG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MDE4NDE2MTZ9.vDQtFT8doOY7Le4-T9lKIGPQMg7H4Xd_4h0pGs59lfU'}
       );
 
       if (response.statusCode == 200) {
@@ -80,8 +79,7 @@ class _PostPageState extends State<PostPage>{
 
   Future<PostPageResponse> PostPost(BuildContext context, Issue issue, String title, String content, String place) async {
     var url = 'http://13.124.153.160:8081/api/neighborhood/posts';
-    List<XFile> files = context.read();
-    print(files.length);
+    print(postImages?.length);
     // 요청에 전송할 데이터
     var body = {
       "createjson" :{
@@ -122,6 +120,7 @@ class _PostPageState extends State<PostPage>{
         ),
         leading:  IconButton(
           onPressed: () {
+            postImages?.clear();
             showExitConfirmationDialog(context);
           },
           color: Colors.purple,
@@ -137,11 +136,12 @@ class _PostPageState extends State<PostPage>{
             ),
             onPressed: () async {
 
-              var postPostResponse = await PostPost(context, _issue, _titleController.text, _contentController.text,
-                                          searchedLocation);
+              var postPostResponse = await PostPost(context, _issue, _titleController.text, _contentController.text, searchedLocation);
               if(postPostResponse.isSuccess == true){
                 print(postPostResponse.message);
-                Navigator.pop(context);
+                postImages?.clear();
+                imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+                showPostonfirmationDialog(context);
               }
             },
             // onPressed: () {
@@ -176,9 +176,8 @@ class _PostPageState extends State<PostPage>{
                     _issue = Issue.RESTAURANT;
                   },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 1'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 1'),
                         elevation: 10
                     ),
                     child: const Text('맛집', style: TextStyle(fontSize: 13),)
@@ -188,9 +187,8 @@ class _PostPageState extends State<PostPage>{
                   _issue = Issue.FACILITY;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 2'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 2'),
                         elevation: 10),
                     child: const Text('시설', style: TextStyle(fontSize: 13),)
                 ),
@@ -199,9 +197,8 @@ class _PostPageState extends State<PostPage>{
                   _issue = Issue.SHARE_INFORMATION;
                   },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 3'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 3'),
                         elevation: 10),
                     child: const Text('정보공유', style: TextStyle(fontSize: 13),)
                 ),
@@ -212,18 +209,17 @@ class _PostPageState extends State<PostPage>{
               children: [
                 ElevatedButton(onPressed: (){
                   selectButton('Button 4');
-                  _issue = Issue.TOGETHER;
+                  _issue = Issue.ETC;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 4'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 4'),
                         elevation: 10),
                     child: const Text('같이해요', style: TextStyle(fontSize: 13),)
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 5');
-                  _issue = Issue.COMMUNICATION;
+                  _issue = Issue.TOGETHER;
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -237,9 +233,8 @@ class _PostPageState extends State<PostPage>{
                   _issue = Issue.ETC;
                 },
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 6'),
                         minimumSize: const Size(30, 30),
-                        primary: getButtonColor('Button 6'),
                         elevation: 10),
                     child: const Text('기타', style: TextStyle(fontSize: 13),)
                 ),
@@ -250,17 +245,16 @@ class _PostPageState extends State<PostPage>{
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
-              child: ImageWidget(imagePickerProvider: imagePickerProvider),
+              child: ImageWidget(),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 5.0,8.0,0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 5.0,8.0,0),
               child: Row(
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(10.0,0,10, 0),
                     child: Text('이미지는 5장까지 업로드할 수 있습니다.', style: TextStyle(fontSize: 12, color: Colors.grey),),
                   ),
-
                 ],
               ),
             ),
@@ -270,9 +264,8 @@ class _PostPageState extends State<PostPage>{
                   padding: const EdgeInsets.fromLTRB(20, 8, 8, 8),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.deepPurple,
                         minimumSize: const Size(20, 20),
-                        primary: Colors.deepPurple,
                         elevation: 10),
                     onPressed: () async {
                       searchedLocation = await Navigator.push(
@@ -346,6 +339,8 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
         ),
         TextButton(
           onPressed: () {
+              postImages?.clear();
+              imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
               Navigator.of(context).pop(true);
               Navigator.of(context).pop(true);
             },
@@ -355,11 +350,29 @@ Future<bool?> showExitConfirmationDialog(BuildContext context) async {
     ),
   );
 }
+
+Future<bool?> showPostonfirmationDialog(BuildContext context) async {
+  return showDialog<bool?>(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: const Text('성공적으로 글을 게시하였습니다.', style: TextStyle(fontSize: 15),),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(true);
+            Navigator.of(context).pop(true);
+          },
+          child: const Text('확인', style: TextStyle(color: Colors.red),),
+        ),
+      ],
+    ),
+  );
+}
 //////////////////////////////////////////////////////
 //Image 업로드 코드
 //////////////////////////////////////////////////////
 
-//final imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+var imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
 
 class ImageState extends StateNotifier<List<XFile>> {
   ImageState() : super(<XFile>[]);
@@ -370,17 +383,24 @@ class ImageState extends StateNotifier<List<XFile>> {
     super.state = value;
   }
 
-  delImage(XFile image) {
+  clear(){
+    super.state = [];
+  }
+
+  delImage(XFile image) async {
     var list = [...super.state];
+    ////
+    postImages?.remove(image);
     list.remove(image);
     state = list;
   }
 
-  void addImage(List<XFile> value) {
+  void addImage(List<XFile> value) async {
     var list = [...super.state];
     if (list.isEmpty) {
       state = value;
     } else {
+      ////
       list.addAll(value);
       list.toSet().toList();
       state = list;
@@ -393,6 +413,7 @@ class ImageState extends StateNotifier<List<XFile>> {
 
   Future getImage() async {
     picker.pickImage().then((value) {
+      postImages?.addAll(value);
       addImage(value);
     }).catchError((onError) {
       Fluttertoast.showToast(msg: 'failed to get image');
@@ -401,8 +422,7 @@ class ImageState extends StateNotifier<List<XFile>> {
 }
 
 class ImageWidget extends ConsumerWidget {
-  ImageWidget({Key? key, required this.imagePickerProvider});
-  StateNotifierProvider<ImageState, List<XFile>> imagePickerProvider;
+  ImageWidget({Key? key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -445,7 +465,9 @@ class ImageWidget extends ConsumerWidget {
       ] else ...[
         ...images.map((e) => imageBox(e)).toList(),
         InkWell(
-            onTap: () => ref.read(imagePickerProvider!.notifier).getImage(),
+            onTap: () => {
+              ref.read(imagePickerProvider!.notifier).getImage(),
+            },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 2),
               width: MediaQuery.of(context).size.width * 0.17,

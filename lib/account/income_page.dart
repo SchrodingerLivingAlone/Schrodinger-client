@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ExpensePage extends StatefulWidget {
-  const ExpensePage({super.key});
+class IncomePage extends StatefulWidget {
+  const IncomePage({super.key});
 
   @override
-  State<ExpensePage> createState() => _ExpensePageState();
+  State<IncomePage> createState() => _IncomePageState();
 }
 
-class _ExpensePageState extends State<ExpensePage> {
+class _IncomePageState extends State<IncomePage> {
   final _controller = TextEditingController();
   String expenseamount = '';
   final _monthList = List.generate(11, (i)=>'${i+1}');
@@ -24,12 +24,12 @@ class _ExpensePageState extends State<ExpensePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('2023/05/22'),
+            const Text('2023/05/22'),
             IconButton(
               onPressed: () {
 
               },
-              icon: Icon(Icons.expand_more),
+              icon: const Icon(Icons.expand_more),
             )
 
           ],
@@ -38,22 +38,22 @@ class _ExpensePageState extends State<ExpensePage> {
         actions: [
           IconButton(onPressed: (){
             Navigator.pushNamed(context,'/AccountBank');
-          }, icon:Icon(Icons.close)),
+          }, icon:const Icon(Icons.close)),
         ],
       ),
 
       body: ListView(
         children: [
-          SizedBox(height:40),
+          const SizedBox(height:40),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
+              SizedBox(
                 width: 240,
                 child: TextField(
-                  style: TextStyle(fontSize:30),
+                  style: const TextStyle(fontSize:30),
                   controller: _controller,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Enter amount', // 힌트 텍스트 설정
                     suffixText: '원', // 입력란 뒤에 추가할 텍스트
                   ),
@@ -62,21 +62,21 @@ class _ExpensePageState extends State<ExpensePage> {
               ),
             ],
           ),
-          SizedBox(height:80),
-          Container(
+          const SizedBox(height:80),
+          SizedBox(
             width: double.infinity,
             child: Text('날짜 선택',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
                 decoration: TextDecoration.combine([
-                TextDecoration.underline,
-                TextDecoration.overline,
-              ]),
+                  TextDecoration.underline,
+                  TextDecoration.overline,
+                ]),
               ),
             ),
           ),
-          SizedBox(height:20),
+          const SizedBox(height:20),
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
             child: Row(
@@ -95,7 +95,7 @@ class _ExpensePageState extends State<ExpensePage> {
                     });
                   },
                 ),
-                Text('년', style: TextStyle(fontSize: 15)),
+                const Text('년', style: TextStyle(fontSize: 15)),
                 DropdownButton( //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
 
                   value: _selectedmonthValue,
@@ -109,7 +109,7 @@ class _ExpensePageState extends State<ExpensePage> {
                     });
                   },
                 ),
-                Text('월', style: TextStyle(fontSize: 15)),
+                const Text('월', style: TextStyle(fontSize: 15)),
                 DropdownButton( //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
 
                   value: _selecteddayValue,
@@ -123,7 +123,7 @@ class _ExpensePageState extends State<ExpensePage> {
                     });
                   },
                 ),
-                Text('일', style: TextStyle(fontSize: 15)),
+                const Text('일', style: TextStyle(fontSize: 15)),
               ],
             ),
           ),
@@ -131,24 +131,24 @@ class _ExpensePageState extends State<ExpensePage> {
             children: [
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(30.0),
+                padding: const EdgeInsets.all(30.0),
                 child: TextButton(onPressed: (){
-                    setState(() {
-                      expenseamount = _controller.text.trim();
-                    });
-                    //여기에 현수꺼 코드 넣어서 날짜랑 금액 넘기면 됨.
-                    Navigator.pushNamed(context, '/expenseCategory',
-                        arguments:{'year':_selectedyearValue,
+                  setState(() {
+                    expenseamount = _controller.text.trim();
+                  });
+                  //여기에 현수꺼 코드 넣어서 날짜랑 금액 넘기면 됨.
+                  Navigator.pushNamed(context, '/incomeCategory',
+                      arguments:{'year':_selectedyearValue,
                         'month':_selectedmonthValue,'day':_selecteddayValue,'amount': expenseamount
                       }
-                    );
+                  );
 
                 },
                     style: TextButton.styleFrom(
-                    backgroundColor: Colors.deepOrange,
+                      backgroundColor: Colors.deepOrange,
                     ),
-                    child: Text('다음',
-                    style: TextStyle(color: Colors.white),)),
+                    child: const Text('다음',
+                      style: TextStyle(color: Colors.white),)),
               ),
             ],
           ),
@@ -169,12 +169,12 @@ class BottomDialog extends StatelessWidget {
       actions: [
         Column(
           children: [
-            IconButton(onPressed: (){},icon: Icon(Icons.close)),
+            IconButton(onPressed: (){},icon: const Icon(Icons.close)),
           ],
         ),
       ],
 
-      content: Column(
+      content: const Column(
         children: [
           Row(
 
