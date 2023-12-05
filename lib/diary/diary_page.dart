@@ -33,32 +33,30 @@ class _DiaryPageState extends State<DiaryPage> {
   void initState(){
     super.initState();
 
-    // getPost();
+    getPost();
   }
 
-  // Future<void> getPost() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? accessToken = prefs.getString('accessToken');
-  //   String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/10';
-  //
-  //   final response = await http.get(
-  //       Uri.parse(url),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': 'Bearer $accessToken'
-  //       }
-  //   );
-  //
-  //   final res = jsonDecode(utf8.decode(response.bodyBytes));
-  //
-  //   final responseResult = res['result'];
-  //   print(res);
-  //   List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
-  //   print(posts);
-  //   setState(() {
-  //     postList = posts;
-  //   });
-  // }
+  Future<void> getPost() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String url = '${dotenv.env['BASE_URL']}/api/diary';
+
+    final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken'
+        }
+    );
+
+    final res = jsonDecode(utf8.decode(response.bodyBytes));
+    final List<dynamic> responseResult = res['result'];
+    List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
+    setState(() {
+      postList = posts;
+    });
+  }
+
   Widget sliderWidget () {
     return CarouselSlider (
       carouselController: _carouselController,
@@ -95,6 +93,219 @@ class _DiaryPageState extends State<DiaryPage> {
       ),
     );
   }//
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
+      ),
+      // backgroundColor: AppColor.main,
+      context: context,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColor.main,
+                      borderRadius: BorderRadius.only(topLeft:Radius.circular(30), topRight:Radius.circular(30))
+                  ),
+                  height: 70,
+                  constraints: BoxConstraints(minWidth: 500, minHeight: 70),
+                  child: Center(
+                    child: Text('댓글',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        )
+                    ),
+                  )
+
+                  // color: AppColor.main,
+                ),
+                Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                          child: Container(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('nickname',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                    FontWeight.bold
+                                )
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 320,
+                              child: Text(
+                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                          child: Container(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('nickname',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                    FontWeight.bold
+                                )
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 320,
+                              child: Text(
+                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                          child: Container(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('nickname',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                    FontWeight.bold
+                                )
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 320,
+                              child: Text(
+                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                          child: Container(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('nickname',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                    FontWeight.bold
+                                )
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 320,
+                              child: Text(
+                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                          child: Container(
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage("https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805"),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('nickname',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight:
+                                    FontWeight.bold
+                                )
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 320,
+                              child: Text(
+                                'xt ttext text textxt text text text textxt text text text textxt t text xt text text textxt t text xt text text textxt t text xt text text textxt t text',
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                ),
+              ],
+            ),
+          );
+      },
+    );
+  }
+
 
   Widget sliderIndicator() {
     return Align(
@@ -223,36 +434,27 @@ class _DiaryPageState extends State<DiaryPage> {
                     ),
                   ),
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                      child: Column(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                              child: SizedBox(width: 400,
-                                  child: Divider(color: Colors.grey, thickness: 1.0)),
-                            ),
-                            Container(
-                              child: ListView(
-                                shrinkWrap : true,
-                                physics : const NeverScrollableScrollPhysics(),
-                                children: getContent(),
-                              ),
-                            )
-                          ]
-                      )
+                    padding: EdgeInsets.symmetric(vertical:0, horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('좋아요 23개', style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(height: 5),
+                        Text('nickname 오늘 저녁은 간단하게 볶음밥 하루한끼 유튜브는 자취생활의 그저goat.. ...더보기'),
+                        TextButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          ),
+                          onPressed: () {
+                            _showBottomSheet(context);
+                          },
+                          child: Text('댓글 8개 모두 보기', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                        ),
+                        Text('4분 전', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      ],
+                    ),
                   ),
                 ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-            child:
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.person),
-                suffixIcon: Icon(Icons.star),
-                labelText: '댓글을 입력하세요.',
               ),
             ),
           ),
@@ -266,14 +468,10 @@ class _DiaryPageState extends State<DiaryPage> {
 
 class Post {
   int id;
-  String dong;
-  String neighborhoodPostCategory;
-  String title;
   String content;
   List<String> imageUrls;
   String createdAt;
   String calculatedTime;
-  int view;
   int likeCount;
   int commentCount;
   List<Map<String, String?>> comments;
@@ -282,14 +480,10 @@ class Post {
 
   Post({
     required this.id,
-    required this.dong,
-    required this.neighborhoodPostCategory,
-    required this.title,
     required this.content,
     required this.imageUrls,
     required this.createdAt,
     required this.calculatedTime,
-    required this.view,
     required this.likeCount,
     required this.commentCount,
     required this.comments
@@ -298,21 +492,17 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      dong: json['dong'],
-      neighborhoodPostCategory: json['neighborhoodPostCategory'],
-      title: json['title'],
       content: json['content'],
       imageUrls: List<String>.from(json['imageUrls'] ?? []),
       createdAt: json['createdAt'],
       calculatedTime: json['calculatedTime'],
-      view: json['view'],
       likeCount: json['likeCount'],
       commentCount: json['commentCount'],
-      comments: List<Map<String, String?>>.from(json['comments'] ?? []).map((comment) {
+      comments: List<Map<String, dynamic>>.from(json['comments'] ?? []).map((comment) {
         return {
-          'nickname': comment['nickname'],
-          'comment': comment['comment'],
-          'profile_image': comment['profile_image'],
+          'nickname': comment['nickname'].toString(),
+          'comment': comment['comment'].toString(),
+          'profile_image': comment['profile_image'].toString(),
         };
       }).toList(),
     );
@@ -321,57 +511,11 @@ class Post {
 
 
 }
-
-class Comment {
-  final String username;
-  final String text;
-
-  Comment({required this.username, required this.text});
-}
-
-List<Comment> comments = [
-  Comment(username: 'User1', text: '첫 번째 댓글입니다.'),
-  Comment(username: 'User2', text: '두 번째 댓글입니다.'),
-  Comment(username: 'User3', text: '세 번째 댓글입니다.'),
-  Comment(username: 'User4', text: '네 번째 댓글입니다.'),
-  Comment(username: 'User5', text: '다섯 번째 댓글입니다.'),
-  // 여기에 필요한 만큼 댓글을 추가할 수 있습니다.
-];
-
-
-List<Widget> getContent(){
-  List<Widget> tiles = [];
-  for (var comment in comments) {
-    tiles.add(Row(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(),
-        ),
-        const Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('nickname', style: TextStyle(fontSize: 10),),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('comment', style: TextStyle(fontSize: 15),),
-                ],
-              ),
-            ],
-          ),
-        ),
-        TextButton(onPressed: (){}, child: const Text('삭제')),
-      ],
-
-    ));
-  }
-  return tiles;
-}
-
+//
+// class Comment {
+//   final String nickname;
+//   final String comment;
+//   final String profile_image;
+//
+//   Comment({required this.nickname, required this.comment, required this.profile_image});
+// }
