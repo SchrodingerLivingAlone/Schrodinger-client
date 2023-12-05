@@ -113,38 +113,37 @@ class _PostPageState extends State<PostPage>{
 
     var request = http.MultipartRequest('POST', url);
     request.headers['Content-Type'] = 'multipart/form-data';
+    request.headers['Authorization'] = 'Bearer $accessToken';
+
 
     request.fields['category'] = category.toString();
     request.fields['title'] = _titleController.text;
     request.fields['content'] = _contentController.text;
     request.fields['place'] = searchedLocation;
-
-    postImages?.forEach((element) async {
-      var imageStream = http.ByteStream(Stream.castFrom(element.openRead()));
-      var length = await element.length();
-      var multipartFile = http.MultipartFile('images', imageStream, length, filename: 'images', contentType: MediaType('image', 'jpeg'));
-      request.files.add(multipartFile);
+    List<File> files = [];
+    postImages?.forEach((element) {
+      files.add(File(element!.path));
     });
+
+    for (var file in files) {
+      request.files.add(await http.MultipartFile.fromPath('files', file.path));
+    }
 
     try {
       var response = await request.send();
-      var responseBody = await response.stream.bytesToString();
-
-      print(responseBody);
-      print('2222222');
-      Map<String, dynamic> jsonMap = json.decode(responseBody);
-
-      print("111111");
-      // 맵에서 값 추출
-      var isSuccess = jsonMap["isSuccess"];
-      var code = jsonMap["code"];
-      var message = jsonMap["message"];
-      var result = jsonMap["result"];
 
       if (response.statusCode == 200) {
         print('게시글 등록 성공');
-        print('Response Body: ${responseBody}');
-        return PostPageResponse.fromJson(json.decode(await response.stream.bytesToString()));
+        var responseBody = await response.stream.bytesToString();
+        Map<String, dynamic> jsonMap = json.decode(responseBody);
+
+
+        var isSuccess = jsonMap["isSuccess"];
+        var code = jsonMap["code"];
+        var message = jsonMap["message"];
+        var result = jsonMap["result"];
+
+        return PostPageResponse.fromJson(jsonMap);
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
@@ -186,11 +185,6 @@ class _PostPageState extends State<PostPage>{
                 showPostonfirmationDialog(context);
               }
             },
-            // onPressed: () {
-            //   setState(() {
-            //     Navigator.pushNamed(context, '/post_info');
-            //   });
-            // },
             child: const Text('등록',
               style: TextStyle(
                 color: AppColor.yellow,
@@ -608,7 +602,7 @@ class PostPageResult{
   final String title;
   final String content;
   final String place;
-  final List<String> imageUrls;
+  final List<dynamic> imageUrls;
   final String createdAt;
   final int view;
 
