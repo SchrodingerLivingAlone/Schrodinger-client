@@ -155,7 +155,7 @@ class _PostSearchState extends State<PostSearch> {
                             ),
                             controller: _locationSearchController,
                           inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|ᆞ|ᆢ|a-z|A-Z]')),
+                            FilteringTextInputFormatter.allow(RegExp(r'[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|ᆞ|ᆢ|a-z|A-Z|0-9]')),
                           ],
                           ),
                     ),
