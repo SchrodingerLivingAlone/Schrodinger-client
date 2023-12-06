@@ -99,7 +99,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 1, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -116,7 +116,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 2, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -133,7 +133,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 3, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
@@ -150,7 +150,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                             print('텍스트가 비어있습니다.');
                           } else {
                             Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                                arguments: {'expense': expense, 'selectedButtonIndex': 4, 'memo': memo, 'year': year, 'month': month, 'day': day}
                             );
                           }
                         },
