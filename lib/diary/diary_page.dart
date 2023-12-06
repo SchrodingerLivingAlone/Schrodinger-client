@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:schrodinger_client/diary/new_diary.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -388,7 +389,9 @@ class _DiaryPageState extends State<DiaryPage> {
               color: Colors.black
           ),
           leading: IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => NewDiary()));
+              },
               color: Colors.white,
               icon: const Icon(Icons.add_circle_outline)
           ),
