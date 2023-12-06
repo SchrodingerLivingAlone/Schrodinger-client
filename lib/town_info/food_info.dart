@@ -26,8 +26,10 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
 
   List<Widget> createFoodListTiles() {
     List<Widget> foodTiles = [];
+
     for (int i = 0; i < foodList.length; i++) {
       TownInfo food = foodList[i];
+
 
       Widget foodTile = Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -70,7 +72,9 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
               Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: TextStyle(fontSize: 11)),
             ],
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/post_info', arguments: food.id);
+          },
         ),
       );
       foodTiles.add(foodTile);
