@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/account/accountbank.dart';
+import 'package:schrodinger_client/diary/diary_page.dart';
 import 'package:schrodinger_client/mypage/my_page.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final List<Widget> bottomTabWidgets = <Widget>[const TownPage(), const AccountBank(), const TownPage(), const MyPage()];
+    final List<Widget> bottomTabWidgets = <Widget>[const TownPage(), const AccountBank(), const TownPage(), const DiaryPage(), const MyPage()];
     return Scaffold(
           body: SafeArea(
             child: bottomTabWidgets.elementAt(_selectedIndex),
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
               BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: '가계부'),
               BottomNavigationBarItem(icon: Icon(Icons.post_add), label: '동네정보'),
+              BottomNavigationBarItem(icon: Icon(Icons.book), label: '자취일기'),
               BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
             ],
             currentIndex: _selectedIndex,
