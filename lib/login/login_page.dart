@@ -4,7 +4,7 @@ import 'package:schrodinger_client/town_info/town_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -136,7 +136,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<LoginResponse> login(BuildContext context, String email, String password) async {
-    var url = 'http://13.124.153.160:8081/api/users/login';
+    var baseUrl = dotenv.env['BASE_URL'];
+    var url = '$baseUrl/api/users/login';
 
     // 요청에 전송할 데이터
     var body = {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/login/google_map_section.dart';
@@ -6,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
+import 'package:schrodinger_client/login/login_page.dart';
 
 File? profileImageFile;
 
@@ -80,6 +82,11 @@ class _JoinPageState extends State<JoinPage> {
                       } else {
                         print('$profileImageFile');
                         join(context, profileImageFile!);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                              (route) => false, // 이 조건이 false가 될 때까지 스택에서 모든 페이지를 제거합니다.
+                        );
                       }
                     }
                   });
@@ -237,7 +244,8 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   Future<JoinResponse> join(BuildContext context, File profileImage) async {
-    var url = Uri.parse('http://13.124.153.160:8081/api/users/sign-up');
+    var baseUrl = dotenv.env['BASE_URL'];
+    var url = Uri.parse('$baseUrl/api/users/sign-up');
 
     var request = http.MultipartRequest('POST', url);
     request.headers['Content-Type'] = 'multipart/form-data';
