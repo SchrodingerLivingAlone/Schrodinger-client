@@ -21,6 +21,7 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/login/town_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
+import 'package:schrodinger_client/town_info/town_search.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
         '/town/auth': (context) => const TownAuthPage(),
         '/town': (context) => const TownPage(),
         '/join': (context) => const JoinPage(),
-        '/home': (context) => const HomePage()
+        '/home': (context) => const HomePage(),
+        '/town/search': (context) => const TownSearchPage()
       },
       home: const Splash(),
     );

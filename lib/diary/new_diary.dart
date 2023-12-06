@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/diary/diary_page.dart';
+import 'package:schrodinger_client/home.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -95,7 +96,7 @@ class _NewDiaryState extends State<NewDiary> {
             onPressed: () async {
               await postNewDiary();
               postImages?.clear();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
             },
             child: const Text('등록',
               style: TextStyle(
