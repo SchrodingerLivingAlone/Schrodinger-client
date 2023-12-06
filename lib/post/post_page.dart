@@ -177,7 +177,6 @@ class _PostPageState extends State<PostPage>{
               shadowColor: Colors.transparent,
             ),
             // onPressed: () async {
-            //
             //   var postPostResponse = await PostPost(context);
             //   if(postPostResponse.isSuccess == true){
             //     print(postPostResponse.message);
@@ -190,7 +189,7 @@ class _PostPageState extends State<PostPage>{
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PostInfo(PostId: 5,),
+                  builder: (context) => PostInfo(PostId: 7,),
                 ),
               );
             },

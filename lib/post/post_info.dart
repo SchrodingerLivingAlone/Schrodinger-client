@@ -36,7 +36,7 @@ class _PostInfoState extends State<PostInfo> {
   bool isLiked = false;
   var imageList = [];
   int current = 0;
-  List<Comment> comments = [];
+  List<dynamic> comments = [];
 
   final CarouselController _carouselController = CarouselController();
   final _commentController = TextEditingController();
@@ -70,7 +70,7 @@ class _PostInfoState extends State<PostInfo> {
   void initPost() async {
     var postInfo = await getPostInfo(context);
     setState(()  {
-
+      //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
       writer = writer;
       writerProfileImage = writerProfileImage;
       createdTime = postInfo.result['calculatedTime'];
@@ -78,11 +78,11 @@ class _PostInfoState extends State<PostInfo> {
       issue = postInfo.result['neighborhoodPostCategory'];
       pos = postInfo.result['dong'];
       title = postInfo.result['title'];
+      imageList = postInfo.result['imageUrls'];
       content = postInfo.result['content'];
       isScrapped = postInfo.result['scrapped'];
       isLiked = postInfo.result['liked'];
-
-      //CommentResult commentsResult = comments.result
+      comments = postInfo.result['comments'];
     });
   }
 
@@ -310,14 +310,14 @@ class _PostInfoState extends State<PostInfo> {
                           children: [
                             Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Icon(Icons.pin_drop_outlined, color: Colors.deepPurple, size: 20,),
-                                        Text('위치', style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
+                                        Text(pos, style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
                                       ],
                                     ),
                                   ),
