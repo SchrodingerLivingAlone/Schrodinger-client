@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
+import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/ImageUploader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -175,15 +176,23 @@ class _PostPageState extends State<PostPage>{
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
             ),
+            // onPressed: () async {
+            //
+            //   var postPostResponse = await PostPost(context);
+            //   if(postPostResponse.isSuccess == true){
+            //     print(postPostResponse.message);
+            //     postImages?.clear();
+            //     imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+            //     showPostonfirmationDialog(context);
+            //   }
+            // },
             onPressed: () async {
-
-              var postPostResponse = await PostPost(context);
-              if(postPostResponse.isSuccess == true){
-                print(postPostResponse.message);
-                postImages?.clear();
-                imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
-                showPostonfirmationDialog(context);
-              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostInfo(PostId: 5,),
+                ),
+              );
             },
             child: const Text('등록',
               style: TextStyle(

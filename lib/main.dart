@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => const LoginPage(),
         '/splash': (context) => const Splash(),
         '/post': (context) => const PostPage(),
-        '/post_info': (context) => const PostInfo(),
         '/town/auth': (context) => const TownAuthPage(),
         '/town': (context) => const TownPage(),
         '/join': (context) => const JoinPage(),
