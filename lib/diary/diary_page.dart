@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:schrodinger_client/diary/new_diary.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,9 +20,9 @@ class _DiaryPageState extends State<DiaryPage> {
 
   int current = 0;
   final CarouselController _carouselController = CarouselController();
+  final _commentController = TextEditingController();
   bool isScrapped = false;
   bool isLiked = false;
-  final _commentController = TextEditingController();
   late List<Post> postList = [];
 
   @override
@@ -46,7 +47,7 @@ class _DiaryPageState extends State<DiaryPage> {
     final res = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> responseResult = res['result'];
     List<Post> posts = responseResult.map((data) => Post.fromJson(data)).toList();
-    print(responseResult);
+
     setState(() {
       postList = posts;
     });
@@ -70,8 +71,6 @@ class _DiaryPageState extends State<DiaryPage> {
           'Authorization': 'Bearer $accessToken'
         }
     );
-    print('writeComment : ${response.statusCode}');
-
 
     if (response.statusCode == 200) {
       await getPost();
@@ -246,12 +245,13 @@ class _DiaryPageState extends State<DiaryPage> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: (){
+                      onPressed: () async {
                         setState(() {
                           isLiked = !isLiked;
                         });
+                        await updateLikeStatus(post.id);
                       },
-                      icon: isLiked ? const Icon(Icons.favorite, color: Colors.red,) : const Icon(Icons.favorite_border_outlined),
+                      icon: post.liked ? const Icon(Icons.favorite, color: Colors.red,) : const Icon(Icons.favorite_border_outlined),
                     ),
                     IconButton(
                       onPressed: (){},
@@ -294,18 +294,25 @@ class _DiaryPageState extends State<DiaryPage> {
                         } : null,
                         child: post.comments.isNotEmpty ? Text('댓글 ${post.commentCount}개 모두 보기', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)) : Text(''),
                       ) : const SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.all(0.0),
+                      Text(post.calculatedTime, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      Container(
                         child: TextField(
                           controller: _commentController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             prefixIcon: Padding(
                               padding: EdgeInsets.only(right: 15.0),
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage('https://schrodinger-cau.s3.ap-northeast-2.amazonaws.com/fc4b0530-dec3-435d-abf3-94142685c2fd.jpg'),
                               ),
                             ),
-                            suffixIcon: Icon(Icons.star),
+                            suffixIcon: IconButton(
+                                onPressed: () async {
+                                  await writeComment(post.id, _commentController.text);
+                                  _commentController.clear();
+                                  FocusScope.of(context).unfocus();
+                                },
+                                icon:  Icon(Icons.send),
+                            ),
                             labelText: '댓글 달기...',
                           ),
                           onSubmitted: (value) async {
@@ -314,7 +321,8 @@ class _DiaryPageState extends State<DiaryPage> {
                           },
                         ),
                       ),
-                      Text(post.calculatedTime, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      const SizedBox(height: 10),
+
                     ],
                   ),
                 ),
@@ -368,6 +376,12 @@ class _DiaryPageState extends State<DiaryPage> {
   }
 
   @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -375,7 +389,9 @@ class _DiaryPageState extends State<DiaryPage> {
               color: Colors.black
           ),
           leading: IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => NewDiary()));
+              },
               color: Colors.white,
               icon: const Icon(Icons.add_circle_outline)
           ),
@@ -406,6 +422,26 @@ class _DiaryPageState extends State<DiaryPage> {
     );
   }
 
+  Future<void> updateLikeStatus(int diaryId) async {
+    String url = '${dotenv.env['BASE_URL']}/api/diary/likes/$diaryId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken'
+      }
+    );
+
+    if (response.statusCode == 200) {
+    await getPost();
+    }
+  }
+
+
+
 }
 
 class Post {
@@ -419,6 +455,7 @@ class Post {
   int likeCount;
   int commentCount;
   List<Comment> comments;
+  bool liked;
 
 
   Post({
@@ -431,7 +468,8 @@ class Post {
     required this.calculatedTime,
     required this.likeCount,
     required this.commentCount,
-    required this.comments
+    required this.comments,
+    required this.liked
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -454,6 +492,7 @@ class Post {
           profile_image: comment['profile_image'].toString(),
         );
       }).toList(),
+      liked: json['liked']
     );
   }
 }
