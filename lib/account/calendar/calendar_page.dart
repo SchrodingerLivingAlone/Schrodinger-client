@@ -20,6 +20,44 @@ class CalendarPage extends StatefulWidget {
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
+Future<void> initializeData() async {
+  DateTime today = DateTime.now();
+
+  month = '${today.month}';
+  day = today.day;
+  year = today.year;
+  switch (today.weekday) {
+    case 1:
+      dayOfWeek = '월요일';
+      break;
+    case 2:
+      dayOfWeek = '화요일';
+      break;
+    case 3:
+      dayOfWeek = '수요일';
+      break;
+    case 4:
+      dayOfWeek = '목요일';
+      break;
+    case 5:
+      dayOfWeek = '금요일';
+      break;
+    case 6:
+      dayOfWeek = '토요일';
+      break;
+    case 7:
+      dayOfWeek = '일요일';
+      break;
+    default:
+      dayOfWeek = '알 수 없음';
+  }
+
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  accessToken = sharedPreferences.getString('accessToken')!;
+  await getCalendarDotData(int.parse(month), year, accessToken);
+  tList = List.empty();
+}
+
 class _CalendarPageState extends State<CalendarPage> {
   Color? priceColor;
 
@@ -28,43 +66,6 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
 
     initializeData();
-  }
-
-  Future<void> initializeData() async {
-    DateTime today = DateTime.now();
-
-    month = '${today.month}';
-    day = today.day;
-    year = today.year;
-    switch (today.weekday) {
-      case 1:
-        dayOfWeek = '월요일';
-        break;
-      case 2:
-        dayOfWeek = '화요일';
-        break;
-      case 3:
-        dayOfWeek = '수요일';
-        break;
-      case 4:
-        dayOfWeek = '목요일';
-        break;
-      case 5:
-        dayOfWeek = '금요일';
-        break;
-      case 6:
-        dayOfWeek = '토요일';
-        break;
-      case 7:
-        dayOfWeek = '일요일';
-        break;
-      default:
-        dayOfWeek = '알 수 없음';
-    }
-
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    accessToken = sharedPreferences.getString('accessToken')!;
-    await getCalendarDotData(int.parse(month), year, accessToken!);
   }
 
   @override
@@ -121,7 +122,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 }
                 month = '${selectedDay.month}';
                 day = selectedDay.day;
-                // getCalendarAllData(selectedDay.day, selectedDay.month, selectedDay.year, accessToken!);
               });
             },
           ),
@@ -137,7 +137,7 @@ class _CalendarPageState extends State<CalendarPage> {
             child: Row(
               children: [
                 Text(
-                  '${month}월 ${day}일 ${dayOfWeek}',
+                  '$month월 $day일 $dayOfWeek',
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 20,
@@ -149,7 +149,11 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: tList.isEmpty
+                ? const Center(
+              child: Text('데이터가 없습니다.'),
+            )
+                : ListView.builder(
               itemCount: tList.length,
               itemBuilder: (c, i) {
                 checkPriceColor(i);
@@ -157,33 +161,33 @@ class _CalendarPageState extends State<CalendarPage> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width / 3 - 20,
                         child: Text(
-                          '${tList[i].transactionCategory}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          tList[i].transactionCategory,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3 - 20, // 화면 너비의 1/3로 설정하고 간격을 빼줍니다.
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3 - 20,
                         child: Text(
-                          '${tList[i].memo}',
+                          tList[i].memo,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Container(
-                          width: MediaQuery.of(context).size.width / 3 - 20,
-                          child: Text(
-                              '${tList[i].price}',
-                              style: TextStyle(color: priceColor),
-                            textAlign: TextAlign.end,
-                          )
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3 - 20,
+                        child: Text(
+                          '${tList[i].price}',
+                          style: TextStyle(color: priceColor),
+                          textAlign: TextAlign.end,
+                        ),
                       ),
                     ],
                   ),
                 );
-              }
+              },
             ),
           )
         ],
@@ -203,12 +207,13 @@ class _CalendarPageState extends State<CalendarPage> {
 Future<void> getCalendarDotData(int month, int year, String accessToken) async {
   var baseUrl = dotenv.env['BASE_URL'];
   var url = Uri.parse('$baseUrl/api/accountBooks/calendar');
+  dotList = List.empty();
 
   try {
     final response = await http.get(
       url.replace(queryParameters: {'month': '$month', 'year': '$year'}),
       headers: {
-        'Authorization': 'Bearer ${accessToken}',
+        'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
       },
     );
@@ -217,7 +222,6 @@ Future<void> getCalendarDotData(int month, int year, String accessToken) async {
 
     if (response.statusCode == 200) {
       final data = json.decode(utf8.decode(response.bodyBytes));
-      dotList.clear();
       dotList = calendarDotResponse.result.transactionArray;
       print('dotList = $dotList');
       print('데이터: $data');
@@ -225,7 +229,7 @@ Future<void> getCalendarDotData(int month, int year, String accessToken) async {
       final data = json.decode(utf8.decode(response.bodyBytes));
       print('데이터: $data');
       print('요청 실패: ${response.statusCode}');
-      print('에러 메시지: ${data}');
+      print('에러 메시지: $data');
     }
   } catch (e) {
     print('네트워크 오류: $e');
@@ -235,12 +239,13 @@ Future<void> getCalendarDotData(int month, int year, String accessToken) async {
 Future<void> getCalendarAllData(int day, int month, int year, String accessToken) async {
   var baseUrl = dotenv.env['BASE_URL'];
   var url = Uri.parse('$baseUrl/api/transactions');
+  tList = List.empty();
 
   try {
     final response = await http.get(
       url.replace(queryParameters: {'day': '$day', 'month': '$month', 'year': '$year'}),
       headers: {
-        'Authorization': 'Bearer ${accessToken}',
+        'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
       },
     );
@@ -258,7 +263,7 @@ Future<void> getCalendarAllData(int day, int month, int year, String accessToken
       final data = json.decode(utf8.decode(response.bodyBytes));
       print('데이터: $data');
       print('요청 실패: ${response.statusCode}');
-      print('에러 메시지: ${data}');
+      print('에러 메시지: $data');
     }
   } catch (e) {
     print('네트워크 오류: $e');
@@ -285,6 +290,14 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
     DateTime.now().month,
     DateTime.now().day,
   );
+
+  @override
+  void initState() {
+    super.initState();
+
+    initializeData();
+    _onDaySelected(selectedDay, selectedDay);
+  }
 
   DateTime focusedDay = DateTime.now();
   List<bool?> list = dotList;
@@ -321,7 +334,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
       this.selectedDay = selectedDay;
       this.focusedDay = focusedDay;
     });
-    await getCalendarAllData(selectedDay.day, selectedDay.month, selectedDay.year, accessToken!);
+    await getCalendarAllData(selectedDay.day, selectedDay.month, selectedDay.year, accessToken);
     widget.onDateSelected(selectedDay);
   }
 
@@ -336,6 +349,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
   void setDotDate() {
     setState(() {
       events.clear();
+      
       for (int i = 0; i < list.length; i++) {
         if (list[i] == true) {
           Map<DateTime, List<Event>> map = {DateTime.utc(selectedDay.year, selectedDay.month, i) : [ Event('title') ]};
@@ -346,88 +360,88 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
   }
 }
 
-class AccountItem extends StatefulWidget {
-  final int categoryNum;
-  final String memo;
-  final int price;
-
-  const AccountItem({
-    Key? key,
-    required this.categoryNum,
-    required this.memo,
-    required this.price,
-  }) : super(key: key);
-
-  @override
-  State<AccountItem> createState() => _AccountItemState();
-}
-
-class _AccountItemState extends State<AccountItem> {
-  String categoryText = '';
-
-  @override
-  void initState() {
-    super.initState();
-    switch (widget.categoryNum) {
-      case 0: {
-        categoryText = '식비';
-        break;
-      }
-      case 1: {
-        categoryText = '카페/간식';
-        break;
-      }
-      case 2: {
-        categoryText = '교통';
-        break;
-      }
-      case 3: {
-        categoryText = '술/유흥';
-        break;
-      }
-      case 4: {
-        categoryText = '기타(지출)';
-        break;
-      }
-      case 5: {
-        categoryText = '월급';
-        break;
-      }
-      case 6: {
-        categoryText = '용돈';
-        break;
-      }
-      case 7: {
-        categoryText = '이월';
-        break;
-      }
-      case 8: {
-        categoryText = '자산인출';
-        break;
-      }
-      case 9: {
-        categoryText = '기타(수입)';
-        break;
-      }
-      default:
-        categoryText = '알 수 없음';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-
-        ),
-        Text(categoryText),
-        Text(widget.memo),
-        Text('${widget.price}원')
-      ],
-    );
-  }
-}
+// class AccountItem extends StatefulWidget {
+//   final int categoryNum;
+//   final String memo;
+//   final int price;
+//
+//   const AccountItem({
+//     Key? key,
+//     required this.categoryNum,
+//     required this.memo,
+//     required this.price,
+//   }) : super(key: key);
+//
+//   @override
+//   State<AccountItem> createState() => _AccountItemState();
+// }
+//
+// class _AccountItemState extends State<AccountItem> {
+//   String categoryText = '';
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     switch (widget.categoryNum) {
+//       case 0: {
+//         categoryText = '식비';
+//         break;
+//       }
+//       case 1: {
+//         categoryText = '카페/간식';
+//         break;
+//       }
+//       case 2: {
+//         categoryText = '교통';
+//         break;
+//       }
+//       case 3: {
+//         categoryText = '술/유흥';
+//         break;
+//       }
+//       case 4: {
+//         categoryText = '기타(지출)';
+//         break;
+//       }
+//       case 5: {
+//         categoryText = '월급';
+//         break;
+//       }
+//       case 6: {
+//         categoryText = '용돈';
+//         break;
+//       }
+//       case 7: {
+//         categoryText = '이월';
+//         break;
+//       }
+//       case 8: {
+//         categoryText = '자산인출';
+//         break;
+//       }
+//       case 9: {
+//         categoryText = '기타(수입)';
+//         break;
+//       }
+//       default:
+//         categoryText = '알 수 없음';
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         Container(
+//
+//         ),
+//         Text(categoryText),
+//         Text(widget.memo),
+//         Text('${widget.price}원')
+//       ],
+//     );
+//   }
+// }
 
 class CalendarDotResponse {
   final bool isSuccess;
