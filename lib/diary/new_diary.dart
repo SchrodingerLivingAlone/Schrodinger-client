@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:schrodinger_client/diary/diary_page.dart';
 import 'package:schrodinger_client/home.dart';
@@ -25,7 +26,7 @@ class _NewDiaryState extends State<NewDiary> {
   final _contentController = TextEditingController();
 
 
-  Future<void> postNewDiary() async{
+  Future<int> postNewDiary() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     var url = Uri.parse('${dotenv.env['BASE_URL']}/api/diary');
@@ -45,28 +46,7 @@ class _NewDiaryState extends State<NewDiary> {
     }
 
     final response = await request.send();
-
-    if (response.statusCode == 200) {
-      var responseBody = await response.stream.bytesToString();
-      Map<String, dynamic> jsonMap = json.decode(responseBody);
-
-      var isSuccess = jsonMap["isSuccess"];
-      var code = jsonMap["code"];
-      var message = jsonMap["message"];
-      var result = jsonMap["result"];
-      print('$isSuccess $code $message $result');
-    } else {
-      print('error : ${response.statusCode}');
-
-      var responseBody = await response.stream.bytesToString();
-      Map<String, dynamic> jsonMap = json.decode(responseBody);
-
-      var isSuccess = jsonMap["isSuccess"];
-      var code = jsonMap["code"];
-      var message = jsonMap["message"];
-      var result = jsonMap["result"];
-      print('$isSuccess $code $message $result');
-    }
+    return response.statusCode;
   }
 
   @override
@@ -78,6 +58,8 @@ class _NewDiaryState extends State<NewDiary> {
         ),
         leading:  IconButton(
             onPressed: () {
+              postImages?.clear();
+              imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
               Navigator.pop(context);
             },
             color: Colors.purple,
@@ -92,9 +74,19 @@ class _NewDiaryState extends State<NewDiary> {
               shadowColor: Colors.transparent,
             ),
             onPressed: () async {
-              await postNewDiary();
-              postImages?.clear();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+              int statusCode = await postNewDiary();
+              if(statusCode == 200) {
+                postImages?.clear();
+                imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('사진을 필수로 추가해야합니다 !'),
+                      duration: Duration(seconds: 3),
+                    )
+                );
+              }
             },
             child: const Text('등록',
               style: TextStyle(
