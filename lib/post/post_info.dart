@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
 import 'package:schrodinger_client/post/post_comment_response.dart';
 import 'package:schrodinger_client/post/post_info_response.dart';
@@ -30,6 +31,7 @@ class _PostInfoState extends State<PostInfo> {
   int view = 0;
   String issue = ' ';
   String pos = ' ';
+  String dong = ' ';
   String title = ' ';
   String content = ' ';
   bool isScrapped = false;
@@ -37,9 +39,10 @@ class _PostInfoState extends State<PostInfo> {
   var imageList = [];
   int current = 0;
   List<dynamic> comments = [];
+  final _commentController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   final CarouselController _carouselController = CarouselController();
-  final _commentController = TextEditingController();
 
   Future<PostInfoResponse> getPostInfo(BuildContext context) async {
     int postId = widget.PostId;
@@ -66,17 +69,52 @@ class _PostInfoState extends State<PostInfo> {
     }
   }
 
+  Future<CommentResponse> addComment(BuildContext context) async {
+    int postId = widget.PostId;
+    print(postId);
+    var url = '${dotenv.env['BASE_URL']}/api/comments/$postId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Authorization' : 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({'comment' : _commentController.text}),
+      );
+
+
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+        return CommentResponse.fromJson(jsonDecode(temp));
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
 
   void initPost() async {
     var postInfo = await getPostInfo(context);
     setState(()  {
       //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
-      writer = writer;
-      writerProfileImage = writerProfileImage;
+      writer = postInfo.result['nickname'];
+      int writerLen = writer.length;
+      for(int i = 30; i >= writerLen; i--)
+        writer += ' ';
+      writerProfileImage = postInfo.result['profileImage'];
       createdTime = postInfo.result['calculatedTime'];
       view = postInfo.result['view'];
       issue = postInfo.result['neighborhoodPostCategory'];
-      pos = postInfo.result['dong'];
+      dong = postInfo.result['dong'];
+      pos = postInfo.result['place'];
       title = postInfo.result['title'];
       imageList = postInfo.result['imageUrls'];
       content = postInfo.result['content'];
@@ -98,30 +136,35 @@ class _PostInfoState extends State<PostInfo> {
     for (var comment in comments) {
       tiles.add(Row(
         children: [
-          const Padding(
+           Padding(
             padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(comment['profile_image']),
+            ),
           ),
-          const Expanded(
+           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('nickname', style: TextStyle(fontSize: 10),),
+                    Text(comment['nickname'], style: TextStyle(fontSize: 10),),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('comment', style: TextStyle(fontSize: 15),),
+                    Text(comment['comment'], style: TextStyle(fontSize: 15),),
                   ],
                 ),
               ],
             ),
           ),
-          TextButton(onPressed: (){}, child: const Text('삭제')),
+          TextButton(
+              onPressed: (){},
+              child: const Text('삭제')
+          ),
         ],
 
       ));
@@ -248,22 +291,25 @@ class _PostInfoState extends State<PostInfo> {
               child: Column(
                 children: [
                    Padding(
-                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
                      child: Row(
+                       mainAxisAlignment: MainAxisAlignment.start,
                        children: [
                          Padding(
-                           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                           padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
                            child: Container(
                              child:  CircleAvatar(
+                               radius: 25,
                                backgroundColor: Colors.grey,
                                backgroundImage: NetworkImage(writerProfileImage!),
                              ),
                            ),
                          ),
                          Column(
+                           mainAxisAlignment: MainAxisAlignment.start,
                            children: [
-                             Text(writer, style: TextStyle(fontSize: 20),),
-                             Text('$createdTime | 조회 $view | $pos '),
+                                 Text(writer, style: TextStyle(fontSize: 17),),
+                                 Text('$createdTime | 조회 $view | $dong '),
                            ],
                          ),
                          const SizedBox(
@@ -382,11 +428,20 @@ class _PostInfoState extends State<PostInfo> {
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             child:
               TextFormField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                 icon: Icon(Icons.person),
-                suffixIcon: Icon(Icons.star),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    await addComment(context);
+                    _commentController.clear();
+                    _focusNode.unfocus();
+                    initPost();
+                  },
+                  icon: Icon(Icons.send),),
                 labelText: '댓글을 입력하세요.',
-                  ),
+                ),
+                controller: _commentController,
+                focusNode: _focusNode,
               ),
           ),
       ],
@@ -398,9 +453,25 @@ class _PostInfoState extends State<PostInfo> {
 }
 
 class Comment {
-  final String username;
-  final String text;
-  final String commenterProfile;
+  final String nickname;
+  final String comment;
+  final String profile_image;
 
-  Comment({required this.commenterProfile, required this.username, required this.text});
+  Comment({required this.nickname, required this.comment, required this.profile_image});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'profile_image': profile_image,
+      'nickname': nickname,
+      'comment': comment,
+    };
+  }
+
+  factory Comment.fromJson(Map<String, dynamic> json) {
+    return Comment(
+        profile_image: json["profile_image"],
+        nickname: json["nickname"],
+        comment: json["comment"],
+    );
+  }
 }

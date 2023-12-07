@@ -27,8 +27,11 @@ class PostInfoResult{
   final int id;
   final String dong;
   final String neighborhoodPostCategory;
+  final String profileImage;
+  final String nickname;
   final String title;
   final String content;
+  final String place;
   final List<String> imageUrls;
   final String createAt;
   final int view;
@@ -42,8 +45,11 @@ class PostInfoResult{
     required this.id,
     required this.dong,
     required this.neighborhoodPostCategory,
+    required this.profileImage,
+    required this.nickname,
     required this.title,
     required this.content,
+    required this.place,
     required this.imageUrls,
     required this.createAt,
     required this.view,
@@ -59,8 +65,11 @@ class PostInfoResult{
       'id': id,
       'dong': dong,
       'neighborhoodPostCategory': neighborhoodPostCategory,
+      'profileImage': profileImage,
+      'nickname' : nickname,
       'title': title,
       'content': content,
+      'place' : place,
       'imageUrls': imageUrls,
       'createAt': createAt,
       'view': view,
