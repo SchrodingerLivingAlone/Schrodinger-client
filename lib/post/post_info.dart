@@ -162,7 +162,13 @@ class _PostInfoState extends State<PostInfo> {
             ),
           ),
           TextButton(
-              onPressed: (){},
+              onPressed: (){
+                if(comment['owner']){
+
+                }else{
+                  showNotCommentOwner(context);
+                }
+              },
               child: const Text('삭제')
           ),
         ],
@@ -170,6 +176,21 @@ class _PostInfoState extends State<PostInfo> {
       ));
     }
     return tiles;
+  }
+
+  Future<bool?> showNotCommentOwner(BuildContext context) async {
+    return showDialog<bool?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('본인이 작성한 댓글이 아닙니다.', style: TextStyle(fontSize: 15),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('확인', style: TextStyle(color: Colors.blue),),
+          ),
+        ],
+      ),
+    );
   }
 
 
@@ -258,10 +279,10 @@ class _PostInfoState extends State<PostInfo> {
                 context: context,
                 position: const RelativeRect.fromLTRB(1000, 0, 0, 0),
                 items: [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('게시글 수정'),
-                  ),
+                  // const PopupMenuItem(
+                  //   value: 'edit',
+                  //   child: Text('게시글 수정'),
+                  // ),
                   const PopupMenuItem(
                     value: 'delete',
                     child: Text('게시글 삭제'),
@@ -456,14 +477,16 @@ class Comment {
   final String nickname;
   final String comment;
   final String profile_image;
+  final bool owner;
 
-  Comment({required this.nickname, required this.comment, required this.profile_image});
+  Comment({required this.nickname, required this.comment, required this.profile_image, required this.owner});
 
   Map<String, dynamic> toJson() {
     return {
       'profile_image': profile_image,
       'nickname': nickname,
       'comment': comment,
+      'owner' : owner,
     };
   }
 
@@ -472,6 +495,7 @@ class Comment {
         profile_image: json["profile_image"],
         nickname: json["nickname"],
         comment: json["comment"],
+        owner: json["owner"],
     );
   }
 }
