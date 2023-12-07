@@ -45,8 +45,6 @@ class _NewDiaryState extends State<NewDiary> {
     }
 
     final response = await request.send();
-    print('request.fields : ${request.fields}');
-    print('request.fields : ${request.files}');
 
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();
