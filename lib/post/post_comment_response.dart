@@ -75,6 +75,4 @@ class CommentsResult{
     required this.nickname,
     required this.comment,
   });
-
-
 }

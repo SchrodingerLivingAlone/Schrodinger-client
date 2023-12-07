@@ -189,7 +189,7 @@ class _PostPageState extends State<PostPage>{
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PostInfo(PostId: 7,),
+                  builder: (context) => PostInfo(PostId: 14,),//11,
                 ),
               );
             },

@@ -40,6 +40,7 @@ class PostInfoResult{
   final List<CommentResult> comments;
   final bool isScrapped;
   final bool isLiked;
+  final bool owner;
 
   PostInfoResult({
     required this.id,
@@ -58,6 +59,7 @@ class PostInfoResult{
     required this.comments,
     required this.isLiked,
     required this.isScrapped,
+    required this.owner,
   });
 
   Map<String, dynamic> toJson() {
@@ -78,6 +80,51 @@ class PostInfoResult{
       'comments' : comments,
       'isLiked' : isLiked,
       'isScrapped': isScrapped,
+      'owner' : owner,
     };
   }
 }
+
+class CurProfileResponse {
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final dynamic result;
+
+  CurProfileResponse({
+    required this.isSuccess,
+    required this.code,
+    required this.message,
+    required this.result
+  });
+
+  factory CurProfileResponse.fromJson(Map<String, dynamic> json) {
+    return CurProfileResponse(
+        isSuccess: json["isSuccess"],
+        code: json["code"],
+        message: json["message"],
+        result: (json['result'])
+    );
+  }
+}
+
+class CurProfileResult{
+  final String nickname;
+  final String dong;
+  final String profileImageUrl;
+
+  CurProfileResult({
+    required this.nickname,
+    required this.dong,
+    required this.profileImageUrl
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nickname': nickname,
+      'dong': dong,
+      'profileImageUrl': profileImageUrl,
+    };
+  }
+}
+
