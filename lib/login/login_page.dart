@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/home.dart';
-import 'package:schrodinger_client/town_info/town_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
