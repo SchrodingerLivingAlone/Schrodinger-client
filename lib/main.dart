@@ -22,6 +22,7 @@ import 'package:schrodinger_client/login/town_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:schrodinger_client/town_info/town_search.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -59,11 +60,11 @@ class MyApp extends StatelessWidget {
         '/loginPage': (context) => const LoginPage(),
         '/splash': (context) => const Splash(),
         '/post': (context) => const PostPage(),
-        '/post_info': (context) => const PostInfo(),
         '/town/auth': (context) => const TownAuthPage(),
         '/town': (context) => const TownPage(),
         '/join': (context) => const JoinPage(),
-        '/home': (context) => const HomePage()
+        '/home': (context) => const HomePage(),
+        '/town/search': (context) => const TownSearchPage()
       },
       home: const Splash(),
     );

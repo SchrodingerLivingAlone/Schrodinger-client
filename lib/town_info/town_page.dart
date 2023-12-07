@@ -64,7 +64,9 @@ class _TownPageState extends State<TownPage> {
             title: Text(townName),
             leading: const Icon(Icons.place),
             actions: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.search))
+              IconButton(onPressed: (){
+                Navigator.pushNamed(context, '/town/search');
+              }, icon: const Icon(Icons.search))
             ],
             bottom: const TabBar(
                 indicatorColor: Colors.white,

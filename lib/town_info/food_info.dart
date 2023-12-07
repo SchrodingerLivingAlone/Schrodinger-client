@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/town_info/category_dropdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,13 +23,14 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   void initState() {
     super.initState();
     getFoodPost();
-    print('food : ${widget.tabIndex}');
   }
 
   List<Widget> createFoodListTiles() {
     List<Widget> foodTiles = [];
+
     for (int i = 0; i < foodList.length; i++) {
       TownInfo food = foodList[i];
+
 
       Widget foodTile = Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -71,7 +73,9 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
               Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: const TextStyle(fontSize: 11)),
             ],
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: food.id)));
+          },
         ),
       );
       foodTiles.add(foodTile);

@@ -1,95 +1,199 @@
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
+import 'package:schrodinger_client/post/post_comment_response.dart';
+import 'package:schrodinger_client/post/post_info_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 //TODO 1.게시글 수정 로직 추가
 //TODO 2.게시글 삭제 로직 추가
-//TODO 3.댓글 입력창
-//TODO 4.댓글 ui -> 삭제, 수정가능하도록 ListTile이 아닌 widget으로 바꿔보기
+//TODO 3. api 연동
 
 class PostInfo extends StatefulWidget {
-  const PostInfo({super.key});
+  PostInfo({Key? key, required this.PostId}) : super (key: key) ;
+  int PostId;
 
   @override
   State<PostInfo> createState() => _PostInfoState();
 }
 
 class _PostInfoState extends State<PostInfo> {
-  int current = 0;
-  final CarouselController _carouselController = CarouselController();
-  final imageList = [
-    "https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805",
-    "https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/lhs3.jpgb449133c-4efa-41de-b9d0-bf15dff2c805",
-    "https://schrodinger-cau.s3.ap-northeast-2.amazonaws.com/2509b321-65ce-4fa9-9112-06af0e367e5d.png"
-  ];
+
+  String writer = ' ';
+  String writerProfileImage  = 'https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/kbs1.jpg3dc6ec35-e98b-4290-9609-8793c540fb05';
+  String createdTime  = ' ';
+  int view = 0;
+  String issue = ' ';
+  String pos = ' ';
+  String title = ' ';
+  String content = ' ';
   bool isScrapped = false;
   bool isLiked = false;
+  var imageList = [];
+  int current = 0;
+  List<dynamic> comments = [];
+
+  final CarouselController _carouselController = CarouselController();
   final _commentController = TextEditingController();
+
+  Future<PostInfoResponse> getPostInfo(BuildContext context) async {
+    int postId = widget.PostId;
+    print(postId);
+    var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/$postId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.get(
+          Uri.parse(url),
+          headers: {'Authorization' : 'Bearer $accessToken'}
+      );
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+        return PostInfoResponse.fromJson(jsonDecode(temp));
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
+
+  void initPost() async {
+    var postInfo = await getPostInfo(context);
+    setState(()  {
+      //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
+      writer = writer;
+      writerProfileImage = writerProfileImage;
+      createdTime = postInfo.result['calculatedTime'];
+      view = postInfo.result['view'];
+      issue = postInfo.result['neighborhoodPostCategory'];
+      pos = postInfo.result['dong'];
+      title = postInfo.result['title'];
+      imageList = postInfo.result['imageUrls'];
+      content = postInfo.result['content'];
+      isScrapped = postInfo.result['scrapped'];
+      isLiked = postInfo.result['liked'];
+      comments = postInfo.result['comments'];
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initPost();
+  }
+
+  List<Widget> getContent(){
+    List<Widget> tiles = [];
+    for (var comment in comments) {
+      tiles.add(Row(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(),
+          ),
+          const Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('nickname', style: TextStyle(fontSize: 10),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('comment', style: TextStyle(fontSize: 15),),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          TextButton(onPressed: (){}, child: const Text('삭제')),
+        ],
+
+      ));
+    }
+    return tiles;
+  }
+
 
   Widget sliderWidget () {
     return CarouselSlider (
-        carouselController: _carouselController,
-        items: imageList.map(
-          (imgLink) {
-            return Builder(
-              builder: (context) {
-                return SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  child: Image(
-                    fit: BoxFit.contain,
-                    image: NetworkImage(
-                      imgLink,
-                    ),
+      carouselController: _carouselController,
+      items: imageList.map(
+            (imgLink) {
+          return Builder(
+            builder: (context) {
+              return SizedBox(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                child: Image(
+                  fit: BoxFit.contain,
+                  image: NetworkImage(
+                    imgLink,
                   ),
-                );
-          },
-      ); // Builder
-    },
-  ).toList (),
-  options: CarouselOptions (
-      height: 300,
-      viewportFraction: 1.0,
-      autoPlay: false,
-      autoPlayInterval: const Duration (seconds: 4),
-      onPageChanged: (index, reason) {
+                ),
+              );
+            },
+          ); // Builder
+        },
+      ).toList (),
+      options: CarouselOptions (
+        height: 300,
+        viewportFraction: 1.0,
+        autoPlay: false,
+        autoPlayInterval: const Duration (seconds: 4),
+        onPageChanged: (index, reason) {
           setState(() {
-          current = index;
+            current = index;
           });
-          },
+        },
       ),
     );
   }//
 
   Widget sliderIndicator() {
     return Align(
-        alignment: Alignment. bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment. center,
-          children: imageList.asMap().entries.map((entry){
-            return GestureDetector(
-              onTap: () => _carouselController.animateToPage(entry.key),
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(current == entry.key ? 0.9 : 0.4),),
-                  ),
-            );// GestureDetector
-          }).toList(),
-        ),
+      alignment: Alignment. bottomCenter,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment. center,
+        children: imageList.asMap().entries.map((entry){
+          return GestureDetector(
+            onTap: () => _carouselController.animateToPage(entry.key),
+            child: Container(
+              width: 12,
+              height: 12,
+              margin:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(current == entry.key ? 0.9 : 0.4),),
+            ),
+          );// GestureDetector
+        }).toList(),
+      ),
     );
   }
 
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+
     return Scaffold(
       resizeToAvoidBottomInset: true, // true값 할당
       appBar: AppBar(
@@ -150,16 +254,16 @@ class _PostInfoState extends State<PostInfo> {
                          Padding(
                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
                            child: Container(
-                             child: const CircleAvatar(
+                             child:  CircleAvatar(
                                backgroundColor: Colors.grey,
-                               //backgroundImage: ,
+                               backgroundImage: NetworkImage(writerProfileImage!),
                              ),
                            ),
                          ),
-                         const Column(
+                         Column(
                            children: [
-                             Text('nicknamePosition', style: TextStyle(fontSize: 20),),
-                             Text('5분전 | 조회 46 | 전눙동 '),
+                             Text(writer, style: TextStyle(fontSize: 20),),
+                             Text('$createdTime | 조회 $view | $pos '),
                            ],
                          ),
                          const SizedBox(
@@ -172,7 +276,7 @@ class _PostInfoState extends State<PostInfo> {
                                  minimumSize: const Size(30, 30),
                                  elevation: 10
                              ),
-                             child: const Text('IssuePos', style: TextStyle(fontSize: 13),)
+                             child:  Text(issue, style: TextStyle(fontSize: 13),)
                          ),
                        ],
                      ),
@@ -184,11 +288,11 @@ class _PostInfoState extends State<PostInfo> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                    child: Container(child: const Text('TitlePosition', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
+                    child: Container(child:  Text(title, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 2.0),
-                    child: Container(child: const Text('contentPosition', style: TextStyle(fontSize: 20),)),
+                    child: Container(child:  Text(content, style: TextStyle(fontSize: 20),)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
@@ -206,14 +310,14 @@ class _PostInfoState extends State<PostInfo> {
                           children: [
                             Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Icon(Icons.pin_drop_outlined, color: Colors.deepPurple, size: 20,),
-                                        Text('위치', style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
+                                        Text(pos, style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
                                       ],
                                     ),
                                   ),
@@ -288,59 +392,15 @@ class _PostInfoState extends State<PostInfo> {
       ],
     ),
     );
+
+
   }
 }
-
 
 class Comment {
   final String username;
   final String text;
+  final String commenterProfile;
 
-  Comment({required this.username, required this.text});
-}
-
-List<Comment> comments = [
-  Comment(username: 'User1', text: '첫 번째 댓글입니다.'),
-  Comment(username: 'User2', text: '두 번째 댓글입니다.'),
-  Comment(username: 'User3', text: '세 번째 댓글입니다.'),
-  Comment(username: 'User4', text: '네 번째 댓글입니다.'),
-  Comment(username: 'User5', text: '다섯 번째 댓글입니다.'),
-  // 여기에 필요한 만큼 댓글을 추가할 수 있습니다.
-];
-
-
-List<Widget> getContent(){
-  List<Widget> tiles = [];
-  for (var comment in comments) {
-    tiles.add(Row(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(),
-        ),
-        const Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('nickname', style: TextStyle(fontSize: 10),),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('comment', style: TextStyle(fontSize: 15),),
-                ],
-              ),
-            ],
-          ),
-        ),
-        TextButton(onPressed: (){}, child: const Text('삭제')),
-      ],
-
-    ));
-  }
-  return tiles;
+  Comment({required this.commenterProfile, required this.username, required this.text});
 }
