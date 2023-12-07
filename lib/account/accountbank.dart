@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';  //이거 랜덤으로 색 생성하려고 추가한 라이브러리임
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,10 @@ class AccountBank extends StatefulWidget {
 class _AccountBankState extends State<AccountBank> {
 
   late List<AccountBankInfo> GetAllList = []; //맨처음에 get으로 받아온거
+
+  final _monthList = List.generate(12, (i)=>'${i+1}');//월 선택하기
+  var _selectedmonthValue = '11';//맨처음에는 그냥 11월로 나오게 설정
+
 
   @override
   void initState() {
@@ -59,11 +62,34 @@ class _AccountBankState extends State<AccountBank> {
 
       body:ListView(     //column에서 listview로 바꿈 아래에 listtile넣으려고
         children: [
-          const SizedBox(height: 20),
+          Container(//월 선택하기
+            //padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [   //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
+                DropdownButton(
+                  value: _selectedmonthValue,
+                  items: _monthList.map(
+                        (point) => DropdownMenuItem(
+                      value: point,
+                      child: Text(point),
+                    ),
+                  ).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedmonthValue = value!;
+                      getAll();
+                    });
+                  },
+                ),
+                const Text('월', style: TextStyle(fontSize: 15)),
+              ],
+            ),
+          ),
           Center(
             child: Container(
                 color: Colors.yellow,
-                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                //padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child:
                   Column(
                     children: [
@@ -73,7 +99,6 @@ class _AccountBankState extends State<AccountBank> {
                       Text('지출: $totalExpense원'),
                     ],
                   ),
-
             ),
           ),
           Container(//piechart넣기
@@ -95,8 +120,8 @@ class _AccountBankState extends State<AccountBank> {
     String? accessToken = prefs.getString('accessToken');
     //String url = '${dotenv.env['BASE_URL']}/api/accountBooks/all';
 
-    MonthYearRequest request = MonthYearRequest(year: 2023, month: 11);
-
+    MonthYearRequest request = MonthYearRequest(year: 2023, month: int.parse(_selectedmonthValue));
+    print(request.month);
 
     final url = '${dotenv.env['BASE_URL']}/api/accountBooks/all';
     final queryParameters = request.toJson();
@@ -139,7 +164,7 @@ class _AccountBankState extends State<AccountBank> {
     String? accessToken = prefs.getString('accessToken');
     String url = '${dotenv.env['BASE_URL']}/api/accountBooks/budget';
 
-    MonthYearRequest request = MonthYearRequest(year: 2023, month: 11);
+    MonthYearRequest request = MonthYearRequest(year: 2023, month: int.parse(_selectedmonthValue));
 
     final response = await http.post(
       Uri.parse(url),

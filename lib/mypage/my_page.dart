@@ -28,7 +28,7 @@ class _MyPageState extends State<MyPage> {
 
   //이거 서버에서 받아와야함 원래
   // String nickname='dooly22';
-  String ageGender='20대/여';
+  //String ageGender='20대/여';
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +67,15 @@ class _MyPageState extends State<MyPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            GetAllList.isNotEmpty ? GetAllList[0].result.nickname : '',
+                            GetAllList.isNotEmpty ? GetAllList[0].result.nickname :'',
                             style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 5),
-                          Text(
-                            ageGender,
-                            style: const TextStyle(fontSize: 18),
-                          ),
+                          // Text(
+                          //   ageGender,
+                          //   style: const TextStyle(fontSize: 18),
+                          // ),
                         ],
                       ),
                     ],
@@ -88,7 +88,7 @@ class _MyPageState extends State<MyPage> {
                         Navigator.pushNamed(context,'/ManageProfiles',
                             arguments: {
                               'nickname': GetAllList.isNotEmpty ? GetAllList[0].result.nickname : '',
-                              'ageGender' : ageGender,
+                              //'ageGender' : ageGender,
                             }
                         );
                       },
