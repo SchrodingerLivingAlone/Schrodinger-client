@@ -313,7 +313,7 @@ class _SpendingRecordsState extends State<SpendingRecords> {
         );
       } else {
         print('서버 요청 실패: ${response.statusCode}');
-        var responseBody = await response.body;
+        var responseBody = response.body;
         print('에러 메시지: $responseBody');
         throw Exception('Failed to send request: ${response.reasonPhrase}');
       }

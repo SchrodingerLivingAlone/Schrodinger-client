@@ -47,10 +47,11 @@ class _TownPageState extends State<TownPage> {
   }
 
   void _onItemTapped(int index) {
-    if(index == 1)
-    setState(() {
+    if(index == 1) {
+      setState(() {
       _selectedIndex = index;
     });
+    }
   }
 
   @override

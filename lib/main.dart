@@ -21,10 +21,12 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/login/town_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:schrodinger_client/town_info/town_search.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
+  await initializeDateFormatting();
   runApp(
     const ProviderScope(
         child: MyApp()

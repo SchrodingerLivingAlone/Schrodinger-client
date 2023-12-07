@@ -40,7 +40,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 5),
-              Text(food.content, style: TextStyle(fontSize: 12)),
+              Text(food.content, style: const TextStyle(fontSize: 12)),
               const SizedBox(height: 5),
               Row(
                 children: [
@@ -70,7 +70,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
                   return Image.asset('assets/default_profile.png', width: 60, height: 40,); // 오류 발생 시 기본 이미지
                 },
               ),
-              Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: TextStyle(fontSize: 11)),
+              Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: const TextStyle(fontSize: 11)),
             ],
           ),
           onTap: () {

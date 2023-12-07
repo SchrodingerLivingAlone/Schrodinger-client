@@ -6,7 +6,6 @@ import 'package:schrodinger_client/login/google_map_section.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:http_parser/http_parser.dart';
 import 'package:schrodinger_client/login/login_page.dart';
 
 File? profileImageFile;
@@ -257,22 +256,13 @@ class _JoinPageState extends State<JoinPage> {
     request.fields['gu'] = gu;
     request.fields['dong'] = dong;
 
-    var imageStream = http.ByteStream(Stream.castFrom(profileImage.openRead()));
-    var length = await profileImage.length();
-    var multipartFile = http.MultipartFile('file', imageStream, length, filename: 'file', contentType: MediaType('image', 'jpeg'));
-    request.files.add(multipartFile);
+    request.files.add(await http.MultipartFile.fromPath('files', profileImageFile!.path));
 
     try {
       var response = await request.send();
       var responseBody = await response.stream.bytesToString();
 
       Map<String, dynamic> jsonMap = json.decode(responseBody);
-
-      // 맵에서 값 추출
-      var isSuccess = jsonMap["isSuccess"];
-      var code = jsonMap["code"];
-      var message = jsonMap["message"];
-      var result = jsonMap["result"];
 
       if (response.statusCode == 200) {
         // 성공적으로 응답 받은 경우의 처리
