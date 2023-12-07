@@ -26,21 +26,18 @@ class _BudgetPageState extends State<BudgetPage> {
 
   late List<BudgetResponse> PutAllList = []; //맨처음에 get으로 받아온거
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getAll();
-  // }
 
   @override
   Widget build(BuildContext context) {
+
+    //가게부 홈에서 선택한 월 받아오기.
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('예산 설정')),
         actions: [
           TextButton(onPressed: (){
             putAll();  //버튼 누르면 이거 동작******************************
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.pushNamed(context,'/home');
           },
               child: const Text('저장',style: TextStyle(color:Colors.white))
           ),
@@ -113,8 +110,9 @@ class _BudgetPageState extends State<BudgetPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     String url = '${dotenv.env['BASE_URL']}/api/accountBooks/budget';
-
-    MonthYearRequest request = MonthYearRequest(year: 2023, month: 11);//지금은 월지정
+    final month = ModalRoute.of(context)?.settings.arguments as int? ?? 0;
+    print(month);
+    MonthYearRequest request = MonthYearRequest(year: 2023, month: month);//지금은 월지정
 
     final response = await http.put(
       Uri.parse(url),

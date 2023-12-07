@@ -21,6 +21,7 @@ class _AccountBankState extends State<AccountBank> {
   late List<AccountBankInfo> GetAllList = []; //맨처음에 get으로 받아온거
 
   final _monthList = List.generate(12, (i)=>'${i+1}');//월 선택하기
+
   var _selectedmonthValue = '11';//맨처음에는 그냥 11월로 나오게 설정
 
 
@@ -51,7 +52,26 @@ class _AccountBankState extends State<AccountBank> {
             showDialog(
               context: context,
               builder: (context){
-                return const Dialog();
+                return AlertDialog(
+                  alignment: Alignment.topRight,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(onPressed:(){//버튼 누르면 지출내역으로 넘어감
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/ExpensePage');
+                      }, child: const Text('지출 내역 추가'),),
+                      ElevatedButton(onPressed:(){//버튼 누르면 수입내역으로 넘어감
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context,'/IncomePage');
+                      }, child: const Text('수입 내역 추가'),),
+                      ElevatedButton(onPressed:(){ //버튼 누르면 예산설정페이지로 넘어감.
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/BudgetPage',arguments: int.parse(_selectedmonthValue));
+                      }, child: const Text('예산 설정'),),
+                    ],
+                  ),
+                );
                 //지출내역추가, 수입내역 추가, 예산 설정 탭 들어갈수있도록
               },
             );
@@ -86,23 +106,57 @@ class _AccountBankState extends State<AccountBank> {
               ],
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // 지출 부분
+              Container(
+                height: 50, // 지출 섹션의 높이
+                width: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('지출 : $totalExpense', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+              Container(
+                width: 1, // 세로 선의 너비
+                height: 40, // 세로 선의 높이
+                color: Colors.grey, // 선의 색상
+              ),
+              // 수입 부분
+              Container(
+                height: 50, // 수입 섹션의 높이
+                width: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('수입 : $income', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+            ],
+          ),
           Center(
-            child: Container(
-                color: Colors.yellow,
-                //padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child:
-                  Column(
-                    children: [
-                      Text('이번달 남은 예산은 $budget원 이에요.'),
-                      Text('너무 잘하고 있어요!'),
-                      Text('수입: $income원'),
-                      Text('지출: $totalExpense원'),
-                    ],
-                  ),
+            child: Card(
+              color: Colors.yellow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              elevation: 5, // 그림자 크기
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text('이번달 남은 예산은 $budget원 이에요.'),
+                    Text('너무 잘하고 있어요!'),
+                  ],
+                ),
+              ),
             ),
           ),
           Container(//piechart넣기
-
             child: CustomPaint(
               size: Size(200, 200),
               painter: _PieChart(model),
@@ -343,7 +397,7 @@ class Dialog extends StatelessWidget {//오른쪽 상단에 + 버튼눌렀을때
         children: [
           ElevatedButton(onPressed:(){//버튼 누르면 지출내역으로 넘어감
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/ExpensePage');
+            Navigator.pushNamed(context, '/ExpensePage',);
           }, child: const Text('지출 내역 추가'),),
           ElevatedButton(onPressed:(){//버튼 누르면 수입내역으로 넘어감
             Navigator.pop(context);
