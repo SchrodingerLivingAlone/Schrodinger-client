@@ -261,7 +261,9 @@ class _JoinPageState extends State<JoinPage> {
     try {
       var response = await request.send();
       var responseBody = await response.stream.bytesToString();
-      
+
+      Map<String, dynamic> jsonMap = json.decode(responseBody);
+
       if (response.statusCode == 200) {
         // 성공적으로 응답 받은 경우의 처리
         print('회원가입 성공');
