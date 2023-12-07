@@ -9,14 +9,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../post/post_info.dart';
 import '../town_info/category_dropdown.dart';
 
-class WrittenPage extends StatefulWidget {
-  const WrittenPage({super.key});
+class LikePage extends StatefulWidget {
+  const LikePage({super.key});
 
   @override
-  State<WrittenPage> createState() => _WrittenPageState();
+  State<LikePage> createState() => _LikePageState();
 }
 
-class _WrittenPageState extends State<WrittenPage> {
+class _LikePageState extends State<LikePage> {
   List<LikeInfo> likeslist = [];
 
   @override
@@ -29,7 +29,7 @@ class _WrittenPageState extends State<WrittenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('작성한 글')),
+        title: const Center(child: Text('공감한 글')),
         backgroundColor: const Color(0xFF0010A3),
         actions: [
           IconButton(onPressed: (){
@@ -92,7 +92,7 @@ class _WrittenPageState extends State<WrittenPage> {
   Future<void> getLikesPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/users/posts';
+    String url = '${dotenv.env['BASE_URL']}/api/likes/posts';
 
     final response = await http.get(
         Uri.parse(url),

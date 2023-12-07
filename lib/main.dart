@@ -24,6 +24,9 @@ import 'package:schrodinger_client/login/town_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
 
+import 'mypage/Comment_Page.dart';
+import 'mypage/Like_page.dart';
+
 Future main() async {
   await dotenv.load(fileName: '.env');
   runApp(
@@ -67,6 +70,8 @@ class MyApp extends StatelessWidget {
         //MyPage에서 연결되는 부분 루트 새로 추가한 부분.
         '/ManageProfiles': (context) => const ManageProfiles(),
         '/WrittenPage': (context) => const WrittenPage(),
+        '/LikePage': (context) => const LikePage(),
+        '/CommentPage': (context) => const CommentPage(),
       },
       home: const Splash(),
     );

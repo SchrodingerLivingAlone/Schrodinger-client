@@ -135,7 +135,7 @@ class _MyPageState extends State<MyPage> {
             ),
             title: const Text('스크랩 글'),
             onTap: () {
-
+              Navigator.pushNamed(context, '/CommentPage');
             },
           ),
           ListTile(
@@ -145,6 +145,7 @@ class _MyPageState extends State<MyPage> {
             ),
             title: const Text('공감한 글'),
             onTap: () {
+              Navigator.pushNamed(context, '/LikePage');
 
             },
           ),
