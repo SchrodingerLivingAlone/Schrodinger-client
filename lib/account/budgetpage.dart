@@ -1,4 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:schrodinger_client/account/accountbank.dart';
+import 'package:schrodinger_client/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({super.key});
@@ -17,16 +24,23 @@ class _BudgetPageState extends State<BudgetPage> {
   var expenditure =0;
   var day =0;
 
+  late List<BudgetResponse> PutAllList = []; //맨처음에 get으로 받아온거
+
+
   @override
   Widget build(BuildContext context) {
+
+    //가게부 홈에서 선택한 월 받아오기.
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('예산 설정')),
         actions: [
           TextButton(onPressed: (){
-              Navigator.pushNamed(context,'/AccountBank',arguments: expenditure);
+            putAll();  //버튼 누르면 이거 동작******************************
+            Navigator.pushNamed(context,'/home');
           },
-              child: const Text('저장',style: TextStyle(color:Colors.white))),
+              child: const Text('저장',style: TextStyle(color:Colors.white))
+          ),
         ],
       ),
       body: Padding(
@@ -91,8 +105,104 @@ class _BudgetPageState extends State<BudgetPage> {
       ),
     );
   }
+
+  Future<void> putAll() async { //프로필 받아오는거 post
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    String url = '${dotenv.env['BASE_URL']}/api/accountBooks/budget';
+    final month = ModalRoute.of(context)?.settings.arguments as int? ?? 0;
+    print(month);
+    MonthYearRequest request = MonthYearRequest(year: 2023, month: month);//지금은 월지정
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: jsonEncode({
+        'budget': expenditure,
+        'month': request.month,
+        'year': request.year,
+      }),
+    );
+
+    final res = jsonDecode(utf8.decode(response.bodyBytes));
+
+    print(res);
+    print('예산입력 잘 되었어요.');
+    //final List<dynamic> responseResult = res['result'];
+    List<BudgetResponse> putall = [BudgetResponse.fromJson(res)];
+
+    setState(() {
+      PutAllList = putall;
+    });
+  }
+
+
+
+
 }
 
+class MonthYearRequest {
+  final int year;
+  final int month;
+
+  MonthYearRequest({
+    required this.year,
+    required this.month,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'year': year,
+      'month': month,
+    };
+  }
+}
+
+class BudgetResponse {  //예산정보 받아오는 부분
+  final bool isSuccess;
+  final String code;
+  final String message;
+  final BudgetResult result;
+
+  BudgetResponse({
+    required this.isSuccess,
+    required this.code,
+    required this.message,
+    required this.result,
+  });
+
+  factory BudgetResponse.fromJson(Map<String, dynamic> json) {
+    return BudgetResponse(
+      isSuccess: json['isSuccess'],
+      code: json['code'],
+      message: json['message'],
+      result: BudgetResult.fromJson(json['result']),
+    );
+  }
+}
+
+class BudgetResult {  //프로필정보에서 결과값받아오는 부분.
+  final int budget;
+  final String year;
+  final String month;
+
+  BudgetResult({
+    required this.budget,
+    required this.year,
+    required this.month,
+  });
+
+  factory BudgetResult.fromJson(Map<String, dynamic> json) {
+    return BudgetResult(
+      budget: json['budget'],
+      year: json['year'],
+      month: json['month'],
+    );
+  }
+}
 
 
 
