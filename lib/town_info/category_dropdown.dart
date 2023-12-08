@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:schrodinger_client/style.dart';
 
 class CategoryDropdown extends StatefulWidget {
-  const CategoryDropdown({super.key});
+  late final Function setSortedIndex;
+  CategoryDropdown({super.key, required this.setSortedIndex});
 
   @override
   State<CategoryDropdown> createState() => _CategoryDropdownState();
 }
 
 class _CategoryDropdownState extends State<CategoryDropdown> {
-  int sortIndex = 0;
-  final sortCategory = ['카테고리', '최신순', '인기순'];
+  int index = 0;
+  final sortCategory = ['최신순', '인기순', '조회순'];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                   style: const TextStyle(
                     color: Colors.black,
                   ),
-                  value: sortIndex,
+                  value: index,
                   icon: const Icon(
                     Icons.arrow_drop_down,
                     color: Colors.white,
@@ -48,8 +49,9 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                     );
                   }),
                   onChanged: (value){
+                    widget.setSortedIndex(value);
                     setState(() {
-                      sortIndex = value!;
+                      index = value!;
                     });
                   },
                   validator: (value){
