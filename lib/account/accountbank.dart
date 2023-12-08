@@ -46,7 +46,20 @@ class _AccountBankState extends State<AccountBank> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('가계부')),
+        flexibleSpace: const Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              '가계부',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(onPressed: (){  //+버튼생성
             showDialog(
@@ -76,7 +89,10 @@ class _AccountBankState extends State<AccountBank> {
               },
             );
           },icon: const Icon(Icons.add)),
-
+          IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.calendar_month)
+          )
         ],
       ),
 
