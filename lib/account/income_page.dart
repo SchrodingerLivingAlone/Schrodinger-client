@@ -4,18 +4,28 @@ class IncomePage extends StatefulWidget {
   const IncomePage({super.key});
 
   @override
-  State<IncomePage> createState() => _IncomePageState();
+  State<IncomePage> createState() => _ExpensePageState();
 }
 
-class _IncomePageState extends State<IncomePage> {
+class _ExpensePageState extends State<IncomePage> {
   final _controller = TextEditingController();
   String expenseamount = '';
-  final _monthList = List.generate(11, (i)=>'${i+1}');
-  final _dayList = List.generate(30, (i)=>'${i+1}');
+  final _monthList = List.generate(12, (i)=>'${i+1}');
+  List<String> _dayList = [];
   final _yearList = List.generate(30,(i)=> '${i+2000}');
   var _selectedmonthValue = '1';
   var _selecteddayValue = '1';
   var _selectedyearValue = '2000';
+
+  void _updateDayList() {
+    _dayList = _generateDayList(_selectedyearValue, _selectedmonthValue);
+    _selecteddayValue = _dayList.isNotEmpty ? _dayList[0] : '1';
+  }
+
+  List<String> _generateDayList(String year, String month) {
+    int daysInMonth = DateTime(int.parse(year), int.parse(month) + 1, 0).day;
+    return List.generate(daysInMonth, (i) => '${i + 1}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,7 @@ class _IncomePageState extends State<IncomePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('2023/05/22'),
+            const Text('수입내역추가'),
             IconButton(
               onPressed: () {
 
@@ -81,43 +91,48 @@ class _IncomePageState extends State<IncomePage> {
             padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                DropdownButton( //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
-
+              children: [   //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
+                DropdownButton(
                   value: _selectedyearValue,
                   items: _yearList.map(
-                          (point) => DropdownMenuItem(
-                          value: point,
-                          child: Text(point))).toList(),
-                  onChanged: (value){
+                        (point) => DropdownMenuItem(
+                      value: point,
+                      child: Text(point),
+                    ),
+                  ).toList(),
+                  onChanged: (value) {
                     setState(() {
                       _selectedyearValue = value!;
+                      _updateDayList();
                     });
                   },
                 ),
                 const Text('년', style: TextStyle(fontSize: 15)),
-                DropdownButton( //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
-
+                DropdownButton(
                   value: _selectedmonthValue,
                   items: _monthList.map(
-                          (point) => DropdownMenuItem(
-                          value: point,
-                          child: Text(point))).toList(),
-                  onChanged: (value){
+                        (point) => DropdownMenuItem(
+                      value: point,
+                      child: Text(point),
+                    ),
+                  ).toList(),
+                  onChanged: (value) {
                     setState(() {
                       _selectedmonthValue = value!;
+                      _updateDayList();
                     });
                   },
                 ),
                 const Text('월', style: TextStyle(fontSize: 15)),
-                DropdownButton( //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
-
+                DropdownButton(
                   value: _selecteddayValue,
                   items: _dayList.map(
-                          (point) => DropdownMenuItem(
-                          value: point,
-                          child: Text(point))).toList(),
-                  onChanged: (value){
+                        (point) => DropdownMenuItem(
+                      value: point,
+                      child: Text(point),
+                    ),
+                  ).toList(),
+                  onChanged: (value) {
                     setState(() {
                       _selecteddayValue = value!;
                     });
