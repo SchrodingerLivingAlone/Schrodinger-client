@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 var dayOfWeek = '';
 var month = '';
@@ -179,7 +180,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 3 - 20,
                         child: Text(
-                          '${tList[i].price}',
+                          '${NumberFormat('#,###').format(tList[i].price)}',
                           style: TextStyle(color: priceColor),
                           textAlign: TextAlign.end,
                         ),
@@ -297,6 +298,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
 
     initializeData();
     _onDaySelected(selectedDay, selectedDay);
+    setDotDate();
   }
 
   DateTime focusedDay = DateTime.now();
