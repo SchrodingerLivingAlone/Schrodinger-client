@@ -15,6 +15,8 @@ import 'package:schrodinger_client/login/auth_page.dart';
 import 'package:schrodinger_client/login/login_page.dart';
 import 'package:schrodinger_client/login/splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:schrodinger_client/mypage/manage_profile.dart';
+import 'package:schrodinger_client/mypage/written_page.dart';
 import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/post/post_info.dart';
 import 'package:schrodinger_client/style.dart';
@@ -23,6 +25,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:schrodinger_client/town_info/town_search.dart';
+
+import 'mypage/Comment_Page.dart';
+import 'mypage/Like_page.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -64,7 +69,11 @@ class MyApp extends StatelessWidget {
         '/town': (context) => const TownPage(),
         '/join': (context) => const JoinPage(),
         '/home': (context) => const HomePage(),
-        '/town/search': (context) => const TownSearchPage()
+        '/town/search': (context) => const TownSearchPage(),
+        '/ManageProfiles': (context) => const ManageProfiles(),
+        '/WrittenPage': (context) => const WrittenPage(),
+        '/LikePage': (context) => const LikePage(),
+        '/CommentPage': (context) => const CommentPage(),
       },
       home: const Splash(),
     );
