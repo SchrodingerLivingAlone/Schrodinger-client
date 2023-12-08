@@ -19,10 +19,18 @@ class FacilityInfoPage extends StatefulWidget {
 
 class _FacilityInfoPageState extends State<FacilityInfoPage> {
   late List<TownInfo> facilityList = [];
+  int sortedIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    getFacilityPost();
+  }
+
+  void setSortedIndex(int index) {
+    setState(() {
+      sortedIndex = index;
+    });
     getFacilityPost();
   }
 
@@ -84,7 +92,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const CategoryDropdown(),
+        CategoryDropdown(setSortedIndex: setSortedIndex),
         ...createFacilityListTiles(),
       ],
     );
@@ -93,7 +101,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
   Future<void> getFacilityPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=$sortedIndex&category=${widget.tabIndex}';
 
     final response = await http.get(
         Uri.parse(url),

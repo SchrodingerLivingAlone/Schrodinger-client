@@ -46,13 +46,6 @@ class _TownPageState extends State<TownPage> {
     });
   }
 
-  void _onItemTapped(int index) {
-    if(index == 1)
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
