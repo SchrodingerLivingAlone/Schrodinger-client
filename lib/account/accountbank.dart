@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:math' as math;
 import 'package:http/http.dart' as http;
+import 'package:schrodinger_client/account/calendar/calendar_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -90,7 +91,9 @@ class _AccountBankState extends State<AccountBank> {
             );
           },icon: const Icon(Icons.add)),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));
+              },
               icon: Icon(Icons.calendar_month)
           )
         ],
