@@ -241,8 +241,8 @@ class _PostInfoState extends State<PostInfo> {
       //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
       writer = postInfo.result['nickname'];
       int writerLen = writer.length;
-      for(int i = 45; i >= writerLen; i--)
-        writer += ' ';
+      // for(int i = 25; i >= writerLen; i--)
+      //   writer += ' ';
       writerProfileImage = postInfo.result['profileImage'];
       createdTime = postInfo.result['calculatedTime'];
       view = postInfo.result['view'];
@@ -258,8 +258,8 @@ class _PostInfoState extends State<PostInfo> {
       owner = postInfo.result['owner'];
       postDetails = '$createdTime | 조회 $view | $dong ';
       int postDetailsLen = postDetails.length;
-      for(int i = 45; i >= postDetailsLen; i--)
-        postDetails += ' ';
+      // for(int i = 25; i >= postDetailsLen; i--)
+      //   postDetails += ' ';
     });
   }
 
@@ -511,23 +511,28 @@ class _PostInfoState extends State<PostInfo> {
                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
                      child: Expanded(
                        child: Row(
-                         mainAxisAlignment: MainAxisAlignment.start,
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                          children: [
-                           Padding(
-                             padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
-                             child: Container(
-                               child:  CircleAvatar(
-                                 radius: 25,
-                                 backgroundColor: Colors.grey,
-                                 backgroundImage: NetworkImage(writerProfileImage!),
-                               ),
-                             ),
-                           ),
-                           Column(
+                           Row(
                              mainAxisAlignment: MainAxisAlignment.start,
                              children: [
-                                   Text(writer, style: TextStyle(fontSize: 17),),
-                                   Text(postDetails),
+                               Padding(
+                                 padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
+                                 child: Container(
+                                   child:  CircleAvatar(
+                                     radius: 25,
+                                     backgroundColor: Colors.grey,
+                                     backgroundImage: NetworkImage(writerProfileImage!),
+                                   ),
+                                 ),
+                               ),
+                               Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                       Text(writer, style: TextStyle(fontSize: 17), textAlign: TextAlign.start,),
+                                       Text(postDetails),
+                                 ],
+                               ),
                              ],
                            ),
                            ElevatedButton(
