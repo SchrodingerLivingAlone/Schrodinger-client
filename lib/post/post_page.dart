@@ -176,22 +176,14 @@ class _PostPageState extends State<PostPage>{
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
             ),
-            // onPressed: () async {
-            //   var postPostResponse = await PostPost(context);
-            //   if(postPostResponse.isSuccess == true){
-            //     print(postPostResponse.message);
-            //     postImages?.clear();
-            //     imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
-            //     showPostonfirmationDialog(context);
-            //   }
-            // },
             onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PostInfo(PostId: 7,),
-                ),
-              );
+              var postPostResponse = await PostPost(context);
+              if(postPostResponse.isSuccess == true){
+                print(postPostResponse.message);
+                postImages?.clear();
+                imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+                showPostonfirmationDialog(context);
+              }
             },
             child: const Text('등록',
               style: TextStyle(

@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schrodinger_client/post/post_adjust.dart';
 import 'package:schrodinger_client/post/post_comment_response.dart';
 import 'package:schrodinger_client/post/post_info_response.dart';
@@ -25,21 +26,26 @@ class PostInfo extends StatefulWidget {
 class _PostInfoState extends State<PostInfo> {
 
   String writer = ' ';
-  String writerProfileImage  = 'https://capstoneroomof.s3.ap-northeast-2.amazonaws.com/Image/kbs1.jpg3dc6ec35-e98b-4290-9609-8793c540fb05';
+  String writerProfileImage  = ' ';
   String createdTime  = ' ';
   int view = 0;
   String issue = ' ';
   String pos = ' ';
+  String dong = ' ';
   String title = ' ';
+  bool owner = false;
   String content = ' ';
   bool isScrapped = false;
   bool isLiked = false;
   var imageList = [];
   int current = 0;
   List<dynamic> comments = [];
+  final _commentController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
+  String currentProfileImage = ' ';
 
   final CarouselController _carouselController = CarouselController();
-  final _commentController = TextEditingController();
 
   Future<PostInfoResponse> getPostInfo(BuildContext context) async {
     int postId = widget.PostId;
@@ -66,23 +72,189 @@ class _PostInfoState extends State<PostInfo> {
     }
   }
 
+  Future<void> getCurrentProfile(BuildContext context) async {
+    var url = '${dotenv.env['BASE_URL']}/api/users/profile';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.get(
+          Uri.parse(url),
+          headers: {'Authorization' : 'Bearer $accessToken'}
+      );
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        CurProfileResponse curProfileResponse = CurProfileResponse.fromJson(jsonDecode(temp));
+        currentProfileImage = curProfileResponse.result['profileImageUrl'];
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
+  Future<CommentResponse> addComment(BuildContext context) async {
+    int postId = widget.PostId;
+    print(postId);
+    var url = '${dotenv.env['BASE_URL']}/api/comments/$postId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Authorization' : 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({'comment' : _commentController.text}),
+      );
+
+
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+        return CommentResponse.fromJson(jsonDecode(temp));
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
+  void likePost(BuildContext context) async {
+    int postId = widget.PostId;
+    var url = '${dotenv.env['BASE_URL']}/api/likes/$postId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization' : 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
+  void scrapPost(BuildContext context) async {
+    int postId = widget.PostId;
+    var url = '${dotenv.env['BASE_URL']}/api/scraps/$postId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization' : 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
+  void deleteComment(BuildContext context, int commentId) async {
+    var url = '${dotenv.env['BASE_URL']}/api/comments/$commentId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization' : 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
+
+  void deletePost(BuildContext context, int postId) async {
+    var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/$postId';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization' : 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      var temp = utf8.decode(response.bodyBytes);
+      print(temp);
+      if (response.statusCode == 200) {
+        print('Response Body: ${temp}');
+      } else {
+        print(response.statusCode);
+        throw Exception('Failed to load data1: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data2: $e');
+    }
+  }
 
   void initPost() async {
     var postInfo = await getPostInfo(context);
+    await getCurrentProfile(context);
     setState(()  {
       //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
-      writer = writer;
-      writerProfileImage = writerProfileImage;
+      writer = postInfo.result['nickname'];
+      int writerLen = writer.length;
+      for(int i = 30; i >= writerLen; i--)
+        writer += ' ';
+      writerProfileImage = postInfo.result['profileImage'];
       createdTime = postInfo.result['calculatedTime'];
       view = postInfo.result['view'];
       issue = postInfo.result['neighborhoodPostCategory'];
-      pos = postInfo.result['dong'];
+      dong = postInfo.result['dong'];
+      pos = postInfo.result['place'];
       title = postInfo.result['title'];
       imageList = postInfo.result['imageUrls'];
       content = postInfo.result['content'];
       isScrapped = postInfo.result['scrapped'];
       isLiked = postInfo.result['liked'];
       comments = postInfo.result['comments'];
+      owner = postInfo.result['owner'];
     });
   }
 
@@ -98,35 +270,114 @@ class _PostInfoState extends State<PostInfo> {
     for (var comment in comments) {
       tiles.add(Row(
         children: [
-          const Padding(
+           Padding(
             padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(comment['profile_image']),
+            ),
           ),
-          const Expanded(
+           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('nickname', style: TextStyle(fontSize: 10),),
+                    Text(comment['nickname'], style: TextStyle(fontSize: 10),),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('comment', style: TextStyle(fontSize: 15),),
+                    Text(comment['comment'], style: TextStyle(fontSize: 15),),
                   ],
                 ),
               ],
             ),
           ),
-          TextButton(onPressed: (){}, child: const Text('삭제')),
+          TextButton(
+              onPressed: (){
+                if(comment['owner']){
+                  checkDeleteComment(context, comment['id']);
+                }else{
+                  showNotCommentOwner(context);
+                }
+              },
+              child: const Text('삭제')
+          ),
         ],
 
       ));
     }
     return tiles;
+  }
+
+  Future<bool?> checkDeleteComment(BuildContext context, int commentId) async {
+    return showDialog<bool?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('댓글을 삭제하시겠습니까?', style: TextStyle(fontSize: 15),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              deleteComment(context, commentId);
+              initPost();
+              Navigator.of(context).pop(false);
+              },
+            child: const Text('확인', style: TextStyle(color: Colors.blue),),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소', style: TextStyle(color: Colors.blue),),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool?> showNotCommentOwner(BuildContext context) async {
+    return showDialog<bool?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('본인이 작성한 댓글이 아닙니다.', style: TextStyle(fontSize: 15),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('확인', style: TextStyle(color: Colors.blue),),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool?> showNotPostOwner(BuildContext context) async {
+    return showDialog<bool?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('본인이 작성한 글이 아닙니다.', style: TextStyle(fontSize: 15),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('확인', style: TextStyle(color: Colors.blue),),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool?> deleteSuccess(BuildContext context) async {
+    return showDialog<bool?>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('성공적으로 글을 삭제하였습니다.', style: TextStyle(fontSize: 15),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () { Navigator.of(context).pop(true); Navigator.of(context).pop(true);},
+            child: const Text('확인', style: TextStyle(color: Colors.blue),),
+          ),
+        ],
+      ),
+    );
   }
 
 
@@ -215,10 +466,10 @@ class _PostInfoState extends State<PostInfo> {
                 context: context,
                 position: const RelativeRect.fromLTRB(1000, 0, 0, 0),
                 items: [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('게시글 수정'),
-                  ),
+                  // const PopupMenuItem(
+                  //   value: 'edit',
+                  //   child: Text('게시글 수정'),
+                  // ),
                   const PopupMenuItem(
                     value: 'delete',
                     child: Text('게시글 삭제'),
@@ -226,14 +477,18 @@ class _PostInfoState extends State<PostInfo> {
                 ],
                 elevation: 8.0,
               ).then((value) {
-                // 사용자가 선택한 항목에 따라 처리합니다.
-                if (value == 'edit') {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PostAdjustPage()));
-                  print('게시글 수정');
-                } else if (value == 'delete') {
-                  // 게시글 삭제 api호출.
-
-                  print('게시글 삭제');
+                if(owner){
+                  if (value == 'delete') {
+                    deletePost(context, widget.PostId);
+                    deleteSuccess(context);
+                  }
+                  // else if (value == 'edit') {
+                  //   Navigator.push(context, MaterialPageRoute(builder: (context) => PostAdjustPage(postId : widget.PostId)));
+                  //   initPost();
+                  //   print('게시글 수정');
+                  // }
+                }else{
+                  showNotPostOwner(context);
                 }
               });
             },
@@ -248,22 +503,25 @@ class _PostInfoState extends State<PostInfo> {
               child: Column(
                 children: [
                    Padding(
-                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
                      child: Row(
+                       mainAxisAlignment: MainAxisAlignment.start,
                        children: [
                          Padding(
-                           padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+                           padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
                            child: Container(
                              child:  CircleAvatar(
+                               radius: 25,
                                backgroundColor: Colors.grey,
                                backgroundImage: NetworkImage(writerProfileImage!),
                              ),
                            ),
                          ),
                          Column(
+                           mainAxisAlignment: MainAxisAlignment.start,
                            children: [
-                             Text(writer, style: TextStyle(fontSize: 20),),
-                             Text('$createdTime | 조회 $view | $pos '),
+                                 Text(writer, style: TextStyle(fontSize: 17),),
+                                 Text('$createdTime | 조회 $view | $dong '),
                            ],
                          ),
                          const SizedBox(
@@ -308,19 +566,21 @@ class _PostInfoState extends State<PostInfo> {
                     padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                     child: Column(
                           children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Icon(Icons.pin_drop_outlined, color: Colors.deepPurple, size: 20,),
-                                        Text(pos, style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
-                                      ],
+                              Row(
+                                  children: [
+                                    Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Icon(Icons.pin_drop_outlined, color: Colors.deepPurple, size: 20,),
+                                          Text(pos, style: TextStyle(color: Colors.deepPurple, fontSize: 15),),
+                                        ],
+                                      ),
                                     ),
                                   ),
+                                  ],
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -330,34 +590,37 @@ class _PostInfoState extends State<PostInfo> {
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(10.0), // 조절하고 싶은 둥근 정도
                                             ),
-                                          backgroundColor: isLiked ? Colors.blue : Colors.white,
+                                          backgroundColor: Colors.white,
                                           shadowColor: Colors.transparent,
                                         ),
                                         onPressed: (){
                                           setState(() {
+                                            likePost(context);
                                             isLiked = !isLiked;
                                           });
                                         },
-                                        child: const Text('공감하기', style: TextStyle(fontSize: 15, color:Colors.black),)
+                                        child: Icon(Icons.thumb_up, color: isLiked ? Colors.blue : Colors.grey,),
+                                        //child: const Text('공감하기', style: TextStyle(fontSize: 15, color:Colors.black),)
                                     ),
                                     ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10.0), // 조절하고 싶은 둥근 정도
                                           ),
-                                          backgroundColor: isScrapped ? Colors.orange : Colors.white,
+                                          backgroundColor: Colors.white,
                                           shadowColor: Colors.transparent,
                                         ),
                                         onPressed: (){
                                           setState(() {
-                                            isScrapped = !isScrapped; // 버튼 클릭 시 상태 변경
+                                              scrapPost(context);
+                                              isScrapped = !isScrapped; // 버튼 클릭 시 상태
+                                            // 변경
                                           });
                                         },
-                                        child: const Text('스크랩', style: TextStyle(fontSize: 15, color:Colors.black),)
+                                        child: Icon(Icons.star, color: isScrapped ? Colors.yellow : Colors.grey,),
+                                        //child: const Text('스크랩', style: TextStyle(fontSize: 15, color:Colors.black),)
                                     ),
                                   ],
-                                ),
-                              ],
                             ),
                             const Padding(
                               padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -381,26 +644,67 @@ class _PostInfoState extends State<PostInfo> {
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             child:
-              TextFormField(
-                decoration: const InputDecoration(
-                icon: Icon(Icons.person),
-                suffixIcon: Icon(Icons.star),
-                labelText: '댓글을 입력하세요.',
+              Row(
+                children: [
+                  Padding(
+                    padding : EdgeInsets.fromLTRB(0, 0, 8.0, 0),
+                    child : CircleAvatar(
+                      backgroundImage:  NetworkImage(currentProfileImage),
+                    ),
                   ),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          await addComment(context);
+                          _commentController.clear();
+                          _focusNode.unfocus();
+                          initPost();
+                        },
+                        icon: Icon(Icons.send),),
+                      labelText: '댓글을 입력하세요.',
+                        
+                      ),
+                      controller: _commentController,
+                      focusNode: _focusNode,
+                    ),
+                  ),
+                ],
               ),
           ),
       ],
     ),
     );
-
-
   }
 }
 
 class Comment {
-  final String username;
-  final String text;
-  final String commenterProfile;
+  final String nickname;
+  final String comment;
+  final String profile_image;
+  final int id;
+  final bool owner;
 
-  Comment({required this.commenterProfile, required this.username, required this.text});
+  Comment({required this.nickname, required this.comment, required this.profile_image, required this.owner, required this.id});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'profile_image': profile_image,
+      'nickname': nickname,
+      'comment': comment,
+      'owner' : owner,
+      'id' : id,
+    };
+  }
+
+  factory Comment.fromJson(Map<String, dynamic> json) {
+    return Comment(
+        profile_image: json["profile_image"],
+        nickname: json["nickname"],
+        comment: json["comment"],
+        owner: json["owner"],
+        id : json["id"]
+    );
+  }
 }
