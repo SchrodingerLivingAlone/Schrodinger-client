@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:schrodinger_client/account/accountbank.dart';
 import 'package:schrodinger_client/diary/diary_page.dart';
 import 'package:schrodinger_client/mypage/my_page.dart';
-import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/town_page.dart';
+
+import 'home/mainPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final List<Widget> bottomTabWidgets = <Widget>[const TownPage(), const AccountBank(), const TownPage(), const DiaryPage(), const MyPage()];
+    final List<Widget> bottomTabWidgets = <Widget>[const MainPage(), const AccountBank(), const TownPage(), const DiaryPage(), const MyPage()];
     return Scaffold(
           body: SafeArea(
             child: bottomTabWidgets.elementAt(_selectedIndex),

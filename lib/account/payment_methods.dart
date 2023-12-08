@@ -112,7 +112,7 @@ class ImageCardButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/spendingRecords',
-            arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'type': '카드', 'year': year, 'month': month, 'day': day}
+            arguments: {'expense': expense, 'selectedButtonIndex': selectedButtonIndex, 'memo': memo, 'type': '카드', 'year': year, 'month': month, 'day': day}
         );
       },
       child: Container(
@@ -151,7 +151,7 @@ class ImageCashButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/spendingRecords',
-            arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'type': '현금', 'year': year, 'month': month, 'day': day}
+            arguments: {'expense': expense, 'selectedButtonIndex': selectedButtonIndex, 'memo': memo, 'type': '현금', 'year': year, 'month': month, 'day': day}
         );
       },
       child: Container(

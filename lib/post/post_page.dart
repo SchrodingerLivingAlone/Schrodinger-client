@@ -90,25 +90,25 @@ class _PostPageState extends State<PostPage>{
     String? accessToken = prefs.getString('accessToken');
     var url = Uri.parse('${dotenv.env['BASE_URL']}/api/neighborhood/posts');
 
-    String category;
+    int category;
     switch(_issue){
       case Issue.RESTAURANT:
-        category = '0';
+        category = 0;
         break;
       case Issue.FACILITY:
-        category = '1';
+        category = 1;
         break;
       case Issue.SHARE_INFORMATION:
-        category = '2';
+        category = 2;
         break;
       case Issue.TOGETHER:
-        category = '3';
+        category = 3;
         break;
       case Issue.COMMUNICATION:
-        category = '4';
+        category = 4;
         break;
       case Issue.ETC:
-        category = '5';
+        category = 5;
         break;
     }
 
@@ -118,6 +118,7 @@ class _PostPageState extends State<PostPage>{
 
 
     request.fields['category'] = category.toString();
+    print(category.toString());
     request.fields['title'] = _titleController.text;
     request.fields['content'] = _contentController.text;
     request.fields['place'] = searchedLocation;
@@ -176,22 +177,14 @@ class _PostPageState extends State<PostPage>{
               backgroundColor: Colors.white,
               shadowColor: Colors.transparent,
             ),
-            // onPressed: () async {
-            //   var postPostResponse = await PostPost(context);
-            //   if(postPostResponse.isSuccess == true){
-            //     print(postPostResponse.message);
-            //     postImages?.clear();
-            //     imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
-            //     showPostonfirmationDialog(context);
-            //   }
-            // },
             onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PostInfo(PostId: 7,),
-                ),
-              );
+              var postPostResponse = await PostPost(context);
+              if(postPostResponse.isSuccess == true){
+                print(postPostResponse.message);
+                postImages?.clear();
+                imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
+                showPostonfirmationDialog(context);
+              }
             },
             child: const Text('등록',
               style: TextStyle(
@@ -253,7 +246,7 @@ class _PostPageState extends State<PostPage>{
               children: [
                 ElevatedButton(onPressed: (){
                   selectButton('Button 4');
-                  _issue = Issue.ETC;
+                  _issue = Issue.TOGETHER;
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: getButtonColor('Button 4'),
@@ -263,7 +256,7 @@ class _PostPageState extends State<PostPage>{
                 ),
                 ElevatedButton(onPressed: (){
                   selectButton('Button 5');
-                  _issue = Issue.TOGETHER;
+                  _issue = Issue.COMMUNICATION;
                 },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
