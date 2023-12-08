@@ -11,8 +11,6 @@ class HomeInfoPage extends StatefulWidget {
 }
 
 class _HomeInfoPageState extends State<HomeInfoPage> {
-  int sortIndex = 0;
-  final sortCategory = ['카테고리', '최신순', '인기순'];
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +54,12 @@ class _HomeInfoPageState extends State<HomeInfoPage> {
                 ),
               ],
             ),
-            const ListItem(title: '맛집'),
-            const ListItem(title: '시설'),
-            const ListItem(title: '할일'),
-            const ListItem(title: '같이 해요'),
-            const ListItem(title: '질문 요청'),
-            const ListItem(title: '공공 정보'),
+            const ListItem(title: '오늘의 HOT 게시글 🔥'),
+            // const ListItem(title: '시설'),
+            // const ListItem(title: '할일'),
+            // const ListItem(title: '같이 해요'),
+            // const ListItem(title: '질문 요청'),
+            // const ListItem(title: '공공 정보'),
           ],
         );
   }

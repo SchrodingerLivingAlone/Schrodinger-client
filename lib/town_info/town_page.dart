@@ -21,7 +21,6 @@ class TownPage extends StatefulWidget {
 }
 
 class _TownPageState extends State<TownPage> {
-  int _selectedIndex = 0;
   bool isCompleted = false;
   String townName = '검색중...';
 
