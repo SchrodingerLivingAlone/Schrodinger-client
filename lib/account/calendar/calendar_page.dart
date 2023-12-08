@@ -273,8 +273,9 @@ Future<void> getCalendarAllData(int day, int month, int year, String accessToken
 
 class Event {
   String title;
+  Color color;
 
-  Event(this.title);
+  Event(this.title, this.color);
 }
 
 class TableCalendarScreen extends StatefulWidget {
@@ -355,7 +356,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
 
       for (int i = 0; i < list.length; i++) {
         if (list[i] == true) {
-          Map<DateTime, List<Event>> map = {DateTime.utc(selectedDay.year, selectedDay.month, i) : [ Event('title') ]};
+          Map<DateTime, List<Event>> map = {DateTime.utc(selectedDay.year, selectedDay.month, i) : [ Event('title', Colors.deepPurple) ]};
           events.addAll(map);
         }
       }
