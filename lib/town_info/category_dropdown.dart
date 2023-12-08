@@ -11,7 +11,7 @@ class CategoryDropdown extends StatefulWidget {
 
 class _CategoryDropdownState extends State<CategoryDropdown> {
   int index = 0;
-  final sortCategory = ['카테고리', '최신순', '인기순'];
+  final sortCategory = ['최신순', '인기순', '조회순'];
 
   @override
   Widget build(BuildContext context) {

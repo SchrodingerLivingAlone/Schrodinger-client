@@ -6,7 +6,7 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/facility_info.dart';
-import 'package:schrodinger_client/town_info/public_info.dart';
+import 'package:schrodinger_client/town_info/etc_info.dart';
 import 'package:schrodinger_client/town_info/question_info.dart';
 import 'package:schrodinger_client/town_info/share_info.dart';
 import 'package:schrodinger_client/town_info/together_info.dart';
