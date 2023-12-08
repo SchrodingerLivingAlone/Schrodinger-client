@@ -10,7 +10,7 @@ var month = '';
 var day = 0;
 var year = 0;
 var accessToken = '';
-List<bool?> dotList = List.empty();
+List<bool> dotList = List.empty();
 List<TransactionsResult> tList = List.empty();
 
 class CalendarPage extends StatefulWidget {
@@ -300,7 +300,7 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
   }
 
   DateTime focusedDay = DateTime.now();
-  List<bool?> list = dotList;
+  List<bool> list = dotList;
 
   Map<DateTime, List<Event>> events = {};
 
@@ -348,8 +348,9 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
 
   void setDotDate() {
     setState(() {
-      events.clear();
-      
+      list = dotList;
+      events = {};
+
       for (int i = 0; i < list.length; i++) {
         if (list[i] == true) {
           Map<DateTime, List<Event>> map = {DateTime.utc(selectedDay.year, selectedDay.month, i) : [ Event('title') ]};
@@ -359,89 +360,6 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
     });
   }
 }
-
-// class AccountItem extends StatefulWidget {
-//   final int categoryNum;
-//   final String memo;
-//   final int price;
-//
-//   const AccountItem({
-//     Key? key,
-//     required this.categoryNum,
-//     required this.memo,
-//     required this.price,
-//   }) : super(key: key);
-//
-//   @override
-//   State<AccountItem> createState() => _AccountItemState();
-// }
-//
-// class _AccountItemState extends State<AccountItem> {
-//   String categoryText = '';
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     switch (widget.categoryNum) {
-//       case 0: {
-//         categoryText = '식비';
-//         break;
-//       }
-//       case 1: {
-//         categoryText = '카페/간식';
-//         break;
-//       }
-//       case 2: {
-//         categoryText = '교통';
-//         break;
-//       }
-//       case 3: {
-//         categoryText = '술/유흥';
-//         break;
-//       }
-//       case 4: {
-//         categoryText = '기타(지출)';
-//         break;
-//       }
-//       case 5: {
-//         categoryText = '월급';
-//         break;
-//       }
-//       case 6: {
-//         categoryText = '용돈';
-//         break;
-//       }
-//       case 7: {
-//         categoryText = '이월';
-//         break;
-//       }
-//       case 8: {
-//         categoryText = '자산인출';
-//         break;
-//       }
-//       case 9: {
-//         categoryText = '기타(수입)';
-//         break;
-//       }
-//       default:
-//         categoryText = '알 수 없음';
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         Container(
-//
-//         ),
-//         Text(categoryText),
-//         Text(widget.memo),
-//         Text('${widget.price}원')
-//       ],
-//     );
-//   }
-// }
 
 class CalendarDotResponse {
   final bool isSuccess;
