@@ -42,6 +42,7 @@ class _PostInfoState extends State<PostInfo> {
   List<dynamic> comments = [];
   final _commentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  String postDetails = ' ';
 
   String currentProfileImage = ' ';
 
@@ -240,7 +241,7 @@ class _PostInfoState extends State<PostInfo> {
       //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
       writer = postInfo.result['nickname'];
       int writerLen = writer.length;
-      for(int i = 30; i >= writerLen; i--)
+      for(int i = 45; i >= writerLen; i--)
         writer += ' ';
       writerProfileImage = postInfo.result['profileImage'];
       createdTime = postInfo.result['calculatedTime'];
@@ -255,6 +256,10 @@ class _PostInfoState extends State<PostInfo> {
       isLiked = postInfo.result['liked'];
       comments = postInfo.result['comments'];
       owner = postInfo.result['owner'];
+      postDetails = '$createdTime | 조회 $view | $dong ';
+      int postDetailsLen = postDetails.length;
+      for(int i = 45; i >= postDetailsLen; i--)
+        postDetails += ' ';
     });
   }
 
@@ -504,39 +509,38 @@ class _PostInfoState extends State<PostInfo> {
                 children: [
                    Padding(
                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
-                     child: Row(
-                       mainAxisAlignment: MainAxisAlignment.start,
-                       children: [
-                         Padding(
-                           padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
-                           child: Container(
-                             child:  CircleAvatar(
-                               radius: 25,
-                               backgroundColor: Colors.grey,
-                               backgroundImage: NetworkImage(writerProfileImage!),
+                     child: Expanded(
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                         children: [
+                           Padding(
+                             padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
+                             child: Container(
+                               child:  CircleAvatar(
+                                 radius: 25,
+                                 backgroundColor: Colors.grey,
+                                 backgroundImage: NetworkImage(writerProfileImage!),
+                               ),
                              ),
                            ),
-                         ),
-                         Column(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                                 Text(writer, style: TextStyle(fontSize: 17),),
-                                 Text('$createdTime | 조회 $view | $dong '),
-                           ],
-                         ),
-                         const SizedBox(
-                           width: 80,
-                         ),
-                         ElevatedButton(
-                             onPressed: (){},
-                             style: ElevatedButton.styleFrom(
-                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.orange,
-                                 minimumSize: const Size(30, 30),
-                                 elevation: 10
-                             ),
-                             child:  Text(issue, style: TextStyle(fontSize: 13),)
-                         ),
-                       ],
+                           Column(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             children: [
+                                   Text(writer, style: TextStyle(fontSize: 17),),
+                                   Text(postDetails),
+                             ],
+                           ),
+                           ElevatedButton(
+                               onPressed: (){},
+                               style: ElevatedButton.styleFrom(
+                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.orange,
+                                   minimumSize: const Size(30, 30),
+                                   elevation: 10
+                               ),
+                               child:  Text(issue, style: TextStyle(fontSize: 13),)
+                           ),
+                         ],
+                       ),
                      ),
                    ),
                   const Padding(
