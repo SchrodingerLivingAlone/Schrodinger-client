@@ -189,13 +189,11 @@ class _MainPageState extends State<MainPage> {
                     SizedBox(
                       height: 5,
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: hottestPlace.map((data) {
-                            return buildHotPlace(context, data);
-                          }).toList(),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: hottestPlace.map((data) {
+                          return buildHotPlace(context, data);
+                        }).toList(),
                     ),
                   ],
                 ),
