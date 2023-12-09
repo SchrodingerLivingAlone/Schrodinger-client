@@ -92,7 +92,7 @@ class _CommentPageState extends State<CommentPage> {
   Future<void> getLikesPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/comments/posts';
+    String url = '${dotenv.env['BASE_URL']}/api/scraps';
 
     final response = await http.get(
         Uri.parse(url),
