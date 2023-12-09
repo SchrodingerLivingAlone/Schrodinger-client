@@ -23,7 +23,7 @@ class _AccountBankState extends State<AccountBank> {
 
   final _monthList = List.generate(12, (i)=>'${i+1}');//월 선택하기
 
-  var _selectedmonthValue = '11';//맨처음에는 그냥 11월로 나오게 설정
+  var _selectedmonthValue = '12';//맨처음에는 그냥 11월로 나오게 설정
 
 
   @override
