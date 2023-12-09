@@ -9,30 +9,30 @@ import 'package:http/http.dart' as http;
 import '../post/post_info.dart';
 import 'category_dropdown.dart';
 
-class FacilityInfoPage extends StatefulWidget {
+class ShareInfoPage extends StatefulWidget {
   final int tabIndex;
 
-  const FacilityInfoPage({super.key, required this.tabIndex});
+  const ShareInfoPage({super.key, required this.tabIndex});
 
   @override
-  State<FacilityInfoPage> createState() => _FacilityInfoPageState();
+  State<ShareInfoPage> createState() => _ShareInfoPageState();
 }
 
-class _FacilityInfoPageState extends State<FacilityInfoPage> {
-  late List<TownInfo> facilityList = [];
+class _ShareInfoPageState extends State<ShareInfoPage> {
+  late List<TownInfo> shareList = [];
   int sortedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    getFacilityPost();
+    getSharePost();
   }
 
   void setSortedIndex(int index) {
     setState(() {
       sortedIndex = index;
     });
-    getFacilityPost();
+    getSharePost();
   }
 
   List<Widget> createTownListTiles(List<TownInfo> townInfoList) {
@@ -84,7 +84,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
           ),
           onTap: () async {
             await Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: town.id)));
-            getFacilityPost();
+            getSharePost();
           },
         ),
       );
@@ -98,12 +98,12 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
     return ListView(
       children: [
         CategoryDropdown(setSortedIndex: setSortedIndex),
-        ...createTownListTiles(facilityList),
+        ...createTownListTiles(shareList),
       ],
     );
   }
 
-  Future<void> getFacilityPost() async {
+  Future<void> getSharePost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=$sortedIndex&category=${widget.tabIndex}';
@@ -118,10 +118,10 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
 
     final res = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> responseResult = res['result'];
-    List<TownInfo> facilities = responseResult.map((data) => TownInfo.fromJson(data)).toList();
+    List<TownInfo> shares = responseResult.map((data) => TownInfo.fromJson(data)).toList();
 
     setState(() {
-      facilityList = facilities;
+      shareList = shares;
     });
   }
 }

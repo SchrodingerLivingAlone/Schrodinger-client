@@ -9,30 +9,30 @@ import 'package:http/http.dart' as http;
 import '../post/post_info.dart';
 import 'category_dropdown.dart';
 
-class FacilityInfoPage extends StatefulWidget {
+class QuestionInfoPage extends StatefulWidget {
   final int tabIndex;
 
-  const FacilityInfoPage({super.key, required this.tabIndex});
+  const QuestionInfoPage({super.key, required this.tabIndex});
 
   @override
-  State<FacilityInfoPage> createState() => _FacilityInfoPageState();
+  State<QuestionInfoPage> createState() => _QuestionInfoPageState();
 }
 
-class _FacilityInfoPageState extends State<FacilityInfoPage> {
-  late List<TownInfo> facilityList = [];
+class _QuestionInfoPageState extends State<QuestionInfoPage> {
+  late List<TownInfo> questionList = [];
   int sortedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    getFacilityPost();
+    getQuestionPost();
   }
 
   void setSortedIndex(int index) {
     setState(() {
       sortedIndex = index;
     });
-    getFacilityPost();
+    getQuestionPost();
   }
 
   List<Widget> createTownListTiles(List<TownInfo> townInfoList) {
@@ -84,7 +84,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
           ),
           onTap: () async {
             await Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: town.id)));
-            getFacilityPost();
+            getQuestionPost();
           },
         ),
       );
@@ -98,12 +98,12 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
     return ListView(
       children: [
         CategoryDropdown(setSortedIndex: setSortedIndex),
-        ...createTownListTiles(facilityList),
+        ...createTownListTiles(questionList),
       ],
     );
   }
 
-  Future<void> getFacilityPost() async {
+  Future<void> getQuestionPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=$sortedIndex&category=${widget.tabIndex}';
@@ -118,10 +118,10 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
 
     final res = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> responseResult = res['result'];
-    List<TownInfo> facilities = responseResult.map((data) => TownInfo.fromJson(data)).toList();
+    List<TownInfo> questions = responseResult.map((data) => TownInfo.fromJson(data)).toList();
 
     setState(() {
-      facilityList = facilities;
+      questionList = questions;
     });
   }
 }

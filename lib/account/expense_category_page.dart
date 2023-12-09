@@ -158,7 +158,6 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                         name: '기타',
                       ),
                     ),
-                    ElevatedButton(onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));}, child: const Text('temp'))
                   ],
                 ),
               ),

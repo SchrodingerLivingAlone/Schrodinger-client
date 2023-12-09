@@ -18,6 +18,7 @@ class FoodInfoPage extends StatefulWidget {
 
 class _FoodInfoPageState extends State<FoodInfoPage> {
   late List<TownInfo> foodList = [];
+  int sortedIndex = 0;
 
   @override
   void initState() {
@@ -25,70 +26,19 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
     getFoodPost();
   }
 
-  List<Widget> createFoodListTiles() {
-    List<Widget> foodTiles = [];
-
-    for (int i = 0; i < foodList.length; i++) {
-      TownInfo food = foodList[i];
-
-
-      Widget foodTile = Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: ListTile(
-          title: Text(food.title),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 5),
-              Text(food.content, style: const TextStyle(fontSize: 12)),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  Text(food.dong),
-                  const SizedBox(width: 10),
-                  Text(food.calculatedTime),
-                  const SizedBox(width: 10),
-                  Text('조회 ${food.view}'),
-                ],
-              ),
-            ],
-          ),
-          trailing: Column(
-            children: [
-              Image.network(
-                food.imageUrl,
-                width: 60,
-                height: 40,
-                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child; // 이미지 로드 완료됨
-                  } else {
-                    return const CircularProgressIndicator(); // 이미지 로드 중
-                  }
-                },
-                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                  return Image.asset('assets/default_profile.png', width: 60, height: 40,); // 오류 발생 시 기본 이미지
-                },
-              ),
-              Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: const TextStyle(fontSize: 11)),
-            ],
-          ),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: food.id)));
-          },
-        ),
-      );
-      foodTiles.add(foodTile);
-    }
-    return foodTiles;
+  void setSortedIndex(int index) {
+    setState(() {
+      sortedIndex = index;
+    });
+    getFoodPost();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const CategoryDropdown(),
-        ...createFoodListTiles(),
+        CategoryDropdown(setSortedIndex: setSortedIndex),
+        ...createTownListTiles(foodList),
       ]
     );
   }
@@ -96,7 +46,7 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
   Future<void> getFoodPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=$sortedIndex&category=${widget.tabIndex}';
 
     final response = await http.get(
         Uri.parse(url),
@@ -113,6 +63,64 @@ class _FoodInfoPageState extends State<FoodInfoPage> {
     setState(() {
       foodList = foods;
     });
+  }
+
+  List<Widget> createTownListTiles(List<TownInfo> townInfoList) {
+    List<Widget> townTiles = [];
+
+    for (int i = 0; i < townInfoList.length; i++) {
+      TownInfo town = townInfoList[i];
+
+      Widget townTile = Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        child: ListTile(
+          title: Text(town.title),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 5),
+              Text(town.content, style: TextStyle(fontSize: 12)),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  Text(town.dong),
+                  const SizedBox(width: 10),
+                  Text(town.calculatedTime),
+                  const SizedBox(width: 10),
+                  Text('조회 ${town.view}'),
+                ],
+              ),
+            ],
+          ),
+          trailing: Column(
+            children: [
+              Image.network(
+                town.imageUrl,
+                width: 60,
+                height: 40,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child; // 이미지 로드 완료됨
+                  } else {
+                    return const CircularProgressIndicator(); // 이미지 로드 중
+                  }
+                },
+                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Image.asset('assets/default_profile.png', width: 60, height: 40,); // 오류 발생 시 기본 이미지
+                },
+              ),
+              Text('댓글 ${town.commentCount} 공감 ${town.likeCount}', style: TextStyle(fontSize: 11)),
+            ],
+          ),
+          onTap: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: town.id)));
+            getFoodPost();
+          },
+        ),
+      );
+      townTiles.add(townTile);
+    }
+    return townTiles;
   }
 }
 

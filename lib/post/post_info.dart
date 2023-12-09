@@ -42,6 +42,7 @@ class _PostInfoState extends State<PostInfo> {
   List<dynamic> comments = [];
   final _commentController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  String postDetails = ' ';
 
   String currentProfileImage = ' ';
 
@@ -49,7 +50,6 @@ class _PostInfoState extends State<PostInfo> {
 
   Future<PostInfoResponse> getPostInfo(BuildContext context) async {
     int postId = widget.PostId;
-    print(postId);
     var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/$postId';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
@@ -240,8 +240,8 @@ class _PostInfoState extends State<PostInfo> {
       //ToDO -> 작성자 닉네임, 작성자 프로필이미지, 공유된 장소 추가로 api받기
       writer = postInfo.result['nickname'];
       int writerLen = writer.length;
-      for(int i = 30; i >= writerLen; i--)
-        writer += ' ';
+      // for(int i = 25; i >= writerLen; i--)
+      //   writer += ' ';
       writerProfileImage = postInfo.result['profileImage'];
       createdTime = postInfo.result['calculatedTime'];
       view = postInfo.result['view'];
@@ -255,6 +255,10 @@ class _PostInfoState extends State<PostInfo> {
       isLiked = postInfo.result['liked'];
       comments = postInfo.result['comments'];
       owner = postInfo.result['owner'];
+      postDetails = '$createdTime | 조회 $view | $dong ';
+      int postDetailsLen = postDetails.length;
+      // for(int i = 25; i >= postDetailsLen; i--)
+      //   postDetails += ' ';
     });
   }
 
@@ -466,10 +470,6 @@ class _PostInfoState extends State<PostInfo> {
                 context: context,
                 position: const RelativeRect.fromLTRB(1000, 0, 0, 0),
                 items: [
-                  // const PopupMenuItem(
-                  //   value: 'edit',
-                  //   child: Text('게시글 수정'),
-                  // ),
                   const PopupMenuItem(
                     value: 'delete',
                     child: Text('게시글 삭제'),
@@ -482,11 +482,6 @@ class _PostInfoState extends State<PostInfo> {
                     deletePost(context, widget.PostId);
                     deleteSuccess(context);
                   }
-                  // else if (value == 'edit') {
-                  //   Navigator.push(context, MaterialPageRoute(builder: (context) => PostAdjustPage(postId : widget.PostId)));
-                  //   initPost();
-                  //   print('게시글 수정');
-                  // }
                 }else{
                   showNotPostOwner(context);
                 }
@@ -501,31 +496,33 @@ class _PostInfoState extends State<PostInfo> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                    Padding(
-                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+                     padding: const EdgeInsets.fromLTRB(10.0, 25.0, 15.0, 10.0),
                      child: Row(
-                       mainAxisAlignment: MainAxisAlignment.start,
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
-                         Padding(
-                           padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
-                           child: Container(
-                             child:  CircleAvatar(
-                               radius: 25,
-                               backgroundColor: Colors.grey,
-                               backgroundImage: NetworkImage(writerProfileImage!),
-                             ),
-                           ),
-                         ),
-                         Column(
+                         Row(
                            mainAxisAlignment: MainAxisAlignment.start,
                            children: [
-                                 Text(writer, style: TextStyle(fontSize: 17),),
-                                 Text('$createdTime | 조회 $view | $dong '),
+                             Padding(
+                               padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
+                               child: CircleAvatar(
+                                 radius: 25,
+                                 backgroundColor: Colors.grey,
+                                 backgroundImage: NetworkImage(writerProfileImage!),
+                               ),
+                             ),
+                             Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+                                     Text(writer, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.start),
+                                     SizedBox(height: 5),
+                                     Text(postDetails),
+                               ],
+                             ),
                            ],
-                         ),
-                         const SizedBox(
-                           width: 80,
                          ),
                          ElevatedButton(
                              onPressed: (){},
@@ -539,18 +536,14 @@ class _PostInfoState extends State<PostInfo> {
                        ],
                      ),
                    ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                    child: SizedBox(width: 500,
-                        child: Divider(color: Colors.grey, thickness: 2.0)),
+                  const Divider(color: Colors.grey, thickness: 0.3),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30.0, 10.0, 15.0, 0.0),
+                    child: Text(title, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                    child: Container(child:  Text(title, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 2.0),
-                    child: Container(child:  Text(content, style: TextStyle(fontSize: 20),)),
+                    padding: const EdgeInsets.fromLTRB(30.0, 20.0, 15.0, 2.0),
+                    child: Text(content, style: const TextStyle(fontSize: 20, height: 1.7)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),

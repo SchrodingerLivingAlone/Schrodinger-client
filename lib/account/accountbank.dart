@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:math' as math;
 import 'package:http/http.dart' as http;
+import 'package:schrodinger_client/account/calendar/calendar_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -22,7 +23,7 @@ class _AccountBankState extends State<AccountBank> {
 
   final _monthList = List.generate(12, (i)=>'${i+1}');//월 선택하기
 
-  var _selectedmonthValue = '11';//맨처음에는 그냥 11월로 나오게 설정
+  var _selectedmonthValue = '12';//맨처음에는 그냥 11월로 나오게 설정
 
 
   @override
@@ -46,7 +47,20 @@ class _AccountBankState extends State<AccountBank> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('가계부')),
+        flexibleSpace: const Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              '가계부',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(onPressed: (){  //+버튼생성
             showDialog(
@@ -76,7 +90,12 @@ class _AccountBankState extends State<AccountBank> {
               },
             );
           },icon: const Icon(Icons.add)),
-
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));
+              },
+              icon: Icon(Icons.calendar_month)
+          )
         ],
       ),
 
