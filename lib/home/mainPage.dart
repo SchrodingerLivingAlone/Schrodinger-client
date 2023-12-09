@@ -29,9 +29,6 @@ class _MainPageState extends State<MainPage> {
 
   void initHome() async {
     await getHotPlaces();
-    setState(()  {
-
-    });
   }
 
   //인기글 Api 통신 함수
@@ -55,6 +52,7 @@ class _MainPageState extends State<MainPage> {
 
     setState(() {
       hottestPlace = hotplaces.sublist(0, 3);
+      print(hottestPlace);
     });
   }
 
@@ -62,15 +60,13 @@ class _MainPageState extends State<MainPage> {
   Widget buildHotPlace(BuildContext context, TownInfo hotplace) {
     return InkWell(
       onTap: () async {
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => PostInfo(PostId: hotplace.id),
           ),
         );
-        setState(() {
-          initHome();
-        });
+        getHotPlaces();
       },
       child: Container(
         width: 130,
