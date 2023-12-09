@@ -536,7 +536,7 @@ class _PostInfoState extends State<PostInfo> {
                        ],
                      ),
                    ),
-                  const Divider(color: Colors.grey, thickness: 0.7),
+                  const Divider(color: Colors.grey, thickness: 0.3),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(30.0, 10.0, 15.0, 0.0),
                     child: Text(title, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
