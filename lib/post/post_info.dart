@@ -471,10 +471,6 @@ class _PostInfoState extends State<PostInfo> {
                 context: context,
                 position: const RelativeRect.fromLTRB(1000, 0, 0, 0),
                 items: [
-                  // const PopupMenuItem(
-                  //   value: 'edit',
-                  //   child: Text('게시글 수정'),
-                  // ),
                   const PopupMenuItem(
                     value: 'delete',
                     child: Text('게시글 삭제'),
@@ -487,11 +483,6 @@ class _PostInfoState extends State<PostInfo> {
                     deletePost(context, widget.PostId);
                     deleteSuccess(context);
                   }
-                  // else if (value == 'edit') {
-                  //   Navigator.push(context, MaterialPageRoute(builder: (context) => PostAdjustPage(postId : widget.PostId)));
-                  //   initPost();
-                  //   print('게시글 수정');
-                  // }
                 }else{
                   showNotPostOwner(context);
                 }
@@ -509,43 +500,41 @@ class _PostInfoState extends State<PostInfo> {
                 children: [
                    Padding(
                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
-                     child: Expanded(
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Row(
-                             mainAxisAlignment: MainAxisAlignment.start,
-                             children: [
-                               Padding(
-                                 padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
-                                 child: Container(
-                                   child:  CircleAvatar(
-                                     radius: 25,
-                                     backgroundColor: Colors.grey,
-                                     backgroundImage: NetworkImage(writerProfileImage!),
-                                   ),
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.start,
+                           children: [
+                             Padding(
+                               padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
+                               child: Container(
+                                 child:  CircleAvatar(
+                                   radius: 25,
+                                   backgroundColor: Colors.grey,
+                                   backgroundImage: NetworkImage(writerProfileImage!),
                                  ),
                                ),
-                               Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: [
-                                       Text(writer, style: TextStyle(fontSize: 17), textAlign: TextAlign.start,),
-                                       Text(postDetails),
-                                 ],
-                               ),
-                             ],
-                           ),
-                           ElevatedButton(
-                               onPressed: (){},
-                               style: ElevatedButton.styleFrom(
-                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.orange,
-                                   minimumSize: const Size(30, 30),
-                                   elevation: 10
-                               ),
-                               child:  Text(issue, style: TextStyle(fontSize: 13),)
-                           ),
-                         ],
-                       ),
+                             ),
+                             Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+                                     Text(writer, style: TextStyle(fontSize: 17), textAlign: TextAlign.start,),
+                                     Text(postDetails),
+                               ],
+                             ),
+                           ],
+                         ),
+                         ElevatedButton(
+                             onPressed: (){},
+                             style: ElevatedButton.styleFrom(
+                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), backgroundColor: Colors.orange,
+                                 minimumSize: const Size(30, 30),
+                                 elevation: 10
+                             ),
+                             child:  Text(issue, style: TextStyle(fontSize: 13),)
+                         ),
+                       ],
                      ),
                    ),
                   const Padding(
