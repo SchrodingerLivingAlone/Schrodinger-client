@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/post/post_info.dart';
-import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/style.dart';
-import 'package:schrodinger_client/home/hotplace.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,9 +29,6 @@ class _MainPageState extends State<MainPage> {
 
   void initHome() async {
     await getHotPlaces();
-    setState(()  {
-
-    });
   }
 
   //인기글 Api 통신 함수
@@ -57,6 +52,7 @@ class _MainPageState extends State<MainPage> {
 
     setState(() {
       hottestPlace = hotplaces.sublist(0, 3);
+      print(hottestPlace);
     });
   }
 
@@ -64,15 +60,13 @@ class _MainPageState extends State<MainPage> {
   Widget buildHotPlace(BuildContext context, TownInfo hotplace) {
     return InkWell(
       onTap: () async {
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => PostInfo(PostId: hotplace.id),
           ),
         );
-        setState(() {
-          initHome();
-        });
+        getHotPlaces();
       },
       child: Container(
         width: 130,
