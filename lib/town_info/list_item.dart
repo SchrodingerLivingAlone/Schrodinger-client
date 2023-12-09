@@ -72,8 +72,9 @@ class _ListItemState extends State<ListItem> {
               Text('댓글 ${town.commentCount} 공감 ${town.likeCount}', style: TextStyle(fontSize: 11)),
             ],
           ),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: town.id)));
+          onTap: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: town.id)));
+            getPost();
           },
         ),
       );
@@ -123,6 +124,7 @@ class _ListItemState extends State<ListItem> {
     setState(() {
       postList = posts;
     });
+
   }
 }
 
