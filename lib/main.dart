@@ -28,6 +28,7 @@ import 'package:schrodinger_client/town_info/town_search.dart';
 
 import 'mypage/Comment_Page.dart';
 import 'mypage/Like_page.dart';
+import 'mypage/mypage_town_auth.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
         '/WrittenPage': (context) => const WrittenPage(),
         '/LikePage': (context) => const LikePage(),
         '/CommentPage': (context) => const CommentPage(),
+        '/Mypagetownauth' : (context) => const Mypagetownauth(),
       },
       home: const Splash(),
     );

@@ -165,7 +165,9 @@ class _MyPageState extends State<MyPage> {
               child: Icon(Icons.room),
             ),
             title: const Text('동네 인증'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/Mypagetownauth');
+            },
           ),
         ],
       ),
