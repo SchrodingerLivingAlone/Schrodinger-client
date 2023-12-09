@@ -92,83 +92,86 @@ class _MainPageState extends State<MainPage> {
         );
         getHotPlaces();
       },
-      child: Container(
-        width: 130,
-        height: 140,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 3,
-              offset: const Offset(0, 2), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                    image: NetworkImage(hotplace.imageUrl),
-                    fit: BoxFit.cover,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8, top: 5, bottom: 10),
+        child: Container(
+          width: 130,
+          height: 140,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 3,
+                offset: const Offset(0, 2), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    image: DecorationImage(
+                      image: NetworkImage(hotplace.imageUrl),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                hotplace.title,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  hotplace.title,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            const SizedBox(height: 5.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.comment,
-                  size: 16.0,
-                  color: Colors.grey,
-                ),
-                const SizedBox(width: 5.0),
-                Text(
-                  '${hotplace.commentCount}개 댓글',
-                  style: const TextStyle(
+              const SizedBox(height: 5.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.comment,
+                    size: 16.0,
                     color: Colors.grey,
-                    fontSize: 12.0,
                   ),
-                ),
-                const SizedBox(width: 15.0),
-                const Icon(
-                  Icons.remove_red_eye,
-                  size: 16.0,
-                  color: Colors.grey,
-                ),
-                const SizedBox(width: 5.0),
-                Text(
-                  '${hotplace.view}',
-                  style: const TextStyle(
+                  const SizedBox(width: 5.0),
+                  Text(
+                    '${hotplace.commentCount}개 댓글',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                  const SizedBox(width: 15.0),
+                  const Icon(
+                    Icons.remove_red_eye,
+                    size: 16.0,
                     color: Colors.grey,
-                    fontSize: 12.0,
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 5.0),
+                  Text(
+                    '${hotplace.view}',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -220,7 +223,8 @@ class _MainPageState extends State<MainPage> {
                               Text(
                                   '${NumberFormat('#,###').format(budget)}원',
                                 style: const TextStyle(
-                                  fontSize: 15
+                                  fontSize: 15,
+                                  color: Colors.blue
                                 ),
                               )
                             ],
@@ -247,12 +251,16 @@ class _MainPageState extends State<MainPage> {
                                     Text(
                                       '${NumberFormat('#,###').format(totalExpense)}원',
                                       style: const TextStyle(
-                                          fontSize: 15
+                                          fontSize: 15,
+                                          color: Colors.red
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              width: 20,
                             ),
                             Expanded(
                               child: Padding(
@@ -269,7 +277,8 @@ class _MainPageState extends State<MainPage> {
                                     Text(
                                       '${NumberFormat('#,###').format(income)}원',
                                       style: const TextStyle(
-                                        fontSize: 15
+                                        fontSize: 15,
+                                          color: Colors.blue
                                       ),
                                     ),
                                   ],
@@ -325,9 +334,10 @@ class _MainPageState extends State<MainPage> {
                         height: 5,
                       ),
                       SingleChildScrollView(
+                        padding: EdgeInsets.only(left: 10, right: 10),
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: hottestPlace.map((data) {
                             return buildHotPlace(context, data);
                           }).toList(),
