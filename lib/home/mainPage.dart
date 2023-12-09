@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:schrodinger_client/post/post_info.dart';
-import 'package:schrodinger_client/post/post_page.dart';
 import 'package:schrodinger_client/style.dart';
-import 'package:schrodinger_client/home/hotplace.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
