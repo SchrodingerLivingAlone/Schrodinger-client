@@ -6,6 +6,10 @@ import 'package:schrodinger_client/style.dart';
 import 'package:schrodinger_client/town_info/home_info.dart';
 import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:schrodinger_client/town_info/facility_info.dart';
+import 'package:schrodinger_client/town_info/etc_info.dart';
+import 'package:schrodinger_client/town_info/question_info.dart';
+import 'package:schrodinger_client/town_info/share_info.dart';
+import 'package:schrodinger_client/town_info/together_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +21,6 @@ class TownPage extends StatefulWidget {
 }
 
 class _TownPageState extends State<TownPage> {
-  int _selectedIndex = 0;
   bool isCompleted = false;
   String townName = '검색중...';
 
@@ -44,14 +47,6 @@ class _TownPageState extends State<TownPage> {
     setState(() {
       townName = res['result']['town'];
     });
-  }
-
-  void _onItemTapped(int index) {
-    if(index == 1) {
-      setState(() {
-      _selectedIndex = index;
-    });
-    }
   }
 
   @override
@@ -87,30 +82,10 @@ class _TownPageState extends State<TownPage> {
               HomeInfoPage(townName: townName),
               const FoodInfoPage(tabIndex: 0),
               const FacilityInfoPage(tabIndex: 1),
-              ListTile(
-                leading: const Icon(Icons.home),
-                title: const Text('할인'),
-                trailing: const Icon(Icons.navigate_next),
-                onTap: (){},
-              ),
-              ListTile(
-                leading: const Icon(Icons.search),
-                title: const Text('같이 해요'),
-                trailing: const Icon(Icons.navigate_next),
-                onTap: (){},
-              ),
-              ListTile(
-                leading: const Icon(Icons.refresh),
-                title: const Text('질문 요청'),
-                trailing: const Icon(Icons.navigate_next),
-                onTap: (){},
-              ),
-              ListTile(
-                leading: const Icon(Icons.refresh),
-                title: const Text('공공 정보'),
-                trailing: const Icon(Icons.navigate_next),
-                onTap: (){},
-              ),
+              const ShareInfoPage(tabIndex: 2),
+              const TogetherInfoPage(tabIndex: 3),
+              const QuestionInfoPage(tabIndex: 4),
+              const EtcInfoPage(tabIndex: 5),
             ],
           ),
           floatingActionButton: FloatingActionButton.extended(

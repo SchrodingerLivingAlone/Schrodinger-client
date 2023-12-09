@@ -6,6 +6,7 @@ import 'package:schrodinger_client/town_info/food_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../post/post_info.dart';
 import 'category_dropdown.dart';
 
 class FacilityInfoPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class FacilityInfoPage extends StatefulWidget {
 
 class _FacilityInfoPageState extends State<FacilityInfoPage> {
   late List<TownInfo> facilityList = [];
+  int sortedIndex = 0;
 
   @override
   void initState() {
@@ -26,28 +28,36 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
     getFacilityPost();
   }
 
-  List<Widget> createFacilityListTiles() {
-    List<Widget> foodTiles = [];
-    for (int i = 0; i < facilityList.length; i++) {
-      TownInfo food = facilityList[i];
+  void setSortedIndex(int index) {
+    setState(() {
+      sortedIndex = index;
+    });
+    getFacilityPost();
+  }
 
-      Widget foodTile = Padding(
+  List<Widget> createTownListTiles(List<TownInfo> townInfoList) {
+    List<Widget> townTiles = [];
+
+    for (int i = 0; i < townInfoList.length; i++) {
+      TownInfo town = townInfoList[i];
+
+      Widget townTile = Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: ListTile(
-          title: Text(food.title),
+          title: Text(town.title),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 5),
-              Text(food.content, style: const TextStyle(fontSize: 12)),
+              Text(town.content, style: TextStyle(fontSize: 12)),
               const SizedBox(height: 5),
               Row(
                 children: [
-                  Text(food.dong),
+                  Text(town.dong),
                   const SizedBox(width: 10),
-                  Text(food.calculatedTime),
+                  Text(town.calculatedTime),
                   const SizedBox(width: 10),
-                  Text('조회 ${food.view}'),
+                  Text('조회 ${town.view}'),
                 ],
               ),
             ],
@@ -55,7 +65,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
           trailing: Column(
             children: [
               Image.network(
-                food.imageUrl,
+                town.imageUrl,
                 width: 60,
                 height: 40,
                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
@@ -69,23 +79,25 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
                   return Image.asset('assets/default_profile.png', width: 60, height: 40,); // 오류 발생 시 기본 이미지
                 },
               ),
-              Text('댓글 ${food.commentCount} 공감 ${food.likeCount}', style: const TextStyle(fontSize: 11)),
+              Text('댓글 ${town.commentCount} 공감 ${town.likeCount}', style: TextStyle(fontSize: 11)),
             ],
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PostInfo(PostId: town.id)));
+          },
         ),
       );
-      foodTiles.add(foodTile);
+      townTiles.add(townTile);
     }
-    return foodTiles;
+    return townTiles;
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const CategoryDropdown(),
-        ...createFacilityListTiles(),
+        CategoryDropdown(setSortedIndex: setSortedIndex),
+        ...createTownListTiles(facilityList),
       ],
     );
   }
@@ -93,7 +105,7 @@ class _FacilityInfoPageState extends State<FacilityInfoPage> {
   Future<void> getFacilityPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=0&category=${widget.tabIndex}';
+    String url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts?sortBy=$sortedIndex&category=${widget.tabIndex}';
 
     final response = await http.get(
         Uri.parse(url),
