@@ -50,7 +50,6 @@ class _PostInfoState extends State<PostInfo> {
 
   Future<PostInfoResponse> getPostInfo(BuildContext context) async {
     int postId = widget.PostId;
-    print(postId);
     var url = '${dotenv.env['BASE_URL']}/api/neighborhood/posts/$postId';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
@@ -497,9 +496,10 @@ class _PostInfoState extends State<PostInfo> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                    Padding(
-                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+                     padding: const EdgeInsets.fromLTRB(10.0, 25.0, 15.0, 10.0),
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
@@ -508,18 +508,17 @@ class _PostInfoState extends State<PostInfo> {
                            children: [
                              Padding(
                                padding: const EdgeInsets.fromLTRB(8.0, 0, 15.0, 0),
-                               child: Container(
-                                 child:  CircleAvatar(
-                                   radius: 25,
-                                   backgroundColor: Colors.grey,
-                                   backgroundImage: NetworkImage(writerProfileImage!),
-                                 ),
+                               child: CircleAvatar(
+                                 radius: 25,
+                                 backgroundColor: Colors.grey,
+                                 backgroundImage: NetworkImage(writerProfileImage!),
                                ),
                              ),
                              Column(
                                crossAxisAlignment: CrossAxisAlignment.start,
                                children: [
-                                     Text(writer, style: TextStyle(fontSize: 17), textAlign: TextAlign.start,),
+                                     Text(writer, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.start),
+                                     SizedBox(height: 5),
                                      Text(postDetails),
                                ],
                              ),
@@ -537,18 +536,14 @@ class _PostInfoState extends State<PostInfo> {
                        ],
                      ),
                    ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                    child: SizedBox(width: 500,
-                        child: Divider(color: Colors.grey, thickness: 2.0)),
+                  const Divider(color: Colors.grey, thickness: 0.7),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30.0, 10.0, 15.0, 0.0),
+                    child: Text(title, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                    child: Container(child:  Text(title, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 2.0),
-                    child: Container(child:  Text(content, style: TextStyle(fontSize: 20),)),
+                    padding: const EdgeInsets.fromLTRB(30.0, 20.0, 15.0, 2.0),
+                    child: Text(content, style: const TextStyle(fontSize: 20, height: 1.7)),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
