@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:schrodinger_client/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,11 +15,9 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  final int _selectedIndex=3;
   bool isCompleted = false;
 
-  //추가하는 부분
-  late List<ProfileResponse> GetAllList = []; //맨처음에 get으로 받아온거
+  late List<ProfileResponse> GetAllList = [];
 
   @override
   void initState() {
@@ -26,16 +25,13 @@ class _MyPageState extends State<MyPage> {
     getAll();
   }
 
-  //이거 서버에서 받아와야함 원래
-  // String nickname='dooly22';
-  //String ageGender='20대/여';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('마이페이지')),
-        backgroundColor: const Color(0xFF0010A3),
+        title: const Center(child: Text('마이페이지', style: TextStyle(fontWeight: FontWeight.bold),)),
+        leading: Container(width: 10),
+        backgroundColor: AppColor.main,
         actions: [
           IconButton(onPressed: (){
           }, icon:const Icon(Icons.settings)),
@@ -45,62 +41,76 @@ class _MyPageState extends State<MyPage> {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
             child: Container(
-              color: const Color(0xFFFFD300), // 노란색 타일
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xffFFC536),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 3,
+                    spreadRadius: 3,
+                    offset: Offset(3, 3),
+                  ),
+                ],
+              ), // 노란색 타일
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(//유저 프로필사진 삽입
-                        padding: const EdgeInsets.all(10),
-                        width: 100,
-                        height: 100,
-                        child: _buildProfileImage(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40.0, 30.0, 30.0, 10.0),
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.grey,
+                          backgroundImage: GetAllList.isNotEmpty ? NetworkImage(GetAllList[0].result.profileImageUrl) : const NetworkImage('https://schrodinger-cau.s3.ap-northeast-2.amazonaws.com/istockphoto-1214428300-612x612.jpeg'),
+
+                        ),
                       ),
-                      const SizedBox(width: 30),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            GetAllList.isNotEmpty ? GetAllList[0].result.nickname :'',
+                            GetAllList.isNotEmpty ? GetAllList[0].result.nickname :'검색중...',
                             style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                                fontSize: 24, fontWeight: FontWeight.bold
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          // Text(
-                          //   ageGender,
-                          //   style: const TextStyle(fontSize: 18),
-                          // ),
+                          const SizedBox(height: 10),
+                          Text(GetAllList.isNotEmpty ? GetAllList[0].result.dong :'검색중...',
+                            style: const TextStyle(fontSize: 16))
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                    padding: const EdgeInsets.fromLTRB(60, 10, 60, 20),
                     child: TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context,'/ManageProfiles',
                             arguments: {
-                              'nickname': GetAllList.isNotEmpty ? GetAllList[0].result.nickname : '',
+                              'nickname': GetAllList.isNotEmpty ? GetAllList[0].result.nickname : '검색중...',
                               //'ageGender' : ageGender,
                             }
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF800080),
+                        backgroundColor: const Color.fromRGBO(255, 255, 255, 0.8),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
+                            borderRadius: BorderRadius.circular(20)
                         ),
                       ),
-                      child: const Text(
-                        '프로필 관리',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: Text(
+                          '프로필 관리',
+                          style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -110,61 +120,114 @@ class _MyPageState extends State<MyPage> {
           ),
 
           const Padding(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
             child: Text('동네정보',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
 
-          const SizedBox(
-            height:10,
-          ),
-
           ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.red, // 아이콘 색깔 조절
-              child: Icon(Icons.border_color),
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: const Color(0xffFF6969),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 2),
+                  ),
+                ],
+              ),
             ),
-            title: const Text('작성한 글'),
+            title: const Text('작성한 글',
+                style: TextStyle(
+                    fontSize: 17, fontWeight: FontWeight.bold
+                )
+            ),
             onTap: () {
               Navigator.pushNamed(context, '/WrittenPage');
             },
           ),
           ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.yellow, // 아이콘 색깔 조절
-              child: Icon(Icons.whatshot),
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: const Color(0xffFFF069),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 2),
+                  ),
+                ],
+              ),
             ),
-            title: const Text('스크랩 글'),
+            title: const Text('스크랩 글',
+                style: TextStyle(
+                    fontSize: 17, fontWeight: FontWeight.bold
+                )
+            ),
             onTap: () {
               Navigator.pushNamed(context, '/CommentPage');
             },
           ),
           ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.green, // 아이콘 색깔 조절
-              child: Icon(Icons.thumb_up),
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: const Color(0xffABFF69),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 2),
+                  ),
+                ],
+              ),
             ),
-            title: const Text('공감한 글'),
+            title: const Text('공감한 글',
+              style: TextStyle(
+                  fontSize: 17, fontWeight: FontWeight.bold
+              )
+            ),
             onTap: () {
               Navigator.pushNamed(context, '/LikePage');
-
             },
           ),
-
-          const SizedBox(
-            height:10,
-          ),
-
           const Padding(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
             child: Text('기타',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
-
           ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.purple, // 아이콘 색깔 조절
-              child: Icon(Icons.room),
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: const Color(0xffAB69FF),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                    offset: const Offset(2, 2),
+                  ),
+                ],
+              ),
             ),
-            title: const Text('동네 인증'),
+            title: const Text('동네 인증',
+                style: TextStyle(
+                    fontSize: 17, fontWeight: FontWeight.bold
+                )
+            ),
             onTap: () {},
           ),
         ],

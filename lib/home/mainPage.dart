@@ -285,6 +285,7 @@ class _MainPageState extends State<MainPage> {
                 ),
                 Stack(
                   children: [
+
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       width: MediaQuery.of(context).size.width, // 화면 좌우로 확장
