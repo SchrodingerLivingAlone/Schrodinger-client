@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:schrodinger_client/account/accountbank.dart';
 import 'package:schrodinger_client/home.dart';
+import 'package:schrodinger_client/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpendingRecords extends StatefulWidget {
@@ -30,19 +32,19 @@ class _SpendingRecordsState extends State<SpendingRecords> {
 
     if (selectedButtonIndex == 0) {
       selectedButtonText = '식비';
-      color = Colors.pink;
+      color = const Color(0xffFF6161);
     } else if (selectedButtonIndex == 1) {
       selectedButtonText = '카페/간식';
-      color = Colors.orange;
+      color = const Color(0xffFF9F69);
     } else if (selectedButtonIndex == 2) {
       selectedButtonText = '교통';
-      color = Colors.blue;
+      color = const Color(0xff69FFC9);
     } else if (selectedButtonIndex == 3) {
       selectedButtonText = '술/유흥';
-      color = Colors.green;
+      color = const Color(0xffFFF069);
     } else if (selectedButtonIndex == 4) {
       selectedButtonText = '기타';
-      color = Colors.grey;
+      color = const Color(0xff727272);
     }
 
     if (type == '현금') {
@@ -58,6 +60,7 @@ class _SpendingRecordsState extends State<SpendingRecords> {
             onPressed: () {
             },
           ),
+          backgroundColor: AppColor.lightBlue,
           actions: [
             IconButton(
               icon: const Icon(Icons.delete),
@@ -70,17 +73,23 @@ class _SpendingRecordsState extends State<SpendingRecords> {
                         margin: const EdgeInsets.only(top: 20),
                         child: const Text('정말로 삭제하시겠습니까?'),
                       ),
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Colors.white,
                       actions: [
                         TextButton(
                           onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HomePage()),
+                                  (route) => false, // 이 조건이 false가 될 때까지 스택에서 모든 페이지를 제거합니다.
+                            );
                           },
-                          child: const Text('내역 취소'),
+                          child: const Text('네', style: TextStyle(color: Colors.black),),
                         ),
                         TextButton(
                           onPressed: () {
+                            Navigator.pop(context);
                           },
-                          child: const Text('내역 유지'),
+                          child: const Text('아니오', style: TextStyle(color: Colors.black)),
                         ),
                       ],
                     );
@@ -95,7 +104,7 @@ class _SpendingRecordsState extends State<SpendingRecords> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.purple,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -230,7 +239,7 @@ class _SpendingRecordsState extends State<SpendingRecords> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(right: 40),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -240,7 +249,13 @@ class _SpendingRecordsState extends State<SpendingRecords> {
                                 accessToken = sharedPreferences.getString('accessToken')!;
                                 await sendRequest(context, int.parse(year), int.parse(month), int.parse(day), 0, expense, selectedButtonIndex, typeNum, memo, accessToken);
                               },
-                              child: const Text('저장')
+                              child: const Text('저장'),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0), // 둥글게 만들기 위한 속성
+                              ),
+                              backgroundColor: AppColor.lightBlue, // 배경색 변경
+                            ),
                           )
                         ],
                       ),

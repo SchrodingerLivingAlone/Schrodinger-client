@@ -220,7 +220,10 @@ class _MyPageState extends State<MyPage> {
                     fontSize: 17, fontWeight: FontWeight.bold
                 )
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/Mypagetownauth');
+            },
+
           ),
         ],
       ),

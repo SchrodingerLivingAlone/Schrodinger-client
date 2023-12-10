@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/style.dart';
 
 class PaymentMethods extends StatefulWidget {
   const PaymentMethods({super.key});
@@ -26,6 +27,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
             onPressed: () {
             },
           ),
+          backgroundColor: AppColor.lightBlue,
           actions: [
             IconButton(
               icon: const Icon(Icons.close),
@@ -39,51 +41,46 @@ class _PaymentMethodsState extends State<PaymentMethods> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
-                color: Colors.purple,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           )
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 140,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: ImageCashButton(
-                      expense: expense,
-                      selectedButtonIndex: selectedButtonIndex,
-                      memo: memo,
-                      year: year,
-                      month: month,
-                      day: day,
-                    ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: ImageCashButton(
+                    expense: expense,
+                    selectedButtonIndex: selectedButtonIndex,
+                    memo: memo,
+                    year: year,
+                    month: month,
+                    day: day,
                   ),
-                  const SizedBox(
-                    height: 100,
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Container(
+                  child: ImageCardButton(
+                    expense: expense,
+                    selectedButtonIndex: selectedButtonIndex,
+                    memo: memo,
+                    year: year,
+                    month: month,
+                    day: day,
                   ),
-                  Container(
-                    child: ImageCardButton(
-                      expense: expense,
-                      selectedButtonIndex: selectedButtonIndex,
-                      memo: memo,
-                      year: year,
-                      month: month,
-                      day: day,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        )
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

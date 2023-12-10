@@ -183,7 +183,7 @@ class _PostPageState extends State<PostPage>{
                 print(postPostResponse.message);
                 postImages?.clear();
                 imagePickerProvider = StateNotifierProvider<ImageState, List<XFile>>((ref) {return ImageState();});
-                showPostonfirmationDialog(context);
+                await showPostonfirmationDialog(context);
               }
             },
             child: const Text('등록',

@@ -292,20 +292,18 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
     DateTime.now().month,
     DateTime.now().day,
   );
+  Map<DateTime, List<Event>> events = {};
 
   @override
   void initState() {
     super.initState();
 
     initializeData();
-    _onDaySelected(selectedDay, selectedDay);
     setDotDate();
   }
 
   DateTime focusedDay = DateTime.now();
-  List<bool> list = dotList;
 
-  Map<DateTime, List<Event>> events = {};
 
   List<Event> _getEventsForDay(DateTime day) {
     return events[day] ?? [];
@@ -346,21 +344,23 @@ class _TableCalendarScreenState extends State<TableCalendarScreen> {
     selectedDay = newSelectedDay;
     _onDaySelected(selectedDay, selectedDay); // onDaySelected 호출
     await getCalendarDotData(selectedDay.month, selectedDay.year, accessToken);
+    initEvent();
     setDotDate();
   }
 
   void setDotDate() {
     setState(() {
-      list = dotList;
-      events = {};
-
-      for (int i = 0; i < list.length; i++) {
-        if (list[i] == true) {
+      for (int i = 0; i < dotList.length; i++) {
+        if (dotList[i] == true) {
           Map<DateTime, List<Event>> map = {DateTime.utc(selectedDay.year, selectedDay.month, i) : [ Event('title', Colors.deepPurple) ]};
           events.addAll(map);
         }
       }
     });
+  }
+
+  void initEvent() {
+    events = {};
   }
 }
 
