@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/style.dart';
 
 class IncomeCategory extends StatefulWidget {
   const IncomeCategory({super.key});
@@ -42,11 +43,12 @@ class _IncomeCategoryState extends State<IncomeCategory> {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 20,
-              color: Colors.purple,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
-        )
+        ),
+        backgroundColor: AppColor.lightBlue,
       ),
       body: SingleChildScrollView(
         child: Column(

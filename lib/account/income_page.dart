@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/style.dart';
+import 'package:intl/intl.dart';
 
 class IncomePage extends StatefulWidget {
   const IncomePage({super.key});
@@ -13,9 +15,16 @@ class _ExpensePageState extends State<IncomePage> {
   final _monthList = List.generate(12, (i)=>'${i+1}');
   List<String> _dayList = [];
   final _yearList = List.generate(30,(i)=> '${i+2000}');
-  var _selectedmonthValue = '1';
+  var _selectedmonthValue = '12';
   var _selecteddayValue = '1';
-  var _selectedyearValue = '2000';
+  var _selectedyearValue = '2023';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _updateDayList();
+  }
 
   void _updateDayList() {
     _dayList = _generateDayList(_selectedyearValue, _selectedmonthValue);
@@ -31,20 +40,9 @@ class _ExpensePageState extends State<IncomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('수입내역추가'),
-            IconButton(
-              onPressed: () {
-
-              },
-              icon: const Icon(Icons.expand_more),
-            )
-
-          ],
-
-        ),
+        title: Text('$_selectedyearValue.$_selectedmonthValue.$_selecteddayValue의 수입 내역', style: TextStyle(fontSize: 18),),
+        centerTitle: true,
+        backgroundColor: AppColor.lightBlue,
         actions: [
           IconButton(onPressed: (){
             Navigator.pushNamed(context,'/AccountBank');
@@ -52,19 +50,28 @@ class _ExpensePageState extends State<IncomePage> {
         ],
       ),
 
-      body: ListView(
+      body: Column(
         children: [
-          const SizedBox(height:40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          const SizedBox(height:80),
+          Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                      child: Text('금액을 입력해주세요.', style: TextStyle(fontSize: 15, color: Colors.grey),
+                      )
+                  ),
+                ],
+              ),
               SizedBox(
-                width: 240,
+                width: MediaQuery.of(context).size.width - 40,
                 child: TextField(
-                  style: const TextStyle(fontSize:30),
+                  style: const TextStyle(fontSize:25),
                   controller: _controller,
                   decoration: const InputDecoration(
-                    hintText: 'Enter amount', // 힌트 텍스트 설정
+                    hintText: '금액 입력', // 힌트 텍스트 설정
                     suffixText: '원', // 입력란 뒤에 추가할 텍스트
                   ),
                   keyboardType: TextInputType.number,
@@ -72,81 +79,95 @@ class _ExpensePageState extends State<IncomePage> {
               ),
             ],
           ),
-          const SizedBox(height:80),
-          SizedBox(
-            width: double.infinity,
-            child: Text('날짜 선택',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                decoration: TextDecoration.combine([
-                  TextDecoration.underline,
-                  TextDecoration.overline,
-                ]),
+          const SizedBox(height:30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: Text('날짜를 선택해주세요.', style: TextStyle(fontSize: 15, color: Colors.grey),
+                  )
               ),
-            ),
+            ],
           ),
-          const SizedBox(height:20),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
+          Container(
+            width: MediaQuery.of(context).size.width - 40,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [   //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
-                DropdownButton(
-                  value: _selectedyearValue,
-                  items: _yearList.map(
-                        (point) => DropdownMenuItem(
-                      value: point,
-                      child: Text(point),
+                Row(
+                  children: [
+                    DropdownButton(
+                      value: _selectedyearValue,
+                      items: _yearList.map(
+                            (point) => DropdownMenuItem(
+                          value: point,
+                          child: Text(point),
+                        ),
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedyearValue = value!;
+                          _updateDayList();
+                        });
+                      },
                     ),
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedyearValue = value!;
-                      _updateDayList();
-                    });
-                  },
+                    const Text('년', style: TextStyle(fontSize: 15)),
+                  ],
                 ),
-                const Text('년', style: TextStyle(fontSize: 15)),
-                DropdownButton(
-                  value: _selectedmonthValue,
-                  items: _monthList.map(
-                        (point) => DropdownMenuItem(
-                      value: point,
-                      child: Text(point),
+                SizedBox(
+                  width: 30,
+                ),
+                Row(
+                  children: [
+                    DropdownButton(
+                      value: _selectedmonthValue,
+                      items: _monthList.map(
+                            (point) => DropdownMenuItem(
+                          value: point,
+                          child: Text(point),
+                        ),
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedmonthValue = value!;
+                          _updateDayList();
+                        });
+                      },
                     ),
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedmonthValue = value!;
-                      _updateDayList();
-                    });
-                  },
+                    const Text('월', style: TextStyle(fontSize: 15)),
+                  ],
                 ),
-                const Text('월', style: TextStyle(fontSize: 15)),
-                DropdownButton(
-                  value: _selecteddayValue,
-                  items: _dayList.map(
-                        (point) => DropdownMenuItem(
-                      value: point,
-                      child: Text(point),
+                SizedBox(
+                  width: 30,
+                ),
+                Row(
+                  children: [
+                    DropdownButton(
+                      value: _selecteddayValue,
+                      items: _dayList.map(
+                            (point) => DropdownMenuItem(
+                          value: point,
+                          child: Text(point),
+                        ),
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selecteddayValue = value!;
+                        });
+                      },
                     ),
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selecteddayValue = value!;
-                    });
-                  },
+                    const Text('일', style: TextStyle(fontSize: 15)),
+                  ],
                 ),
-                const Text('일', style: TextStyle(fontSize: 15)),
               ],
             ),
           ),
           Column(
             children: [
               Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(30.0),
+                margin: EdgeInsets.only(top: 50),
+                width: MediaQuery.of(context).size.width - 40,
                 child: TextButton(onPressed: (){
                   setState(() {
                     expenseamount = _controller.text.trim();
@@ -160,7 +181,7 @@ class _ExpensePageState extends State<IncomePage> {
 
                 },
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
+                      backgroundColor: AppColor.lightBlue,
                     ),
                     child: const Text('다음',
                       style: TextStyle(color: Colors.white),)),

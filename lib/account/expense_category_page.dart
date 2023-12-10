@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schrodinger_client/account/calendar/calendar_page.dart';
+import 'package:schrodinger_client/style.dart';
 
 class ExpenseCategoryPage extends StatefulWidget {
   const ExpenseCategoryPage({super.key});
@@ -43,11 +44,12 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
-                  color: theme.colorScheme.primary,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            )
+            ),
+            backgroundColor: AppColor.lightBlue,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -76,7 +78,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
-                        color: Colors.pink,
+                        color: const Color(0xffFF6161),
                         onPressed: () {
                           final memo = _memoController.text;
                           if (memo.isEmpty) {
@@ -93,7 +95,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
-                        color: Colors.orange,
+                        color: const Color(0xffFF9F69),
                         onPressed: () {
                           final memo = _memoController.text;
                           if (memo.isEmpty) {
@@ -110,7 +112,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
-                        color: Colors.blue,
+                        color: Color(0xff69FFC9),
                         onPressed: () {
                           final memo = _memoController.text;
                           if (memo.isEmpty) {
@@ -127,7 +129,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
-                        color: Colors.green,
+                        color: const Color(0xffFFF069),
                         onPressed: () {
                           final memo = _memoController.text;
                           if (memo.isEmpty) {
@@ -144,7 +146,7 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: CircularButton(
-                        color: Colors.grey,
+                        color: const Color(0xff727272),
                         onPressed: () {
                           final memo = _memoController.text;
                           if (memo.isEmpty) {
