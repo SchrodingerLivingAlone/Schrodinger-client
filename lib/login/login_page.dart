@@ -80,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
+                        obscureText: true,
                         decoration: const InputDecoration(
                           hintText: '비밀번호',
                             border: UnderlineInputBorder(),
