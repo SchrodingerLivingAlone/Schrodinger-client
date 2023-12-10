@@ -75,7 +75,12 @@ class _MainPageState extends State<MainPage> {
     List<TownInfo> hotplaces = responseResult.map((data) => TownInfo.fromJson(data)).toList();
 
     setState(() {
-      hottestPlace = hotplaces.sublist(0, 3);
+      int i = hotplaces.length;
+      if(i > 5){
+        hottestPlace = hotplaces.sublist(0, 5);
+      }else{
+        hottestPlace = hotplaces.sublist(0, i);
+      }
       print(hottestPlace);
     });
   }
