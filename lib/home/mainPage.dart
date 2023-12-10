@@ -199,157 +199,159 @@ class _MainPageState extends State<MainPage> {
             backgroundColor: AppColor.lightBlue,
             title: Text(schrodinger),
           ),
-          body: Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                Card(
-                  color: const Color(0xFFFBD26C),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5, // 그림자 크기
-                  child: Container(
-                    width: MediaQuery.of(context).size.width - 40,
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
+          body: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  Card(
+                    color: const Color(0xFFFBD26C),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 5, // 그림자 크기
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 40,
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                    '이번달 예산',
+                                  style: TextStyle(
+                                    fontSize: 15
+                                  ),
+                                ),
+                                Text(
+                                    '${NumberFormat('#,###').format(budget)}원',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.blue
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                  '이번달 예산',
-                                style: TextStyle(
-                                  fontSize: 15
-                                ),
-                              ),
-                              Text(
-                                  '${NumberFormat('#,###').format(budget)}원',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.blue
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      '지출',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${NumberFormat('#,###').format(totalExpense)}원',
-                                      style: const TextStyle(
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        '지출',
+                                        style: TextStyle(
                                           fontSize: 15,
-                                          color: Colors.red
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        '${NumberFormat('#,###').format(totalExpense)}원',
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.red
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      '수입',
-                                      style: TextStyle(
-                                        fontSize: 15,
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        '수입',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${NumberFormat('#,###').format(income)}원',
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                          color: Colors.blue
+                                      Text(
+                                        '${NumberFormat('#,###').format(income)}원',
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                            color: Colors.blue
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )
+                            ],
+                          )
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Stack(
-                  children: [
+                  Stack(
+                    children: [
 
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      width: MediaQuery.of(context).size.width, // 화면 좌우로 확장
-                      child: Card(
-                        elevation: 3,
-                        child: Container(
-                          height: 200,
-                          child: Center(
-                            child: CustomPaint(
-                              size: Size(200, 200),
-                              painter: _PieChart(model),
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        width: MediaQuery.of(context).size.width, // 화면 좌우로 확장
+                        child: Card(
+                          elevation: 3,
+                          child: Container(
+                            height: 200,
+                            child: Center(
+                              child: CustomPaint(
+                                size: Size(200, 200),
+                                painter: _PieChart(model),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(16.0, 8, 8, 0),
-                        child: Row(
-                            children : [
-                              Icon(Icons.local_fire_department, color: Colors.red,),
-                              Text('오늘의 인기글'),
-                            ]
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      SingleChildScrollView(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: hottestPlace.map((data) {
-                            return buildHotPlace(context, data);
-                          }).toList(),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(16.0, 8, 8, 0),
+                          child: Row(
+                              children : [
+                                Icon(Icons.local_fire_department, color: Colors.red,),
+                                Text('오늘의 인기글'),
+                              ]
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SingleChildScrollView(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: hottestPlace.map((data) {
+                              return buildHotPlace(context, data);
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         )
