@@ -30,11 +30,10 @@ class _MyPageState extends State<MyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('마이페이지', style: TextStyle(fontWeight: FontWeight.bold),)),
-        leading: Container(width: 10),
+        leading: Container(width: 50),
         backgroundColor: AppColor.main,
         actions: [
-          IconButton(onPressed: (){
-          }, icon:const Icon(Icons.settings)),
+          Container(width: 50),
         ],
       ),
 
@@ -91,14 +90,7 @@ class _MyPageState extends State<MyPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(60, 10, 60, 20),
                     child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context,'/ManageProfiles',
-                            arguments: {
-                              'nickname': GetAllList.isNotEmpty ? GetAllList[0].result.nickname : '검색중...',
-                              //'ageGender' : ageGender,
-                            }
-                        );
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(255, 255, 255, 0.8),
                         shape: RoundedRectangleBorder(
