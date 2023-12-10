@@ -198,6 +198,7 @@ class _PostInfoState extends State<PostInfo> {
       print(temp);
       if (response.statusCode == 200) {
         print('Response Body: ${temp}');
+        getPostInfo(context);
       } else {
         print(response.statusCode);
         throw Exception('Failed to load data1: ${response.statusCode}');
