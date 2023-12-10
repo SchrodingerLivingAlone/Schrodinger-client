@@ -195,7 +195,7 @@ class _MainPageState extends State<MainPage> {
             title: Text(schrodinger),
           ),
           body: Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 20),
             child: Column(
               children: [
                 Card(
@@ -301,10 +301,8 @@ class _MainPageState extends State<MainPage> {
                       child: Card(
                         elevation: 3,
                         child: Container(
-                          // 이 부분에서 height를 조절하여 그래프의 크기를 설정하세요
                           height: 200,
                           child: Center(
-                            // 이 부분에서 그래프를 렌더링하는 위젯을 배치하세요
                             child: CustomPaint(
                               size: Size(200, 200),
                               painter: _PieChart(model),
@@ -561,15 +559,15 @@ class ResultInfo {
 Color getExpenseCategoryColor(String category) {  //카테고리 색 정하기
   switch (category) {
     case '식비':
-      return Colors.pink;
+      return const Color(0xffFF6161);
     case '카페/간식':
-      return Colors.orange;
+      return const Color(0xffFF9F69);
     case '교통':
-      return Colors.blue;
+      return const Color(0xff69FFC9);
     case '술/유흥':
-      return Colors.green;
+      return const Color(0xffFFF069);
     case '기타':
-      return Colors.grey;
+      return const Color(0xff727272);
     default:
       return Colors.grey; // 기본값은 회색으로 지정
   }

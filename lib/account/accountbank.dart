@@ -6,7 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:math' as math;
 import 'package:http/http.dart' as http;
 import 'package:schrodinger_client/account/calendar/calendar_page.dart';
+import 'package:schrodinger_client/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 
 class AccountBank extends StatefulWidget {
@@ -60,58 +62,66 @@ class _AccountBankState extends State<AccountBank> {
             ),
           ),
         ),
+        backgroundColor: AppColor.lightBlue,
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){  //+버튼생성
-            showDialog(
-              context: context,
-              builder: (context){
-                return AlertDialog(
-                  alignment: Alignment.topRight,
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton(onPressed:(){//버튼 누르면 지출내역으로 넘어감
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, '/ExpensePage');
-                      }, child: const Text('지출 내역 추가'),),
-                      ElevatedButton(onPressed:(){//버튼 누르면 수입내역으로 넘어감
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context,'/IncomePage');
-                      }, child: const Text('수입 내역 추가'),),
-                      ElevatedButton(onPressed:(){ //버튼 누르면 예산설정페이지로 넘어감.
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, '/BudgetPage',arguments: int.parse(_selectedmonthValue));
-                      }, child: const Text('예산 설정'),),
-                    ],
-                  ),
-                );
-                //지출내역추가, 수입내역 추가, 예산 설정 탭 들어갈수있도록
-              },
-            );
-          },icon: const Icon(Icons.add)),
+          PopupMenuButton<String>(
+            offset: const Offset(0, 50),
+            onSelected: (value) {
+              if (value == 'expense') {
+                Navigator.pushNamed(context, '/ExpensePage');
+              } else if (value == 'income') {
+                Navigator.pushNamed(context, '/IncomePage');
+              } else if (value == 'budget') {
+                Navigator.pushNamed(context, '/BudgetPage', arguments: int.parse(_selectedmonthValue));
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'expense',
+                  child: Text('지출 내역 추가'),
+                ),
+                PopupMenuDivider(),
+                const PopupMenuItem<String>(
+                  value: 'income',
+                  child: Text('수입 내역 추가'),
+                ),
+                PopupMenuDivider(),
+                const PopupMenuItem<String>(
+                  value: 'budget',
+                  child: Text('예산 설정'),
+                ),
+              ];
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            icon: Icon(Icons.add),
+          ),
           IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarPage()));
               },
-              icon: Icon(Icons.calendar_month)
+              icon: const Icon(Icons.calendar_month)
           )
         ],
       ),
 
-      body:ListView(     //column에서 listview로 바꿈 아래에 listtile넣으려고
+      body:Column(
         children: [
           Container(//월 선택하기
             //padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
+            margin: EdgeInsets.only(left: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [   //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
                 DropdownButton(
                   value: _selectedmonthValue,
                   items: _monthList.map(
                         (point) => DropdownMenuItem(
                       value: point,
-                      child: Text(point),
+                      child: Text('$point월'),
                     ),
                   ).toList(),
                   onChanged: (value) {
@@ -120,69 +130,132 @@ class _AccountBankState extends State<AccountBank> {
                       getAll();
                     });
                   },
+                    underline: Container()
                 ),
-                const Text('월', style: TextStyle(fontSize: 15)),
               ],
             ),
+          ),
+          const Divider(
+            color: Colors.grey,
+            height: 1,
+            thickness: 1,
+            indent: 10,
+            endIndent: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               // 지출 부분
-              Container(
-                height: 50, // 지출 섹션의 높이
-                width: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('지출 : $totalExpense', style: TextStyle(fontSize: 16)),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '지출',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        '${NumberFormat('#,###').format(totalExpense)}원',
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.red
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Container(
                 width: 1, // 세로 선의 너비
-                height: 40, // 세로 선의 높이
+                height: 50, // 세로 선의 높이
                 color: Colors.grey, // 선의 색상
               ),
-              // 수입 부분
-              Container(
-                height: 50, // 수입 섹션의 높이
-                width: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('수입 : $income', style: TextStyle(fontSize: 16)),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '수입',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        '${NumberFormat('#,###').format(income)}원',
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.blue
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
-          Center(
-            child: Card(
-              color: Colors.yellow,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              elevation: 5, // 그림자 크기
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text('이번달 남은 예산은 $budget원 이에요.'),
-                    Text('너무 잘하고 있어요!'),
-                  ],
-                ),
+          const Divider(
+            color: Colors.grey,
+            height: 1,
+            thickness: 1,
+            indent: 10,
+            endIndent: 10,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Card(
+            color: const Color(0xFFFBD26C),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 5, // 그림자 크기
+            child: Container(
+              width: MediaQuery.of(context).size.width - 50,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '이번달 남은 예산은 ${NumberFormat('#,###').format(budget)}원이에요',
+                      style: const TextStyle(
+                          fontSize: 15
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      '너무 잘하고 있어요!',
+                      style: TextStyle(
+                          fontSize: 15
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          Container(//piechart넣기
-            child: CustomPaint(
-              size: Size(200, 200),
-              painter: _PieChart(model),
-            ),
+          CustomPaint(
+            size: const Size(200, 200),
+            painter: _PieChart(model),
           ),
-          _buildExpenseDetailsList(),  //이게 이제 listtile보여주는 부분.
-
+          const Divider(
+            color: Colors.grey,
+            height: 1,
+            thickness: 1,
+            indent: 10,
+            endIndent: 10,
+          ),
+          _buildExpenseDetailsList(),
         ],
       ),
     );
@@ -300,15 +373,24 @@ class _AccountBankState extends State<AccountBank> {
       shrinkWrap: true,
       itemCount: expenseItems.length,
       itemBuilder: (context, index) {
-        return Container(
-          height: 40,
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: getExpenseCategoryColor(expenseItems[index].transactionCategory),
-              radius: 17.0,
+        return Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            height: 40,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: getExpenseCategoryColor(expenseItems[index].transactionCategory),
+                radius: 17.0,
+              ),
+              title: Text(expenseItems[index].transactionCategory),
+              subtitle: Text('${(expenseItems[index].price / totalExpense * 100).toStringAsFixed(2)}%'),
+              trailing: Text(
+                  '${NumberFormat('#,###').format(expenseItems[index].price)}원',
+                style: TextStyle(
+                  fontSize: 16
+                ),
+              ),
             ),
-            title: Text(expenseItems[index].transactionCategory),
-            subtitle: Text('${(expenseItems[index].price / totalExpense * 100).toStringAsFixed(2)}%'),
           ),
         );
       },
@@ -452,10 +534,15 @@ class _PieChart extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint circlePaint = Paint()..color = Colors.black;
+    Paint circlePaint = Paint()..color = Colors.white;
+    Paint shadowPaint = Paint()
+      ..color = Colors.grey.withOpacity(0.5) // 그림자 색상 및 투명도
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
 
-    Offset offset = Offset(size.width / 2, size.width / 4); //원의 중심좌표
-    double radius = (size.width / 2) * 0.5;
+    Offset offset = Offset(size.width / 2, size.width / 2); //원의 중심좌표
+    double radius = (size.width / 2) * 0.8;
+
+    canvas.drawCircle(offset, radius, shadowPaint);//그래프에 그림자 그리기
     canvas.drawCircle(offset, radius, circlePaint);
 
     double _startPoint = 0.0;
@@ -465,7 +552,7 @@ class _PieChart extends CustomPainter {
       circlePaint.color = data[i].color;
 
       canvas.drawArc(
-        Rect.fromCircle(center: Offset(size.width / 2, size.width / 4), radius: radius),
+        Rect.fromCircle(center: Offset(size.width / 2, size.width / 2), radius: radius),
         -math.pi / 2 + _startPoint,
         _nextAngle,
         true,
@@ -491,15 +578,15 @@ class _PieChart extends CustomPainter {
 Color getExpenseCategoryColor(String category) {  //카테고리 색 정하기
   switch (category) {
     case '식비':
-      return Colors.pink;
+      return const Color(0xffFF6161);
     case '카페/간식':
-      return Colors.orange;
+      return const Color(0xffFF9F69);
     case '교통':
-      return Colors.blue;
+      return const Color(0xff69FFC9);
     case '술/유흥':
-      return Colors.green;
+      return const Color(0xffFFF069);
     case '기타':
-      return Colors.grey;
+      return const Color(0xff727272);
     default:
       return Colors.grey; // 기본값은 회색으로 지정
   }

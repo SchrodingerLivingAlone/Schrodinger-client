@@ -6,6 +6,7 @@ import 'package:schrodinger_client/account/accountbank.dart';
 import 'package:schrodinger_client/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:schrodinger_client/style.dart';
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({super.key});
@@ -34,6 +35,7 @@ class _BudgetPageState extends State<BudgetPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('예산 설정')),
+        backgroundColor: AppColor.lightBlue,
         actions: [
           TextButton(onPressed: (){
             putAll();  //버튼 누르면 이거 동작******************************
@@ -46,13 +48,14 @@ class _BudgetPageState extends State<BudgetPage> {
       body: Padding(
         padding: const EdgeInsets.all(27.0),
         child: Center(
-          child: ListView(
+          child: Column(
             children: [
-              const Text('이번달 예산을 입력해주세요.',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 30)),
+              SizedBox(height: 20,),
+              const Text('이번달 예산을 입력해주세요.',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 20)),
               Container(
                 height: 20,
               ),
-              const Center(child: Text('지난달보다 절약해보는건 어떨까요?')),
+              const Center(child: Text('지난달보다 절약해보는건 어떨까요?🔥', style: TextStyle(color: Colors.grey),)),
               Container(
                 height: 20,
               ),
@@ -60,15 +63,17 @@ class _BudgetPageState extends State<BudgetPage> {
                 height: 40,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    flex:5,
+                    flex:20,
                     child: TextField(
-                      style: const TextStyle(fontSize:30),
+                      style: const TextStyle(fontSize:20),
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: UnderlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(vertical: 0),
                         labelText: '금액을 입력하세요',
-
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
                       ),
                       controller: _expenditurecontroller,
                       keyboardType: TextInputType.number,
@@ -82,22 +87,38 @@ class _BudgetPageState extends State<BudgetPage> {
                   ),
                   const Expanded(
                       flex:1,
-                      child: Text('원',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 40,color:Colors.deepPurple))),
+                      child: Text('원',style: TextStyle(fontWeight:FontWeight.bold, fontSize: 25,color:Colors.black))),
                 ],
               ),
 
 
-              const Center(child: Text('하루에 대략', style: TextStyle(fontSize:15))),
-              Container(
-                height: 20,
+              Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      const Text(
+                          '하루에 대략',
+                          style: TextStyle(
+                              fontSize:15
+                          )
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('$day원',style: const TextStyle(fontWeight: FontWeight.bold, color: AppColor.lightBlue,fontSize:15)),
+                          const Text('을 사용할 수 있어요!', style: TextStyle(fontSize:15))
+                        ],
+                      ),
+                    ],
+                  )
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('$day원',style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurple,fontSize:15)),
-                  const Text('을 사용할 수 있어요!', style: TextStyle(fontSize:15))
-                ],
-              ),
+
+
             ],
           ),
         ),
