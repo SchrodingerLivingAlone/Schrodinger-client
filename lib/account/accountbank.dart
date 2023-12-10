@@ -108,155 +108,157 @@ class _AccountBankState extends State<AccountBank> {
         ],
       ),
 
-      body:Column(
-        children: [
-          Container(//월 선택하기
-            //padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
-            margin: EdgeInsets.only(left: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [   //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
-                DropdownButton(
-                  value: _selectedmonthValue,
-                  items: _monthList.map(
-                        (point) => DropdownMenuItem(
-                      value: point,
-                      child: Text('$point월'),
-                    ),
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedmonthValue = value!;
-                      getAll();
-                    });
-                  },
-                    underline: Container()
-                ),
-              ],
-            ),
-          ),
-          const Divider(
-            color: Colors.grey,
-            height: 1,
-            thickness: 1,
-            indent: 10,
-            endIndent: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // 지출 부분
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        '지출',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(//월 선택하기
+              //padding: const EdgeInsets.fromLTRB(8.0,1.0,8.0,1.0),
+              margin: EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [   //뭔가를 선택했을때 리스트가 나오면서 그중하나 선택하게 하는 경우
+                  DropdownButton(
+                    value: _selectedmonthValue,
+                    items: _monthList.map(
+                          (point) => DropdownMenuItem(
+                        value: point,
+                        child: Text('$point월'),
                       ),
-                      Text(
-                        '${NumberFormat('#,###').format(totalExpense)}원',
-                        style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.red
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: 1, // 세로 선의 너비
-                height: 50, // 세로 선의 높이
-                color: Colors.grey, // 선의 색상
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        '수입',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        '${NumberFormat('#,###').format(income)}원',
-                        style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.blue
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const Divider(
-            color: Colors.grey,
-            height: 1,
-            thickness: 1,
-            indent: 10,
-            endIndent: 10,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Card(
-            color: const Color(0xFFFBD26C),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 5, // 그림자 크기
-            child: Container(
-              width: MediaQuery.of(context).size.width - 50,
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '이번달 남은 예산은 ${NumberFormat('#,###').format(budget)}원이에요',
-                      style: const TextStyle(
-                          fontSize: 15
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      '너무 잘하고 있어요!',
-                      style: TextStyle(
-                          fontSize: 15
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedmonthValue = value!;
+                        getAll();
+                      });
+                    },
+                      underline: Container()
                   ),
                 ],
               ),
             ),
-          ),
-          CustomPaint(
-            size: const Size(200, 200),
-            painter: _PieChart(model),
-          ),
-          const Divider(
-            color: Colors.grey,
-            height: 1,
-            thickness: 1,
-            indent: 10,
-            endIndent: 10,
-          ),
-          _buildExpenseDetailsList(),
-        ],
+            const Divider(
+              color: Colors.grey,
+              height: 1,
+              thickness: 1,
+              indent: 10,
+              endIndent: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 지출 부분
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '지출',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '${NumberFormat('#,###').format(totalExpense)}원',
+                          style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.red
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 1, // 세로 선의 너비
+                  height: 50, // 세로 선의 높이
+                  color: Colors.grey, // 선의 색상
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '수입',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '${NumberFormat('#,###').format(income)}원',
+                          style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.blue
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+              height: 1,
+              thickness: 1,
+              indent: 10,
+              endIndent: 10,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Card(
+              color: const Color(0xFFFBD26C),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5, // 그림자 크기
+              child: Container(
+                width: MediaQuery.of(context).size.width - 50,
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '이번달 남은 예산은 ${NumberFormat('#,###').format(budget)}원이에요',
+                        style: const TextStyle(
+                            fontSize: 15
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        '너무 잘하고 있어요!',
+                        style: TextStyle(
+                            fontSize: 15
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CustomPaint(
+              size: const Size(200, 200),
+              painter: _PieChart(model),
+            ),
+            const Divider(
+              color: Colors.grey,
+              height: 1,
+              thickness: 1,
+              indent: 10,
+              endIndent: 10,
+            ),
+            _buildExpenseDetailsList(),
+          ],
+        ),
       ),
     );
   }

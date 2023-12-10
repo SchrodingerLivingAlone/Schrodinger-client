@@ -62,7 +62,7 @@ class _MyPageState extends State<MyPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(40.0, 30.0, 30.0, 10.0),
+                        padding: const EdgeInsets.fromLTRB(40.0, 30.0, 30.0, 30.0),
                         child: CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.grey,
@@ -87,25 +87,6 @@ class _MyPageState extends State<MyPage> {
                     ],
                   ),
                   // const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(60, 10, 60, 20),
-                    child: TextButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(255, 255, 255, 0.8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          '프로필 관리',
-                          style: TextStyle(fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

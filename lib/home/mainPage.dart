@@ -330,7 +330,8 @@ class _MainPageState extends State<MainPage> {
                           child: Row(
                               children : [
                                 Icon(Icons.local_fire_department, color: Colors.red,),
-                                Text('오늘의 인기글'),
+                                Text('오늘의 인기글', style: TextStyle(
+                                  fontWeight: FontWeight.bold,),),
                               ]
                           ),
                         ),
