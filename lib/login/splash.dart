@@ -12,11 +12,11 @@ class Splash extends StatelessWidget {
     Future.delayed(const Duration(seconds: 2), () async {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       var accessToken = sharedPreferences.getString('accessToken');
-      if (accessToken != null) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-      } else {
+      // if (accessToken != null) {
+      //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      // } else {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthPage()));
-      }
+      // }
     });
     
     return Scaffold(

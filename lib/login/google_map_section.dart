@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:schrodinger_client/style.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -55,7 +56,19 @@ class _GoogleMapSectionState extends State<GoogleMapSection> {
     );
   }
 
+  Future<bool> permission() async {
+    Map<Permission, PermissionStatus> status =
+    await [Permission.location].request(); // [] 권한배열에 권한을 작성
+
+    if (await Permission.location.isGranted) {
+      return Future.value(true);
+    } else {
+      return Future.value(false);
+    }
+  }
+
   Future<void> _getCurrentLocation() async {
+    await permission();
     final GoogleMapController controller = await _controller.future;
 
     Position position = await Geolocator.getCurrentPosition(
