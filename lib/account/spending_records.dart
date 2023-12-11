@@ -58,6 +58,7 @@ class _SpendingRecordsState extends State<SpendingRecords> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
+              Navigator.pop(context);
             },
           ),
           backgroundColor: AppColor.lightBlue,
