@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:schrodinger_client/login/auth_page.dart';
 import 'package:schrodinger_client/login/google_map_section.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:schrodinger_client/login/login_page.dart';
+import 'package:schrodinger_client/login/town_auth.dart';
 
 File? profileImageFile;
 
@@ -40,7 +42,14 @@ class _JoinPageState extends State<JoinPage> {
 
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+          // automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=> const AuthPage(),settings:const RouteSettings(name:"/authPage")));
+            },
+          ),
           title: const Text('회원가입',
               style: TextStyle(
                   color: Color(0xFF61646B), fontWeight: FontWeight.bold)),
@@ -119,7 +128,8 @@ class _JoinPageState extends State<JoinPage> {
                       TextFormField(
                         controller: textController,
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, '/town/auth');  //스택에 넣지 않고 화면 전환만
+                          // Navigator.pushReplacementNamed(context, '/town/auth');  //스택에 넣지 않고 화면 전환만
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TownAuthPage()));
                         },
                         decoration: InputDecoration(
                             hintText: townAddress == null ? '우리 동네' : '${townAddress.city} ${townAddress.gu} ${townAddress.dong}',
