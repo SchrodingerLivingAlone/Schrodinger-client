@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:schrodinger_client/account/calendar/calendar_page.dart';
+import 'package:schrodinger_client/provider/account_provider.dart';
 import 'package:schrodinger_client/style.dart';
 
 class ExpenseCategoryPage extends StatefulWidget {
@@ -24,8 +26,10 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
     final day = args['day'];
     final expense = int.parse(args['amount']);
 
-    return Scaffold(
-        appBar: AppBar(
+    return ChangeNotifierProvider(
+        create: (BuildContext context) => ExpenseItemProvider(),
+      builder: (context, child) => Scaffold(
+          appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -51,122 +55,123 @@ class _ExpenseCategoryPageState extends State<ExpenseCategoryPage> {
               ),
             ),
             backgroundColor: AppColor.lightBlue,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  controller: _memoController,
-                  decoration: InputDecoration(
-                      border: const UnderlineInputBorder(),
-                      labelText: '메모',
-                      suffixIcon: GestureDetector(
-                        onTap: (){
-                          _memoController.clear();
-                        },
-                        child: const Icon(Icons.close),
-                      )
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  child: TextField(
+                    controller: _memoController,
+                    decoration: InputDecoration(
+                        border: const UnderlineInputBorder(),
+                        labelText: '메모',
+                        suffixIcon: GestureDetector(
+                          onTap: (){
+                            _memoController.clear();
+                          },
+                          child: const Icon(Icons.close),
+                        )
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: CircularButton(
-                        color: const Color(0xffFF6161),
-                        onPressed: () {
-                          final memo = _memoController.text;
-                          if (memo.isEmpty) {
-                            print('텍스트가 비어있습니다.');
-                          } else {
-                            Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
-                            );
-                          }
-                        },
-                        name: '식비',
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: CircularButton(
+                          color: const Color(0xffFF6161),
+                          onPressed: () {
+                            final memo = _memoController.text;
+                            if (memo.isEmpty) {
+                              print('텍스트가 비어있습니다.');
+                            } else {
+                              Navigator.pushNamed(context, '/paymentMethods',
+                                  arguments: {'expense': expense, 'selectedButtonIndex': 0, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                              );
+                            }
+                          },
+                          name: '식비',
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: CircularButton(
-                        color: const Color(0xffFF9F69),
-                        onPressed: () {
-                          final memo = _memoController.text;
-                          if (memo.isEmpty) {
-                            print('텍스트가 비어있습니다.');
-                          } else {
-                            Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 1, 'memo': memo, 'year': year, 'month': month, 'day': day}
-                            );
-                          }
-                        },
-                        name: '카페/간식',
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: CircularButton(
+                          color: const Color(0xffFF9F69),
+                          onPressed: () {
+                            final memo = _memoController.text;
+                            if (memo.isEmpty) {
+                              print('텍스트가 비어있습니다.');
+                            } else {
+                              Navigator.pushNamed(context, '/paymentMethods',
+                                  arguments: {'expense': expense, 'selectedButtonIndex': 1, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                              );
+                            }
+                          },
+                          name: '카페/간식',
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: CircularButton(
-                        color: Color(0xff69FFC9),
-                        onPressed: () {
-                          final memo = _memoController.text;
-                          if (memo.isEmpty) {
-                            print('텍스트가 비어있습니다.');
-                          } else {
-                            Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 2, 'memo': memo, 'year': year, 'month': month, 'day': day}
-                            );
-                          }
-                        },
-                        name: '교통',
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: CircularButton(
+                          color: Color(0xff69FFC9),
+                          onPressed: () {
+                            final memo = _memoController.text;
+                            if (memo.isEmpty) {
+                              print('텍스트가 비어있습니다.');
+                            } else {
+                              Navigator.pushNamed(context, '/paymentMethods',
+                                  arguments: {'expense': expense, 'selectedButtonIndex': 2, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                              );
+                            }
+                          },
+                          name: '교통',
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: CircularButton(
-                        color: const Color(0xffFFF069),
-                        onPressed: () {
-                          final memo = _memoController.text;
-                          if (memo.isEmpty) {
-                            print('텍스트가 비어있습니다.');
-                          } else {
-                            Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 3, 'memo': memo, 'year': year, 'month': month, 'day': day}
-                            );
-                          }
-                        },
-                        name: '술/유흥',
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: CircularButton(
+                          color: const Color(0xffFFF069),
+                          onPressed: () {
+                            final memo = _memoController.text;
+                            if (memo.isEmpty) {
+                              print('텍스트가 비어있습니다.');
+                            } else {
+                              Navigator.pushNamed(context, '/paymentMethods',
+                                  arguments: {'expense': expense, 'selectedButtonIndex': 3, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                              );
+                            }
+                          },
+                          name: '술/유흥',
+                        ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: CircularButton(
-                        color: const Color(0xff727272),
-                        onPressed: () {
-                          final memo = _memoController.text;
-                          if (memo.isEmpty) {
-                            print('텍스트가 비어있습니다.');
-                          } else {
-                            Navigator.pushNamed(context, '/paymentMethods',
-                                arguments: {'expense': expense, 'selectedButtonIndex': 4, 'memo': memo, 'year': year, 'month': month, 'day': day}
-                            );
-                          }
-                        },
-                        name: '기타',
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: CircularButton(
+                          color: const Color(0xff727272),
+                          onPressed: () {
+                            final memo = _memoController.text;
+                            if (memo.isEmpty) {
+                              print('텍스트가 비어있습니다.');
+                            } else {
+                              Navigator.pushNamed(context, '/paymentMethods',
+                                  arguments: {'expense': expense, 'selectedButtonIndex': 4, 'memo': memo, 'year': year, 'month': month, 'day': day}
+                              );
+                            }
+                          },
+                          name: '기타',
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        )
+              ],
+            ),
+          )
+      ),
     );
   }
 }
