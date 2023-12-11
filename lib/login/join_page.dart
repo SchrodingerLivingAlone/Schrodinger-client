@@ -127,7 +127,7 @@ class _JoinPageState extends State<JoinPage> {
                     children: [
                       TextFormField(
                         controller: textController,
-                        onTap: () async {
+                        onTap: () {
                           // Navigator.pushReplacementNamed(context, '/town/auth');  //스택에 넣지 않고 화면 전환만
                           Navigator.push(context, MaterialPageRoute(builder: (context) => TownAuthPage()));
                         },
