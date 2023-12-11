@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schrodinger_client/account/accountbank.dart';
 import 'package:schrodinger_client/style.dart';
 
 class PaymentMethods extends StatefulWidget {
@@ -25,25 +26,29 @@ class _PaymentMethodsState extends State<PaymentMethods> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
+              Navigator.pop(context);
             },
           ),
           backgroundColor: AppColor.lightBlue,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-              },
-            ),
-          ],
-          title: Center(
-            child: Text(
-              '$expense원',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.close),
+          //     onPressed: () {
+          //       Navigator.pushAndRemoveUntil(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => const AccountBank()),
+          //             (route) => false, // 이 조건이 false가 될 때까지 스택에서 모든 페이지를 제거합니다.
+          //       );
+          //     },
+          //   ),
+          // ],
+          title: Text(
+            '$expense원',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           )
       ),

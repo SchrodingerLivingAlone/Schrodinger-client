@@ -6,7 +6,17 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
+        if (await Permission.location.isGranted) {
+        }
 
+        if (await Permission.location.isDenied) {
+        }
+
+        if (await Permission.location.isPermanentlyDenied) {
+        }
+
+        if (await Permission.location.isRestricted) {
+        }
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/GOOGLE_MAP_KEY"/>
         <activity
